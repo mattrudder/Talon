@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TalonEngine", "src\TalonEngine\TalonEngine.vcxproj", "{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}.Debug|Win32.Build.0 = Debug|Win32
+		{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}.Release|Win32.ActiveCfg = Release|Win32
+		{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
