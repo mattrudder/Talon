@@ -16,9 +16,6 @@
     <Filter Include="Header Files\Platforms">
       <UniqueIdentifier>{66d8ea0c-e880-4fcf-bebe-fdecd2b32d8b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Platforms\Windows">
-      <UniqueIdentifier>{171b0019-4348-4e08-b071-68abc99c43ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{5af8012b-ce3b-400f-8b69-808b2685690a}</UniqueIdentifier>
     </Filter>
@@ -28,18 +25,59 @@
     <Filter Include="Source Files\Platforms">
       <UniqueIdentifier>{6bb7a0aa-aad8-47c3-952d-497abf3c9b07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Platforms\Windows">
-      <UniqueIdentifier>{a8097c3b-86e7-4360-b90c-95505db32cb4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{fd7501b6-23b7-4c4f-8b4f-a046d5b7a916}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics\Direct3D11">
       <UniqueIdentifier>{f1e8256e-d8f5-4118-a0af-eff2f7c2a4bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Platforms\Base">
+      <UniqueIdentifier>{9aa64f96-091c-43bd-b349-91985cdee5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Platforms\Win32">
+      <UniqueIdentifier>{171b0019-4348-4e08-b071-68abc99c43ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Platforms\Win32">
+      <UniqueIdentifier>{a8097c3b-86e7-4360-b90c-95505db32cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Platforms\Base">
+      <UniqueIdentifier>{c625e878-e7fc-4c56-af93-6b8322bb445a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Platforms\Base\WindowBase.cpp">
+      <Filter>Source Files\Platforms\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Platforms\Win32\Win32Window.cpp">
+      <Filter>Source Files\Platforms\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Platforms\Window.cpp">
+      <Filter>Source Files\Platforms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Talon\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Talon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonAssert.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonBuildInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonPlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\TalonPublic.h">
@@ -48,64 +86,20 @@
     <ClInclude Include="..\..\include\Talon\TalonTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Talon\TalonPlatform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\TalonConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Talon\TalonVersion.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\TalonBuildInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\TalonAssert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\Talon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\TalonMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\PlatformSupport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\GraphicsSupport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\Platforms\WindowsPlatformSupport.h">
-      <Filter>Header Files\Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Talon\Graphics\Direct3D11GraphicsSupport.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Platforms\Window.h">
       <Filter>Header Files\Platforms</Filter>
     </ClInclude>
-    <ClInclude Include="..\Talon\Platforms\WindowsPlatformSupport.hpp">
-      <Filter>Source Files\Platforms</Filter>
+    <ClInclude Include="..\..\include\Talon\Platforms\Win32\Win32Window.h">
+      <Filter>Header Files\Platforms\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Talon\Platforms\Windows\Win32Window.h">
-      <Filter>Header Files\Platforms\Windows</Filter>
+    <ClInclude Include="..\..\include\Talon\Platforms\Base\WindowBase.h">
+      <Filter>Header Files\Platforms\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Talon\PlatformSupportBase.h">
+    <ClInclude Include="..\..\include\Talon\TalonDelegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Talon\GraphicsSupportBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Platforms\WindowsPlatformSupport.cpp">
-      <Filter>Source Files\Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11GraphicsSupport.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

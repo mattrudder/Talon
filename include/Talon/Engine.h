@@ -1,20 +1,21 @@
 
 #include <Talon/TalonPublic.h>
-#include <Talon/PlatformSupport.h>
-#include <Talon/GraphicsSupport.h>
+#include <Talon/Platforms/Window.h>
 
 namespace Talon
 {
-	class Engine
+	class TalonApi Engine
 	{
 	public:
-		void initialize();
-		void shutdown();
+		void Initialize(const char* arguments);
+		void Shutdown();
+		void RunFrame();
 
+		inline bool IsRunning() const { return m_running; }
+		
 	private:
-		static PlatformSupport s_platform;
-		static GraphicsSupport s_graphics;
+		bool m_running;
 
-		PlatformSupport::WindowType* m_window;
+		std::unique_ptr<Window> m_window;
 	};
 }

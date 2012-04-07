@@ -3,4 +3,4 @@
 
 #include "TalonPlatform.h"
 
-#warning "FPU Math Library not implemented."
+//#error "FPU Math Library not implemented."

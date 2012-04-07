@@ -126,3 +126,4 @@
 #   pragma warning(disable : 4251)	// STL usage in DLL-interface class
 #   pragma warning(disable : 4275)	// non dll-interface used as base for dll-interface
 #endif
+
