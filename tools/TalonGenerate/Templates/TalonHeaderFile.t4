@@ -1,0 +1,21 @@
+﻿﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	TypeModel model = (TypeModel) Host.GetHostOption("Model");
+#>
+
+#pragma once
+#include <Talon/TalonPublic.h>
+<# if (model.BaseClassHeaderFile != null) {#>#include <Talon/<#= model.BaseClassHeaderFile #>><#}#>
+
+namespace <#= string.Join(" { namespace ", model.Namespaces)#>
+{
+	class TalonApi <#= model.Class #><# if (model.BaseClass != null) {#> : public <#= model.BaseClass #><#}#>
+	{
+	public:
+		<#= model.Class #>();
+		virtual ~<#= model.Class #>();
+
+	private:
+	};
+<#= new string('}', model.Namespaces.Length) #>

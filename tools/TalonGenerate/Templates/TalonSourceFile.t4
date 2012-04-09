@@ -1,0 +1,20 @@
+﻿﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".cpp" encoding="utf-8" #>
+<#
+	TypeModel model = (TypeModel) Host.GetHostOption("Model");
+#>
+
+#include <Talon/<#= model.HeaderFile #>>
+
+namespace <#= string.Join(" { namespace ", model.Namespaces)#>
+{
+	<#= model.Class #>::<#= model.Class #>()
+		: <#= model.BaseClass #>()
+	{
+	}
+
+	<#= model.Class #>::~<#= model.Class #>()
+	{
+
+	}
+<#= new string('}', model.Namespaces.Length) #>
