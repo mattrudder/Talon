@@ -142,9 +142,12 @@ namespace TalonGenerate
 
 		public void LogErrors(CompilerErrorCollection errors)
 		{
-			foreach (CompilerError error in errors)
+			if (errors != null && errors.Count > 0)
 			{
-				Console.WriteLine(error);
+				foreach (CompilerError error in errors)
+				{
+					Console.WriteLine(error);
+				}
 			}
 		}
 
