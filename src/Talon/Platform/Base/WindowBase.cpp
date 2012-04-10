@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	WindowBase::WindowBase(std::wstring title, U32 width, U32 height)
+	WindowBase::WindowBase(std::wstring title, int width, int height)
 	{
 		m_title = title;
 		m_width = width;
@@ -19,7 +19,7 @@ namespace Talon
 
 	}
 
-	void WindowBase::OnResized(U32 width, U32 height)
+	void WindowBase::OnResized(int width, int height)
 	{
 		Resized(width, height);
 	}

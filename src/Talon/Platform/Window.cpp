@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	Window::Window(std::wstring title, U32 width, U32 height)
+	Window::Window(std::wstring title, int width, int height)
 #if TALON_WINDOWS
 		: Win32Window(title, width, height)
 #endif

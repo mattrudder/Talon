@@ -12,7 +12,7 @@ namespace Talon
 	public:
 		typedef Win32::Win32Window Base;
 
-		Window(std::wstring title, U32 width, U32 height);
+		Window(std::wstring title, int width, int height);
 		virtual ~Window();
 
 	public:

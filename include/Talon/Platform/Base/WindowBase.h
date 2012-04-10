@@ -8,26 +8,26 @@ namespace Talon
 	class TalonApi WindowBase
 	{
 	public:
-		WindowBase(std::wstring title, U32 width, U32 height);
+		WindowBase(std::wstring title, int width, int height);
 		virtual ~WindowBase();
 
 		inline const std::wstring& GetTitle() const { return m_title; }
-		inline U32 GetWidth() const { return m_width; }
-		inline U32 GetHeight() const { return m_height; }
+		inline int GetWidth() const { return m_width; }
+		inline int GetHeight() const { return m_height; }
 
-		delegate<WindowBase, void(U32, U32)> Resized;
+		delegate<WindowBase, void(int, int)> Resized;
 		delegate<WindowBase, void()> Closed;
 
 	public:
 		void DoEvents();
 
 	protected:
-		void OnResized(U32 width, U32 height);
+		void OnResized(int width, int height);
 		void OnClosed();
 
 	private:
-		U32 m_width;
-		U32 m_height;
+		i32 m_width;
+		i32 m_height;
 		std::wstring m_title;
 	};
 }

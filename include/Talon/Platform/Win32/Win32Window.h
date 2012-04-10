@@ -10,7 +10,7 @@ namespace Talon { namespace Win32
 	class TalonApi Win32Window : public WindowBase
 	{
 	public:
-		Win32Window(std::wstring title, U32 width, U32 height);
+		Win32Window(std::wstring title, int width, int height);
 		virtual ~Win32Window();
 
 	public:

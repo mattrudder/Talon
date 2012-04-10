@@ -36,7 +36,7 @@ namespace Talon { namespace Win32
 
 	std::unique_ptr<WindowClass> Win32Window::s_windowClass;
 
-	Win32Window::Win32Window(std::wstring title, U32 width, U32 height)
+	Win32Window::Win32Window(std::wstring title, int width, int height)
 		: WindowBase(title, width, height)
 	{
 		auto windowClass = GetOrRegisterClass();
@@ -96,8 +96,8 @@ namespace Talon { namespace Win32
 			return 0;
 		case WM_SIZE:
 			{
-				U32 w = LOWORD(lParam);
-				U32 h = HIWORD(lParam);
+				int w = LOWORD(lParam);
+				int h = HIWORD(lParam);
 
 				pWindow->OnResized(w, h);
 			}
