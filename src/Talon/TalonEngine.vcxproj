@@ -12,15 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Platforms\Base\WindowBase.cpp" />
-    <ClCompile Include="Platforms\Win32\Win32Window.cpp" />
-    <ClCompile Include="Platforms\Window.cpp" />
+    <ClCompile Include="Platform\Base\WindowBase.cpp" />
+    <ClCompile Include="Platform\Win32\Win32Window.cpp" />
+    <ClCompile Include="Platform\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Talon\Engine.h" />
-    <ClInclude Include="..\..\include\Talon\Platforms\Base\WindowBase.h" />
-    <ClInclude Include="..\..\include\Talon\Platforms\Win32\Win32Window.h" />
-    <ClInclude Include="..\..\include\Talon\Platforms\Window.h" />
+    <ClInclude Include="..\..\include\Talon\Platform\Base\WindowBase.h" />
+    <ClInclude Include="..\..\include\Talon\Platform\Win32\Win32Window.h" />
+    <ClInclude Include="..\..\include\Talon\Platform\Window.h" />
     <ClInclude Include="..\..\include\Talon\Talon.h" />
     <ClInclude Include="..\..\include\Talon\TalonAssert.h" />
     <ClInclude Include="..\..\include\Talon\TalonBuildInfo.h" />

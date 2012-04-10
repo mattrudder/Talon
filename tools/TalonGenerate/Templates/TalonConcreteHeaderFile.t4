@@ -1,0 +1,38 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	IEnumerable<TypeModel> models = (IEnumerable<TypeModel>) Host.GetHostOption("AllModels");
+	TypeModel concreteModel = (TypeModel) Host.GetHostOption("Model");
+	int i = 0;
+#>
+
+#pragma once
+
+#include <Talon/TalonPublic.h>
+
+<# 
+	i = 0;
+	foreach (TypeModel model in models) {
+#>
+<#= i == 0 ? "#if" : model.Conditional != null ? "#elif" : "#else" #> <#= model.Conditional != null ? model.Conditional : "" #>
+<#@ include file="TalonBaseClassInclude.t4" #>
+<#
+		++i;
+	}
+#>
+#endif
+
+namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
+{
+<# 
+	i = 0;
+	foreach (TypeModel model in models) {
+#>
+<#= i == 0 ? "#if" : model.Conditional != null ? "#elif" : "#else" #> <#= model.Conditional != null ? model.Conditional : "" #>
+<#@ include file="TalonClassDefinition.t4" #>
+<#
+		++i;
+	}
+#>
+#endif
+<#= new string('}', concreteModel.Namespaces.Length) #>

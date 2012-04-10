@@ -1,0 +1,11 @@
+<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+	class TalonApi <#= model.Class #><# if (model.BaseClass != null) {#> : public <#= model.BaseClass #>
+<#}#>
+	{
+	public:
+		<#= model.Class #>();
+		virtual ~<#= model.Class #>();
+
+	private:
+	};

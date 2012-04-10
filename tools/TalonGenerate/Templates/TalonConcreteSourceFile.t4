@@ -1,0 +1,33 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".cpp" encoding="utf-8" #>
+<#
+	IEnumerable<TypeModel> models = (IEnumerable<TypeModel>) Host.GetHostOption("AllModels");
+	TypeModel concreteModel = (TypeModel) Host.GetHostOption("Model");
+	int i = 0;
+#>
+
+#include <Talon/<#= concreteModel.HeaderFile #>>
+
+namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
+{
+	<#= concreteModel.Class #>::<#= concreteModel.Class #>()
+<# 
+	i = 0;
+	foreach (TypeModel model in models) {
+#>
+<#= i == 0 ? "#if" : model.Conditional != null ? "#elif" : "#else" #> <#= model.Conditional != null ? model.Conditional : "" #>
+		: <#= model.BaseClass #>()
+<#
+		++i;
+	}
+#>
+#endif
+	{
+
+	}
+
+	<#= concreteModel.Class #>::~<#= concreteModel.Class #>()
+	{
+
+	}
+<#= new string('}', concreteModel.Namespaces.Length) #>

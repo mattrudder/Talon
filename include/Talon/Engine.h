@@ -1,6 +1,6 @@
 
 #include <Talon/TalonPublic.h>
-#include <Talon/Platforms/Window.h>
+#include <Talon/Platform/Window.h>
 
 namespace Talon
 {

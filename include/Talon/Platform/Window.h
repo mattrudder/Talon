@@ -3,7 +3,7 @@
 #include <Talon/TalonPublic.h>
 
 #if TALON_WINDOWS
-#include <Talon/Platforms/Win32/Win32Window.h>
+#include <Talon/Platform/Win32/Win32Window.h>
 
 namespace Talon
 {

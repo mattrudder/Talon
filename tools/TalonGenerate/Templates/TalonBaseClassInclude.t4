@@ -1,0 +1,5 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<# if (model.BaseClassHeaderFile != null) { #>
+#include <Talon/<#= model.BaseClassHeaderFile #>>
+<# } #>

@@ -5,17 +5,11 @@
 #>
 
 #pragma once
+
 #include <Talon/TalonPublic.h>
-<# if (model.BaseClassHeaderFile != null) {#>#include <Talon/<#= model.BaseClassHeaderFile #>><#}#>
+<#@ include file="TalonBaseClassInclude.t4" #>
 
 namespace <#= string.Join(" { namespace ", model.Namespaces)#>
 {
-	class TalonApi <#= model.Class #><# if (model.BaseClass != null) {#> : public <#= model.BaseClass #><#}#>
-	{
-	public:
-		<#= model.Class #>();
-		virtual ~<#= model.Class #>();
-
-	private:
-	};
+<#@ include file="TalonClassDefinition.t4" #>
 <#= new string('}', model.Namespaces.Length) #>

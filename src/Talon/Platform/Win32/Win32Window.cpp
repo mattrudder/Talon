@@ -1,5 +1,5 @@
 
-#include <Talon/Platforms/Win32/Win32Window.h>
+#include <Talon/Platform/Win32/Win32Window.h>
 #include <string>
 
 namespace Talon { namespace Win32

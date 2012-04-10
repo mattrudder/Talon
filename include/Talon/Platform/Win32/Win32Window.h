@@ -1,7 +1,7 @@
 
 #pragma once
 #include <Talon/TalonPublic.h>
-#include <Talon/Platforms/Base/WindowBase.h>
+#include <Talon/Platform/Base/WindowBase.h>
 
 namespace Talon { namespace Win32
 {

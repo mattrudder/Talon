@@ -36,6 +36,7 @@ namespace TalonGenerate
 
 		public string TemplateFile { get; internal set; }
 		public TypeModel Model { get; internal set; }
+		public List<TypeModel> AllModels { get; set; }
 
 		public WrapperTemplateHost()
 		{
@@ -51,6 +52,9 @@ namespace TalonGenerate
 				break;
 			case "Model":
 				returnObject = Model;
+				break;
+			case "AllModels":
+				returnObject = AllModels;
 				break;
 			}
 			return returnObject;
@@ -146,13 +150,14 @@ namespace TalonGenerate
 			{
 				foreach (CompilerError error in errors)
 				{
-					Console.WriteLine(error);
+					//C:\Users\mrudder\Projects\Talon\tools\TalonGenerate\WrapperTemplateHost.cs(153,6,153,7): error CS1056: Unexpected character '\'
+
+					Console.WriteLine("{0}({1},{2}): {3} {4}: {5}", error.FileName, error.Line, error.Column, error.IsWarning ? "warn" : "error", error.ErrorNumber,  error.ErrorText);
 				}
 			}
 		}
 
 		private string m_defaultFileExtension;
 		private Encoding m_fileEncoding;
-
 	}
 }

@@ -9,8 +9,10 @@
 namespace <#= string.Join(" { namespace ", model.Namespaces)#>
 {
 	<#= model.Class #>::<#= model.Class #>()
-		: <#= model.BaseClass #>()
+<# if (model.BaseClass != null) { #>		: <#= model.BaseClass #>()
+<#}#>
 	{
+
 	}
 
 	<#= model.Class #>::~<#= model.Class #>()
