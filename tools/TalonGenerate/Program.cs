@@ -28,7 +28,7 @@ namespace TalonGenerate
 					GenerateTypeHierarchy(args[0], args[1], Mode.Update);
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				PrintUsage();
 			}
@@ -94,7 +94,6 @@ namespace TalonGenerate
 							Kind = "Base",
 							Class = baseClass,
 							HeaderFile = baseFileName + ".h",
-							Namespaces = new[] { "Talon" },
 						};
 
 						GenerateFile(baseFilePath, templateText);
@@ -123,7 +122,6 @@ namespace TalonGenerate
 							BaseClass = baseClass,
 							BaseClassHeaderFile = baseFileName + ".h",
 							HeaderFile = classFileName + ".h",
-							Namespaces = new[] { "Talon", kind.FullName },
 						};
 
 						models.Add(new TypeModel
@@ -131,10 +129,9 @@ namespace TalonGenerate
 								Type = classType,
 								Kind = kind.FullName,
 								Class = name,
-								BaseClass = kind.FullName + "::" + className,
+								BaseClass = className,
 								BaseClassHeaderFile = classFileName + ".h",
 								HeaderFile = concreteFileName + ".h",
-								Namespaces = new[] { "Talon" },
 								Conditional = kind.Conditional,
 							});
 
@@ -166,7 +163,6 @@ namespace TalonGenerate
 					{
 						Class = name,
 						HeaderFile = concreteFileName + ".h",
-						Namespaces = new [] { "Talon" }
 					};
 
 					// Concreate implementation is re-written, unless we're deleting the type altogether.
@@ -284,12 +280,13 @@ namespace TalonGenerate
 						{
 							FullName = "Direct3D11",
 							ShortName = "D3D11",
-							Conditional = "TALON_WINDOWS"
+							Conditional = "TALON_GRAPHICS == TALON_GRAPHICS_D3D11"
 						},
 						new PlatformModel
 						{
 							FullName = "OpenGL",
-							ShortName = "GL"
+							ShortName = "GL",
+							Conditional = "TALON_GRAPHICS == TALON_GRAPHICS_OPENGL"
 						},
 					}
 				}
@@ -326,7 +323,6 @@ namespace TalonGenerate
 		public string HeaderFile;
 		public string BaseClass;
 		public string BaseClassHeaderFile;
-		public string[] Namespaces;
 		public string Conditional;
 	}
 

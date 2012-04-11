@@ -3,25 +3,14 @@
 <#
 	IEnumerable<TypeModel> models = (IEnumerable<TypeModel>) Host.GetHostOption("AllModels");
 	TypeModel concreteModel = (TypeModel) Host.GetHostOption("Model");
-	int i = 0;
 #>
 
 #include <Talon/<#= concreteModel.HeaderFile #>>
 
-namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
+namespace Talon
 {
 	<#= concreteModel.Class #>::<#= concreteModel.Class #>()
-<# 
-	i = 0;
-	foreach (TypeModel model in models) {
-#>
-<#= i == 0 ? "#if" : model.Conditional != null ? "#elif" : "#else" #> <#= model.Conditional != null ? model.Conditional : "" #>
-		: <#= model.BaseClass #>()
-<#
-		++i;
-	}
-#>
-#endif
+		: Base()
 	{
 
 	}
@@ -30,4 +19,4 @@ namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
 	{
 
 	}
-<#= new string('}', concreteModel.Namespaces.Length) #>
+}

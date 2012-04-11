@@ -9,7 +9,7 @@
 #include <Talon/TalonPublic.h>
 <#@ include file="TalonBaseClassInclude.t4" #>
 
-namespace <#= string.Join(" { namespace ", model.Namespaces)#>
+namespace Talon
 {
 <#@ include file="TalonClassDefinition.t4" #>
-<#= new string('}', model.Namespaces.Length) #>
+}

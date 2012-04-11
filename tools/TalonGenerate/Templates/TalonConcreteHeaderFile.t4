@@ -22,7 +22,7 @@
 #>
 #endif
 
-namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
+namespace Talon
 {
 <# 
 	i = 0;
@@ -35,4 +35,4 @@ namespace <#= string.Join(" { namespace ", concreteModel.Namespaces)#>
 	}
 #>
 #endif
-<#= new string('}', concreteModel.Namespaces.Length) #>
+}
