@@ -3,7 +3,7 @@
 #include <Talon/TalonPublic.h>
 #include <Talon/Platform/Base/WindowBase.h>
 
-namespace Talon { namespace Win32
+namespace Talon
 {
 	struct WindowClass;
 
@@ -12,6 +12,8 @@ namespace Talon { namespace Win32
 	public:
 		Win32Window(std::wstring title, int width, int height);
 		virtual ~Win32Window();
+
+		inline HWND GetHandle() const { return m_hWnd; };
 
 	public:
 		void DoEvents();
@@ -26,4 +28,4 @@ namespace Talon { namespace Win32
 
 		HWND m_hWnd;
 	};
-}}
+}

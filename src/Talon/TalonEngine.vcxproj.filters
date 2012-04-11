@@ -13,9 +13,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Platforms">
-      <UniqueIdentifier>{66d8ea0c-e880-4fcf-bebe-fdecd2b32d8b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{5af8012b-ce3b-400f-8b69-808b2685690a}</UniqueIdentifier>
     </Filter>
@@ -28,12 +25,6 @@
     <Filter Include="Source Files\Graphics\Direct3D11">
       <UniqueIdentifier>{f1e8256e-d8f5-4118-a0af-eff2f7c2a4bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Platforms\Base">
-      <UniqueIdentifier>{9aa64f96-091c-43bd-b349-91985cdee5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Platforms\Win32">
-      <UniqueIdentifier>{171b0019-4348-4e08-b071-68abc99c43ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Platform">
       <UniqueIdentifier>{6bb7a0aa-aad8-47c3-952d-497abf3c9b07}</UniqueIdentifier>
     </Filter>
@@ -42,6 +33,27 @@
     </Filter>
     <Filter Include="Source Files\Platform\Base">
       <UniqueIdentifier>{c625e878-e7fc-4c56-af93-6b8322bb445a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Platform">
+      <UniqueIdentifier>{66d8ea0c-e880-4fcf-bebe-fdecd2b32d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Platform\Base">
+      <UniqueIdentifier>{9aa64f96-091c-43bd-b349-91985cdee5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Platform\Win32">
+      <UniqueIdentifier>{171b0019-4348-4e08-b071-68abc99c43ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Base">
+      <UniqueIdentifier>{7e770a4f-03b4-4904-a642-0dd4bd0ed483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Base">
+      <UniqueIdentifier>{9692df9e-a958-4157-8501-a157a4797ce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\OpenGL">
+      <UniqueIdentifier>{b70f149c-0498-4874-bb07-f0b7483c7530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\OpenGL">
+      <UniqueIdentifier>{421047b7-5c8d-46a0-b021-1405742c9c9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +68,18 @@
     </ClCompile>
     <ClCompile Include="Platform\Base\WindowBase.cpp">
       <Filter>Source Files\Platform\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11RenderDevice.cpp">
+      <Filter>Source Files\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Base\RenderDeviceBase.cpp">
+      <Filter>Source Files\Graphics\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderDevice.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GLRenderDevice.cpp">
+      <Filter>Source Files\Graphics\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,13 +117,25 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Platform\Window.h">
-      <Filter>Header Files\Platforms</Filter>
+      <Filter>Header Files\Platform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Platform\Win32\Win32Window.h">
-      <Filter>Header Files\Platforms\Win32</Filter>
+      <Filter>Header Files\Platform\Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Platform\Base\WindowBase.h">
-      <Filter>Header Files\Platforms\Base</Filter>
+      <Filter>Header Files\Platform\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\RenderDevice.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Base\RenderDeviceBase.h">
+      <Filter>Header Files\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Direct3D11\D3D11RenderDevice.h">
+      <Filter>Header Files\Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLRenderDevice.h">
+      <Filter>Header Files\Graphics\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

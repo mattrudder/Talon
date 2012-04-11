@@ -1,21 +1,22 @@
 
 #include <Talon/Platform/Win32/Win32Window.h>
+#include <Talon/Graphics/RenderDevice.h>
 #include <string>
 
-namespace Talon { namespace Win32
+namespace Talon
 {
 	struct WindowClass
 	{
 		WindowClass(WNDPROC fnWndProc)
 		{
 			WNDCLASS wc = {0};
-			wc.style = CS_HREDRAW | CS_VREDRAW;
+			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 			wc.lpfnWndProc = fnWndProc;
 			wc.cbClsExtra = 0;
 			wc.hInstance = GetModuleHandle(nullptr);
 			wc.hIcon = LoadIcon(0, IDI_APPLICATION);
 			wc.hCursor = LoadCursor(0, IDC_ARROW);
-			wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+			wc.hbrBackground = nullptr;
 			wc.lpszMenuName = 0;
 			wc.lpszClassName = L"TalonWindow";
 
@@ -46,10 +47,10 @@ namespace Talon { namespace Win32
 			rClient.bottom = height;
 			rClient.right = width;
 
-			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX, FALSE);
+			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, FALSE);
 
 			m_hWnd = CreateWindow(windowClass->Name.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
-				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), 0);
+				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), this);
 
 			if (m_hWnd)
 			{
@@ -63,7 +64,7 @@ namespace Talon { namespace Win32
 
 	Win32Window::~Win32Window()
 	{
-
+		DestroyWindow(m_hWnd);
 	}
 
 	void Win32Window::DoEvents()
@@ -91,8 +92,29 @@ namespace Talon { namespace Win32
 		Win32Window* pWindow = (Win32Window *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 		switch (msg)
 		{
+		case WM_CREATE:
+			{
+				// Hook up wrapper with HWND in both directions.
+				CREATESTRUCT* pCS = (CREATESTRUCT*)lParam;
+				if (pCS != nullptr && pCS->lpCreateParams != nullptr)
+				{
+					pWindow = (Win32Window*)pCS->lpCreateParams;
+					SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)pWindow);
+
+					pWindow->m_hWnd = hWnd;
+					pWindow->OnCreated();
+				}
+			}
+			return 0;
+		case WM_DESTROY:
+			{
+				pWindow->OnDestroyed();
+			}
+			return 0;
 		case WM_CLOSE:
-			pWindow->OnClosed();
+			{
+				pWindow->OnClosed();
+			}
 			return 0;
 		case WM_SIZE:
 			{
@@ -106,4 +128,4 @@ namespace Talon { namespace Win32
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
-}}
+}

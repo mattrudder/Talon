@@ -4,9 +4,7 @@
 namespace Talon
 {
 	Window::Window(std::wstring title, int width, int height)
-#if TALON_WINDOWS
-		: Win32Window(title, width, height)
-#endif
+		: Base(title, width, height)
 	{
 	}
 

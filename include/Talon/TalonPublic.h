@@ -18,6 +18,12 @@
 #	include <windows.h>
 #endif
 
+#if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS && (defined(BUILDING_TALON) || !defined(TALON_DLL))
+#	if TALON_GRAPHICS_OPENGL
+#		pragma comment(lib, "OpenGL32.lib")
+#	endif
+#endif
+
 namespace Talon
 {
 	// Placeholders for non-member methods missing from the C++11 spec.

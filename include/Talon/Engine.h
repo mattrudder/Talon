@@ -16,6 +16,6 @@ namespace Talon
 	private:
 		bool m_running;
 
-		std::unique_ptr<Window> m_window;
+		std::shared_ptr<Window> m_window;
 	};
 }
