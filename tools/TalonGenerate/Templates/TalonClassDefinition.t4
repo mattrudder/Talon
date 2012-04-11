@@ -4,6 +4,9 @@
 <#}#>
 	{
 	public:
+		<# if (model.BaseClass != null) {#>typedef <#= model.BaseClass #> Base;
+<#}#>
+
 		<#= model.Class #>();
 		virtual ~<#= model.Class #>();
 

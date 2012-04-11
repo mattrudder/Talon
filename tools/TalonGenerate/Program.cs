@@ -131,7 +131,7 @@ namespace TalonGenerate
 								Type = classType,
 								Kind = kind.FullName,
 								Class = name,
-								BaseClass = className,
+								BaseClass = kind.FullName + "::" + className,
 								BaseClassHeaderFile = classFileName + ".h",
 								HeaderFile = concreteFileName + ".h",
 								Namespaces = new[] { "Talon" },
