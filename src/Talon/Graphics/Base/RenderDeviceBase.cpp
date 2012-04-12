@@ -6,7 +6,6 @@ namespace Talon
 	RenderDeviceBase::RenderDeviceBase(Window* window)
 		: m_window(window)
 	{
-
 	}
 
 	RenderDeviceBase::~RenderDeviceBase()
