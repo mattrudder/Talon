@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Graphics\OpenGL">
       <UniqueIdentifier>{421047b7-5c8d-46a0-b021-1405742c9c9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals">
+      <UniqueIdentifier>{3276f08c-8c6d-4c67-9888-5efc5ff196c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\glew">
+      <UniqueIdentifier>{6d36fdfe-fb6e-4dfa-894f-7e8515d429bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -80,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GLRenderDevice.cpp">
       <Filter>Source Files\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\glew-1.7.0\src\glew.c">
+      <Filter>Externals\glew</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLRenderDevice.h">
       <Filter>Header Files\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\build\Talon\TalonBuildInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\glew.h">
+      <Filter>Externals\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\wglew.h">
+      <Filter>Externals\glew</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

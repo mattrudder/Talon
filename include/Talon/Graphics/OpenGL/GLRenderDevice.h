@@ -22,7 +22,10 @@ namespace Talon
 		void WithContext(std::function<void()> fn);
 
 	private:
+#if TALON_WINDOWS
 		HDC m_hDC;
 		HGLRC m_hRC;
+#endif
+
 	};
 }

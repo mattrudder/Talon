@@ -11,15 +11,7 @@ namespace Talon
 {
 	void Engine::Initialize(const char* /*arguments*/)
 	{
-		m_running = true;
-		m_window = std::make_shared<Window>(L"Talon Engine " TALON_VERSION_WSTRING, 800, 600);
-		m_window->Closed += [this] ()
-		{
-			m_running = false;
-		};
-
 		char line[MAX_PATH];
-
 		sprintf_s(line, "Talon version: %s\n", TALON_VERSION_STRING);
 		OutputDebugStringA(line);
 
@@ -31,6 +23,13 @@ namespace Talon
 
 		sprintf_s(line, "Cairo version: %s\n", cairo_version_string());
 		OutputDebugStringA(line);
+
+		m_running = true;
+		m_window = std::make_shared<Window>(L"Talon Engine " TALON_VERSION_WSTRING, 800, 600);
+		m_window->Closed += [this] ()
+		{
+			m_running = false;
+		};
 	}
 
 	void Engine::Shutdown()

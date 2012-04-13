@@ -13,11 +13,16 @@ namespace Talon
 		virtual ~RenderDeviceBase();
 
 		inline Window* GetWindow() const { return m_window; }
+		inline bool IsInitialized() const { return m_initialized; }
 
 		void BeginFrame();
 		void EndFrame();
 
+	protected:
+		inline void SetInitialized(bool value) { m_initialized = value; }
+
 	private:
 		Window* m_window;
+		bool m_initialized;
 	};
 }

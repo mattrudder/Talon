@@ -40,22 +40,24 @@ namespace TalonGenerate
 			Console.Error.WriteLine("abstractions for platform features.");
 			Console.Error.WriteLine("");
 			Console.Error.WriteLine("Usage: TalonGenerate [mode] <subsystem> <class>");
-			Console.Error.WriteLine(" mode: ({0}; default is update) Sets the mode of generation.", string.Join("|", Enum.GetNames(typeof(Mode)).Select(s => s.ToLower())));
-			Console.Error.WriteLine("   generate: Regenerates all files for all platforms.");
-			Console.Error.WriteLine("   update: Updates the class hierarchy, adding new files for recently added");
-			Console.Error.WriteLine("   platforms.");
-			Console.Error.WriteLine("   delete: Deletes the class hierarchy for the provided class name.");
-			Console.Error.WriteLine(" subsystem: ({0}) The category of grouped system functionality", string.Join("|", Enum.GetNames(typeof(ClassType)).Select(s => s.ToLower())));
-			Console.Error.WriteLine(" to add the class.");
-			Console.Error.WriteLine(" class: The name of the class hierarchy to generate.");
-			Console.Error.WriteLine(" (For example: Window or Texture)");
+			Console.Error.WriteLine("  mode:      [{0}]", string.Join("|", Enum.GetNames(typeof(Mode)).Select(s => s.ToLower())));
+			Console.Error.WriteLine("    generate -  Regenerates all files for all platforms.");
+			Console.Error.WriteLine("    update   -  Updates the class hierarchy, adding new files for");
+			Console.Error.WriteLine("                recently added platforms.");
+			Console.Error.WriteLine("    delete   -  Deletes the class hierarchy for the provided class name.");
+			Console.Error.WriteLine("");
+			Console.Error.WriteLine("  subsystem: <{0}>", string.Join("|", Enum.GetNames(typeof(ClassType)).Select(s => s.ToLower())));
+			Console.Error.WriteLine("             The category of system functionality to add the class.");
+			Console.Error.WriteLine("");
+			Console.Error.WriteLine("  class:     The name of the class hierarchy to generate.");
+			Console.Error.WriteLine("             For example: Window or Texture");
 			Console.Error.WriteLine("");
 			Console.Error.WriteLine("Examples:");
-			Console.Error.WriteLine("  Updates the Window class to add support for a new platform:");
-			Console.Error.WriteLine("  TalonGenerate update platform Window");
-			Console.Error.WriteLine("  --");
-			Console.Error.WriteLine("  Generates Texture class, for all supported platforms:");
-			Console.Error.WriteLine("  TalonGenerate graphics Texture");
+			Console.Error.WriteLine(" Updates the Window class to add support for a new platform:");
+			Console.Error.WriteLine(" TalonGenerate update platform Window");
+			Console.Error.WriteLine(" --");
+			Console.Error.WriteLine(" Generates Texture class, for all supported platforms:");
+			Console.Error.WriteLine(" TalonGenerate graphics Texture");
 		}
 
 		static void GenerateTypeHierarchy(string classTypeName, string name, Mode generationMode)

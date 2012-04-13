@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\externals\glew-1.7.0\src\glew.c" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Graphics\Base\RenderDeviceBase.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11RenderDevice.cpp" />
@@ -22,6 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\build\Talon\TalonBuildInfo.h" />
+    <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\glew.h" />
+    <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\wglew.h" />
     <ClInclude Include="..\..\include\Talon\Engine.h" />
     <ClInclude Include="..\..\include\Talon\Graphics\Base\RenderDeviceBase.h" />
     <ClInclude Include="..\..\include\Talon\Graphics\Direct3D11\D3D11RenderDevice.h" />
@@ -89,9 +92,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -109,9 +112,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -119,8 +122,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\bin\$(PlatformShortName)\$(Configuration)\;$(ProjectDir)..\..\externals\zlib-1.2.6\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\libpng-1.5.10\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\cairo-1.8.8\lib\vc11\$(PlatformShortName)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zlibwapi.lib;libpng15.lib;cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\bin\$(PlatformShortName)\$(Configuration)\;$(ProjectDir)..\..\externals\zlib-1.2.6\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\libpng-1.5.10\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\cairo-1.8.8\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\glew-1.7.0\lib\vc\$(PlatformShortName)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;zlibwapi.lib;libpng15.lib;cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
