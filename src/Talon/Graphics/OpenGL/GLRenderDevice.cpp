@@ -20,8 +20,8 @@ namespace Talon
 		HDC hDC;
 		HGLRC hRC;
 		
-		void Bind() { wglMakeCurrent(m_hDC, m_hRC); }
-		void Unbind() { wglMakeCurrent(m_hDC, nullptr); }
+		void Bind() { wglMakeCurrent(hDC, hRC); }
+		void Unbind() { wglMakeCurrent(hDC, nullptr); }
 	};
 	
 	bool SetPixelFormat(HDC hDC)
@@ -101,9 +101,10 @@ namespace Talon
 				0
 			};
 
+			HGLRC hRC = tempContext;
 			if (WGLEW_ARB_create_context)
 			{
-				HGLRC hRC = wglCreateContextAttribsARB(hDC, 0, attributes);
+				hRC = wglCreateContextAttribsARB(hDC, 0, attributes);
 				wglMakeCurrent(nullptr, nullptr);
 				wglDeleteContext(tempContext);
 
@@ -169,9 +170,9 @@ namespace Talon
 	GLRenderDevice::~GLRenderDevice()
 	{
 #if TALON_WINDOWS
-		wglMakeCurrent(m_hDC, nullptr);
-		wglDeleteContext(m_hRC);
-		::ReleaseDC(GetWindow()->GetHandle(), m_hDC);
+		wglMakeCurrent(m_impl->hDC, nullptr);
+		wglDeleteContext(m_impl->hRC);
+		::ReleaseDC(GetWindow()->GetHandle(), m_impl->hDC);
 #elif TALON_MAC
 		[NSOpenGLContext clearCurrentContext];
 #endif
@@ -180,7 +181,7 @@ namespace Talon
 	void GLRenderDevice::BeginFrame()
 	{
 #if TALON_WINDOWS
-		wglMakeCurrent(m_hDC, m_hRC);
+		wglMakeCurrent(m_impl->hDC, m_impl->hRC);
 #elif TALON_MAC
 		NSOpenGLContext* context = (NSOpenGLContext*) m_impl->context;
 		[context makeCurrentContext];
@@ -192,9 +193,9 @@ namespace Talon
 	void GLRenderDevice::EndFrame()
 	{
 #if TALON_WINDOWS
-		SwapBuffers(m_hDC);
+		SwapBuffers(m_impl->hDC);
 		ValidateRect(GetWindow()->GetHandle(), nullptr);
-		wglMakeCurrent(m_hDC, nullptr);
+		wglMakeCurrent(m_impl->hDC, nullptr);
 #elif TALON_MAC
 		NSOpenGLContext* context = (NSOpenGLContext*) m_impl->context;
 		[context flushBuffer];
