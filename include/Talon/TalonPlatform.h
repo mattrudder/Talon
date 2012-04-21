@@ -1,7 +1,7 @@
 
 #pragma once
 
-#ifdef __APPLE__
+#ifdef __MACH__
 #include <TargetConditionals.h>
 #endif
 
@@ -63,7 +63,7 @@
 //#		undef TALON_MATH
 //#		define TALON_MATH TALON_MATH_SSE2
 #	endif
-#elif defined(__APPLE__)
+#elif defined(__MACH__)
 #	define TALON_COMPILER_VERSION __GNUC__
 #	define TALON_COMPILER_VENDOR TALON_COMPILER_VENDOR_GCC
 #	if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE

@@ -4,7 +4,7 @@
 #include <Talon/TalonPublic.h>
 #include <Talon/Platform/Base/WindowBase.h>
 
-namespace Talon { namespace Mac
+namespace Talon
 {
 	class TalonApi MacWindow : public WindowBase
 	{
@@ -14,5 +14,12 @@ namespace Talon { namespace Mac
 
 	public:
 		void DoEvents();
+		
+		void* GetWindow() const;
+
+		struct Impl;
+
+	private:
+		std::unique_ptr<Impl> m_impl;
 	};
-}}
+}

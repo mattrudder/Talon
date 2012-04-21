@@ -16,7 +16,7 @@ namespace Talon
 		template<typename F2>
 		delegate(std::function<F2> fn)
 		{
-			m_listeners.push_back(f);
+			m_listeners.push_back(fn);
 		}
 
 		void Add(std::function<F> fn)

@@ -27,11 +27,11 @@
 namespace Talon
 {
 	// Placeholders for non-member methods missing from the C++11 spec.
-	template<class T>
-	auto cbegin(const T& t) -> decltype(t.cbegin()) { return t.cbegin(); }
-
-	template<class T>
-	auto cend(const T& t) -> decltype(t.cend()) { return t.cend(); }
+//	template<class T>
+//	auto cbegin(const T& t) -> decltype(t.cbegin()) { return t.cbegin(); }
+//
+//	template<class T>
+//	auto cend(const T& t) -> decltype(t.cend()) { return t.cend(); }
 
 	// Variadic template version of unique_ptr
 	//template<typename T, typename ...Args>

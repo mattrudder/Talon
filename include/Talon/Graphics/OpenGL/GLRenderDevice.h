@@ -18,14 +18,13 @@ namespace Talon
 		void BeginFrame();
 		void EndFrame();
 
+		struct Impl;
+		
 	private:
 		void WithContext(std::function<void()> fn);
 
 	private:
-#if TALON_WINDOWS
-		HDC m_hDC;
-		HGLRC m_hRC;
-#endif
+		std::unique_ptr<Impl> m_impl;
 
 	};
 }
