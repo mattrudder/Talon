@@ -1,0 +1,62 @@
+﻿{
+	'module': 'Talon.Platform',
+	'interfaces': [
+		{
+			'name': 'Window',
+			'delegates': [
+				{
+					'name': 'Resized',
+					'returnType': 'void',
+					'parameters': [
+						{ 'name': 'width', 'type': 'int' },
+						{ 'name': 'height', 'type': 'int' }
+					]
+				},
+				{
+					'name': 'Closed',
+					'returnType': 'void',
+					'parameters': []
+				},
+				{
+					'name': 'Created',
+					'returnType': 'void',
+					'parameters': []
+				},
+				{
+					'name': 'Destroyed',
+					'returnType': 'void',
+					'parameters': []
+				},
+			],
+			'properties': [
+				{
+					'name': 'Title',
+					'type': 'UString',
+					'isReadOnly': false
+				},
+				{
+					'name': 'Width',
+					'type': 'int',
+					'isReadOnly': true
+				},
+				{
+					'name': 'Height',
+					'type': 'int',
+					'isReadOnly': true
+				},
+				{
+					'name': 'RenderDevice',
+					'type': 'RenderDevice',
+					'isReadOnly': true
+				},
+			],
+			'methods': [
+				{
+					'name': 'DoEvents',
+					'returnType': 'void',
+					'parameters': []
+				}
+			]
+		}
+	]
+}

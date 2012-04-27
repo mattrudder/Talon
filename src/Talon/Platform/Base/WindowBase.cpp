@@ -18,7 +18,6 @@ namespace Talon
 
 	void WindowBase::DoEvents()
 	{
-
 	}
 
 	void WindowBase::OnResized(int width, int height)

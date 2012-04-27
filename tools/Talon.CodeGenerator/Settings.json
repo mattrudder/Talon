@@ -1,0 +1,34 @@
+﻿{
+	'modules': [
+		{
+			'name': 'Platform',
+			'platforms': [
+				{ 
+					'name': 'Windows',
+					'shortName': 'Win32',
+					'condition': 'TALON_WINDOWS'
+				},
+				{
+					'name': 'Mac',
+					'shortName': 'Mac',
+					'condition': 'TALON_MAC'
+				},
+			],
+		},
+		{
+			'name': 'Graphics',
+			'platforms': [
+				{ 
+					'name': 'Direct3D11',
+					'shortName': 'D3D11',
+					'condition': 'TALON_GRAPHICS == TALON_GRAPHICS_DIRECT3D11'
+				},
+				{
+					'name': 'OpenGL',
+					'shortName': 'GL',
+					'condition': 'TALON_GRAPHICS == TALON_GRAPHICS_OPENGL'
+				},
+			],
+		}
+	]
+}

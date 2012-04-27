@@ -1,0 +1,23 @@
+﻿module Talon.Platform;
+
+interface Window
+{
+	property UIString Title;
+	property(readonly) int Width;
+	property(readonly) int Height;
+	property(readonly) RenderDevice RenderDevice;
+
+	delegate void Resized(int width, int height);
+	delegate void Closed();
+	delegate void Created();
+	delegate void Destroyed();
+
+	void DoEvents();
+}
+
+enum WindowType
+{
+	Windowed,
+	FullScreen,
+	FullScreenWindowed
+}

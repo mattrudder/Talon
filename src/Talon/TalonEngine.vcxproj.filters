@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\externals\glew-1.7.0\src\glew.c">
       <Filter>Externals\glew</Filter>
     </ClCompile>
+    <ClCompile Include="Simulation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Talon\Engine.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\wglew.h">
       <Filter>Externals\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Simulation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

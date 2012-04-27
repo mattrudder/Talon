@@ -1,21 +1,24 @@
 
 #include <Talon/TalonPublic.h>
-#include <Talon/Platform/Window.h>
 
 namespace Talon
 {
+	class Simulation;
+	class Window;
+
 	class TalonApi Engine
 	{
 	public:
-		void Initialize(const char* arguments);
+		void Initialize(Simulation* sim);
 		void Shutdown();
 		void RunFrame();
 
 		inline bool IsRunning() const { return m_running; }
-		
+
 	private:
 		bool m_running;
 
+		std::shared_ptr<Simulation> m_simulation;
 		std::shared_ptr<Window> m_window;
 	};
 }

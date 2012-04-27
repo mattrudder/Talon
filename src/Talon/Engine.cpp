@@ -2,6 +2,7 @@
 #include <Talon/Engine.h>
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
+#include <Talon/Simulation.h>
 
 //#include <zlib.h>
 //#include <png.h>
@@ -9,8 +10,10 @@
 
 namespace Talon
 {
-	void Engine::Initialize(const char* /*arguments*/)
+	void Engine::Initialize(Simulation* sim)
 	{
+		m_simulation.reset(sim);
+
 //		char line[MAX_PATH];
 //		sprintf_s(line, "Talon version: %s\n", TALON_VERSION_STRING);
 //		OutputDebugStringA(line);
@@ -26,7 +29,7 @@ namespace Talon
 
 		m_running = true;
 
-		m_window = std::make_shared<Window>(L"Talon", 800, 600);
+		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
 		m_window->Closed += [this] ()
 		{
 			m_running = false;
@@ -41,8 +44,12 @@ namespace Talon
 	{
 		m_window->DoEvents();
 
+		m_simulation->OnBeginFrame();
+
 		auto device = m_window->GetRenderDevice();
 		device->BeginFrame();
+
+
 
 		device->EndFrame();
 	}

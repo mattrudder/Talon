@@ -144,7 +144,8 @@ namespace Talon
 		WithContext([window, this]
 		{
 			glShadeModel(GL_SMOOTH);
-			glClearColor(0.392156862745098f, 0.5843137254901961f, 0.9294117647058824f, 1.0f);
+			//glClearColor(0.392156862745098f, 0.5843137254901961f, 0.9294117647058824f, 1.0f);
+			glClearColor(1.0f, 0.3882352941176471f, 0.2784313725490196f, 1.0f); // TOMATO!
 			glClearDepth(1.0f);
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LEQUAL);
