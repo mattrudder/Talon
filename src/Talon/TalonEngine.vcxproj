@@ -80,7 +80,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)..\..\..\LD23\bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\bin\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\..\obj\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

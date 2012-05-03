@@ -7,6 +7,7 @@ namespace Talon.CodeGenerator
 {
 	public abstract class SymbolDefinition
 	{
+        public string OuterScope { get; set; }
 		public string Name { get; set; }
 	}
 }

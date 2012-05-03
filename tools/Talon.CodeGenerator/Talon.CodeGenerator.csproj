@@ -54,9 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGeneratorSettings.cs" />
+    <Compile Include="Generators\CPlusPlus\CPlusPlusGenerator.cs" />
+    <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Model\DefinitionModule.cs" />
     <Compile Include="Model\InterfaceDefinition.cs" />
-    <Compile Include="Model\MethodDefinition.cs" />
+    <Compile Include="Model\MethodDefinition.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\ParameterDefinition.cs" />
     <Compile Include="ModuleSettings.cs" />
     <Compile Include="Parsing\InterfaceDefinitionGrammar.cs" />
@@ -68,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="Window.json">
+    <Content Include="Definitions\Window.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Window.tdl">
