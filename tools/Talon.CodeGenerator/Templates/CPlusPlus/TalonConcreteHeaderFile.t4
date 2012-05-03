@@ -1,0 +1,46 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
+	int i = 0;
+#>
+
+#pragma once
+
+#include <Talon/TalonPublic.h>
+
+<# 
+	i = 0;
+	foreach (PlatformModel platform in model.Platforms) {
+#>
+<#= i == 0 ? "#if" : platform.Condition != null ? "#elif" : "#else" #> <#= platform.Condition != null ? platform.Condition : "" #>
+#include <Talon/<#= model.Module #>/<#= platform.ShortName #>/<#= platform.ClassName #>.h>
+<#
+		++i;
+	}
+#>
+#endif
+
+namespace Talon
+{
+<# 
+	i = 0;
+	foreach (PlatformModel platform in model.Platforms) {
+#>
+<#= i == 0 ? "#if" : platform.Condition != null ? "#elif" : "#else" #> <#= platform.Condition != null ? platform.Condition : "" #>
+	class TalonApi <#= model.Name #> : public <#= platform.ClassName #>
+	{
+	public:
+		typedef <#= platform.ClassName #> Base;
+
+		<#= model.Name #>();
+		virtual ~<#= model.Name #>();
+
+	private:
+	};
+<#
+		++i;
+	}
+#>
+#endif
+}

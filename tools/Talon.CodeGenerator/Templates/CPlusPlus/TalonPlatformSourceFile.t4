@@ -1,0 +1,19 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".cpp" encoding="utf-8" #>
+<#
+	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
+#>
+
+#include <Talon/<#= model.Parent.Module #>/<#= model.ShortName #>/<#= model.ClassName #>.h>
+
+namespace Talon
+{
+	<#= model.ClassName #>::<#= model.ClassName #>()
+		: Base()
+	{
+	}
+
+	<#= model.ClassName #>::~<#= model.ClassName #>()
+	{
+	}
+}

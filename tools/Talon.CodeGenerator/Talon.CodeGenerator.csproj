@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -56,19 +56,22 @@
     <Compile Include="CodeGeneratorSettings.cs" />
     <Compile Include="Generators\CPlusPlus\CPlusPlusGenerator.cs" />
     <Compile Include="Generators\IGenerator.cs" />
-    <Compile Include="Model\DefinitionModule.cs" />
-    <Compile Include="Model\InterfaceDefinition.cs" />
-    <Compile Include="Model\MethodDefinition.cs">
+    <Compile Include="Generators\Model\InterfaceModel.cs" />
+    <Compile Include="Generators\Model\PlatformModel.cs" />
+    <Compile Include="Parsing\Model\DefinitionModule.cs" />
+    <Compile Include="Parsing\Model\InterfaceDefinition.cs" />
+    <Compile Include="Parsing\Model\MethodDefinition.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\ParameterDefinition.cs" />
+    <Compile Include="Parsing\Model\ParameterDefinition.cs" />
     <Compile Include="ModuleSettings.cs" />
     <Compile Include="Parsing\InterfaceDefinitionGrammar.cs" />
     <Compile Include="PlatformSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\PropertyDefinition.cs" />
-    <Compile Include="Model\SymbolDefinition.cs" />
+    <Compile Include="Parsing\Model\PropertyDefinition.cs" />
+    <Compile Include="Parsing\Model\SymbolDefinition.cs" />
+    <Compile Include="Generators\CPlusPlus\CPlusPlusTemplateHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,7 +84,26 @@
     <Content Include="Settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\CPlusPlus\TalonConcreteHeaderFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\CPlusPlus\TalonConcreteSourceFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\CPlusPlus\TalonBaseHeaderFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\CPlusPlus\TalonBaseSourceFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\CPlusPlus\TalonPlatformHeaderFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\CPlusPlus\TalonPlatformSourceFile.t4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

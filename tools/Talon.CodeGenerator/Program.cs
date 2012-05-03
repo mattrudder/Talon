@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Talon.CodeGenerator.Generators.Model;
+using Talon.CodeGenerator.Parsing.Model;
+using Talon.CodeGenerator.Generators;
+using Talon.CodeGenerator.Generators.CPlusPlus;
 
 namespace Talon.CodeGenerator
 {
@@ -72,6 +76,12 @@ namespace Talon.CodeGenerator
                     module = JsonConvert.DeserializeObject<DefinitionModule>(file);
 
                     PropagateOuterScope(module);
+					foreach (var iface in module.Interfaces)
+					{
+						InterfaceModel model = CreateInterfaceModel(module.Module, iface);
+						Console.WriteLine("Generating {0}...", model.Name);
+						s_generator.Generate(model);
+					}
                 }
             }
 
@@ -79,18 +89,53 @@ namespace Talon.CodeGenerator
             Console.ReadLine();
         }
 
+		private static InterfaceModel CreateInterfaceModel(string module, InterfaceDefinition iface)
+		{
+			IList<PlatformSettings> platforms;
+			if (!s_platformsForModule.TryGetValue(module, out platforms))
+				return null;
+			
+			InterfaceModel model = new InterfaceModel(iface)
+			{
+				Module = module,
+			};
+
+			model.Platforms = new List<PlatformModel>();
+			foreach (PlatformSettings platform in platforms)
+			{
+				model.Platforms.Add(new PlatformModel
+				{
+					Name = platform.Name,
+					ShortName = platform.ShortName,
+					Condition = platform.Condition,
+					Parent = model
+				});
+			}
+
+			return model;
+		}
+
 		static void Main(string[] args)
 		{
-			using (TextReader tw = new StreamReader("Settings.json"))
+			using (TextReader tw = new StreamReader("bin/Debug/Settings.json"))
 			{
 				string file = tw.ReadToEnd();
 				s_settings = JsonConvert.DeserializeObject<CodeGeneratorSettings>(file);
+
+				s_platformsForModule = s_settings.Modules.ToDictionary(m => m.Name, m => m.Platforms, StringComparer.InvariantCultureIgnoreCase);
 			}
 
-            // TODO: Take definition path as commandline options.
-            ProcessDefinitions(Path.Combine(Directory.GetCurrentDirectory(), "Definitions"));
+            // TODO: Take definition path as command line options.
+			s_generator = new CPlusPlusGenerator
+			{
+				OutputPath = Path.Combine(Directory.GetCurrentDirectory(), "include/Talon")
+			};
+
+            ProcessDefinitions(Path.Combine(Directory.GetCurrentDirectory(), "bin/Debug/Definitions"));
 		}
 
 		private static CodeGeneratorSettings s_settings;
+		private static Dictionary<string, IList<PlatformSettings>> s_platformsForModule;
+		private static IGenerator s_generator;
 	}
 }

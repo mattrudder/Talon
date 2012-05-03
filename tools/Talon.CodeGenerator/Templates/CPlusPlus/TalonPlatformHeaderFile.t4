@@ -1,0 +1,25 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
+	string baseClassName = model.Parent.Name + "Base";
+#>
+
+#pragma once
+
+#include <Talon/TalonPublic.h>
+#include <Talon/<#= model.Parent.Module #>/Base/<#= baseClassName #>.h>
+
+namespace Talon
+{
+	class TalonApi <#= model.ClassName #> : public <#= baseClassName #>
+	{
+	public:
+		typedef <#= baseClassName #> Base;
+
+		<#= model.ClassName #>();
+		virtual ~<#= model.ClassName #>();
+
+	private:
+	};
+}

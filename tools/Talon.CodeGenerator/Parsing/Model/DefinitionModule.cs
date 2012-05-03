@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Talon.CodeGenerator
+namespace Talon.CodeGenerator.Parsing.Model
 {
 	public sealed class DefinitionModule
 	{

@@ -1,0 +1,21 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".cpp" encoding="utf-8" #>
+<#
+	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
+#>
+
+#include <Talon/<#= model.Module #>/<#= model.Name #>.h>
+
+namespace Talon
+{
+	<#= model.Name #>::<#= model.Name #>()
+		: Base()
+	{
+
+	}
+
+	<#= model.Name #>::~<#= model.Name #>()
+	{
+
+	}
+}

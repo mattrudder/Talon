@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Talon.CodeGenerator
+namespace Talon.CodeGenerator.Parsing.Model
 {
-	public sealed class InterfaceDefinition : SymbolDefinition
+	public class InterfaceDefinition : SymbolDefinition
 	{
 		public IList<MethodDefinition> Delegates { get; set; }
 		public IList<MethodDefinition> Methods { get; set; }

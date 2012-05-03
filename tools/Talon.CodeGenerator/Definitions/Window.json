@@ -1,5 +1,5 @@
 ﻿{
-	'module': 'Talon.Platform',
+	'module': 'Platform',
 	'interfaces': [
 		{
 			'name': 'Window',

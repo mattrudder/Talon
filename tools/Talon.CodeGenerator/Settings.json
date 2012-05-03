@@ -6,12 +6,14 @@
 				{ 
 					'name': 'Windows',
 					'shortName': 'Win32',
-					'condition': 'TALON_WINDOWS'
+					'condition': 'TALON_WINDOWS',
+					'cPlusPlusExtension': 'cpp'
 				},
 				{
 					'name': 'Mac',
 					'shortName': 'Mac',
-					'condition': 'TALON_MAC'
+					'condition': 'TALON_MAC',
+					'cPlusPlusExtension': 'mm'
 				},
 			],
 		},

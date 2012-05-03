@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talon.CodeGenerator.Generators.Model;
 
 namespace Talon.CodeGenerator.Generators
 {
-    internal interface IGenerator
-    {
-        void Generate(StreamWriter streamWriter, InterfaceDefinition definition);
+	internal interface IGenerator
+	{
+		string OutputPath { get; set; }
+
+        void Generate(InterfaceModel definition);
     }
 }

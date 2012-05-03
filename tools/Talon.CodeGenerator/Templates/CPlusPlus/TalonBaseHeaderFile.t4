@@ -1,0 +1,22 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
+	string className = model.Name + "Base";
+#>
+
+#pragma once
+
+#include <Talon/TalonPublic.h>
+
+namespace Talon
+{
+	class TalonApi <#= className #>
+	{
+	public:
+		<#= className #>();
+		virtual ~<#= className #>();
+
+	private:
+	};
+}
