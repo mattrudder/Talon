@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TextTemplating;
 using Talon.CodeGenerator.Generators.Model;
 using System.Reflection;
+using AutoMapper;
+using Talon.CodeGenerator.Parsing.Model;
 
 namespace Talon.CodeGenerator.Generators.CPlusPlus
 {
@@ -16,8 +18,9 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		{
 			m_textEngine = new Engine();
 			m_textHost = new CPlusPlusTemplateHost();
-		}
 
+			Mapper.CreateMap<string, TypeModel>().ConstructUsing(GetCPlusPlusType);
+		}
 
         public void Generate(InterfaceModel model)
         {
@@ -41,6 +44,23 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 			Generate("TalonBaseHeaderFile.t4", includePath, model);
 			Generate("TalonBaseSourceFile.t4", sourcePath, model);
+		}
+
+		private TypeModel GetCPlusPlusType(string definitionType)
+		{
+			TypeModel actualType;
+			if (!s_definitionsToCppTypes.TryGetValue(definitionType, out actualType))
+				actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
+
+			if (!TypeRegistry.IsValueType(definitionType))
+			{
+				actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
+				actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
+			}
+
+			actualType.UnderlyingType = definitionType;
+
+			return actualType;
 		}
 
 		private void Generate(string templatePath, string outputPath, PlatformModel platform)
@@ -134,10 +154,15 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			return templatePathFull;
 		}
 
+		private static readonly Dictionary<string, TypeModel> s_definitionsToCppTypes = new Dictionary<string, TypeModel>()
+		{
+			{ "string", new TypeModel { ParameterType = "const std::string&", FieldType = "std::string" } }
+		};
 
 		private readonly Engine m_textEngine;
 		private readonly CPlusPlusTemplateHost m_textHost;
 
 		public string OutputPath { get; set; }
+
 	}
 }

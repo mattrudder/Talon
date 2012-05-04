@@ -6,17 +6,30 @@ using Talon.CodeGenerator.Parsing.Model;
 
 namespace Talon.CodeGenerator.Generators.Model
 {
-	public sealed class InterfaceModel : InterfaceDefinition
+	public sealed class InterfaceModel
 	{
-		public InterfaceModel(InterfaceDefinition definition)
+		public string Name { get; set; }
+		public string Module { get; set; }
+		public IList<PlatformModel> Platforms { get; set; }
+		public IList<MethodModel> Methods { get; set; }
+		public IList<PropertyModel> Properties { get; set; }
+		public IList<MethodModel> Delegates { get; set; }
+
+		public IEnumerable<TypeModel> GetReferencedTypes()
 		{
-			this.Name = definition.Name;
-			this.Methods = definition.Methods;
-			this.Properties = definition.Properties;
-			this.Delegates = definition.Delegates;
+			return GetReferencedTypesCore().Distinct().OrderBy(t => t.FieldType);
 		}
 
-		public string Module { get; set; }
-		public List<PlatformModel> Platforms { get; set; }
+		private IEnumerable<TypeModel> GetReferencedTypesCore()
+		{
+			foreach (MethodModel method in Methods)
+				yield return method.ReturnType;
+
+			foreach (MethodModel method in Delegates)
+				yield return method.ReturnType;
+
+			foreach (PropertyModel property in Properties)
+				yield return property.Type;
+		}
 	}
 }

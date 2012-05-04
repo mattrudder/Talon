@@ -11,12 +11,74 @@
 
 namespace Talon
 {
+<#
+	foreach (TypeModel type in model.GetReferencedTypes())
+	{
+		if (TypeRegistry.IsValueType(type.UnderlyingType))
+			continue;
+#>
+	class <#= type.UnderlyingType #>;
+<#
+	}
+#>
+
 	class TalonApi <#= className #>
 	{
 	public:
 		<#= className #>();
 		virtual ~<#= className #>();
 
+<#
+	foreach (MethodModel method in model.Delegates)
+	{
+#>
+		delegate<<#= className #>, <#= method.ReturnType.ParameterType #>(<# method.GenerateParameterList(this, false); #>)> <#= method.Name #>;
+<#
+	}
+#>
+
+<#
+	foreach (PropertyModel property in model.Properties)
+	{
+#>
+		<#= property.Type.ParameterType #> Get<#= property.Name #>() const;
+<#
+		if (!property.IsReadOnly)
+		{
+#>
+		void Set<#= property.Name #>(<#= property.Type.ParameterType #> value);
+<#
+		}
+	}
+#>
+
+<#
+	foreach (MethodModel method in model.Methods)
+	{
+#>
+		<#= method.ReturnType.ParameterType #> <#= method.Name #>(<# method.GenerateParameterList(this); #>);
+<#
+	}
+#>
+
+	protected:
+<#
+	foreach (MethodModel method in model.Delegates)
+	{
+#>
+		<#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
+<#
+	}
+#>
+
 	private:
+<#
+	foreach (PropertyModel property in model.Properties)
+	{
+#>
+		<#= property.Type.FieldType #> m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #>;
+<#
+	}
+#>
 	};
 }

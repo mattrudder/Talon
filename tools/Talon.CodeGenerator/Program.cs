@@ -9,6 +9,7 @@ using Talon.CodeGenerator.Generators.Model;
 using Talon.CodeGenerator.Parsing.Model;
 using Talon.CodeGenerator.Generators;
 using Talon.CodeGenerator.Generators.CPlusPlus;
+using AutoMapper;
 
 namespace Talon.CodeGenerator
 {
@@ -94,12 +95,9 @@ namespace Talon.CodeGenerator
 			IList<PlatformSettings> platforms;
 			if (!s_platformsForModule.TryGetValue(module, out platforms))
 				return null;
-			
-			InterfaceModel model = new InterfaceModel(iface)
-			{
-				Module = module,
-			};
 
+			InterfaceModel model = Mapper.Map<InterfaceDefinition, InterfaceModel>(iface);
+			model.Module = module;
 			model.Platforms = new List<PlatformModel>();
 			foreach (PlatformSettings platform in platforms)
 			{
@@ -130,8 +128,17 @@ namespace Talon.CodeGenerator
 			{
 				OutputPath = Path.Combine(Directory.GetCurrentDirectory(), "include/Talon")
 			};
+			SetupMappers();
 
             ProcessDefinitions(Path.Combine(Directory.GetCurrentDirectory(), "bin/Debug/Definitions"));
+		}
+
+		private static void SetupMappers()
+		{
+			Mapper.CreateMap<InterfaceDefinition, InterfaceModel>();
+			Mapper.CreateMap<MethodDefinition, MethodModel>();
+			Mapper.CreateMap<ParameterDefinition, ParameterModel>();
+			Mapper.CreateMap<PropertyDefinition, PropertyModel>();
 		}
 
 		private static CodeGeneratorSettings s_settings;
