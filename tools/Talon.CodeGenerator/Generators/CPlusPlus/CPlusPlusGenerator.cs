@@ -12,12 +12,13 @@ using Talon.CodeGenerator.Parsing.Model;
 
 namespace Talon.CodeGenerator.Generators.CPlusPlus
 {
-    internal sealed class CPlusPlusGenerator : IGenerator
+    public sealed class CPlusPlusGenerator : IGenerator
     {
 		public CPlusPlusGenerator()
 		{
 			m_textEngine = new Engine();
 			m_textHost = new CPlusPlusTemplateHost();
+			m_textHost.Generator = this;
 
 			Mapper.CreateMap<string, TypeModel>().ConstructUsing(GetCPlusPlusType);
 		}
@@ -27,23 +28,34 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			string includePath = string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name);
 			string sourcePath = string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name);
 
-			Generate("TalonConcreteHeaderFile.t4", includePath, model);
-			Generate("TalonConcreteSourceFile.t4", sourcePath, model);
+			if (!File.Exists(includePath))
+				Generate("TalonConcreteHeaderFile.t4", includePath, model);
+			if (!File.Exists(sourcePath))
+				Generate("TalonConcreteSourceFile.t4", sourcePath, model);
 
 			foreach (PlatformModel platform in model.Platforms)
 			{
 				includePath = string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.ShortName, platform.ClassName);
 				sourcePath = string.Format("src/Talon/{0}/{1}/{2}.cpp", model.Module, platform.ShortName, platform.ClassName);
 
-				Generate("TalonPlatformHeaderFile.t4", includePath, platform);
-				Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
+				if (!File.Exists(includePath))
+					Generate("TalonPlatformHeaderFile.t4", includePath, platform);
+
+				if (!File.Exists(sourcePath))
+					Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
 			}
 
 			includePath = string.Format("include/Talon/{0}/Base/{1}Base.h", model.Module, model.Name);
 			sourcePath = string.Format("src/Talon/{0}/Base/{1}Base.cpp", model.Module, model.Name);
 
+			// Always regenerate base class definitions
 			Generate("TalonBaseHeaderFile.t4", includePath, model);
 			Generate("TalonBaseSourceFile.t4", sourcePath, model);
+		}
+
+		public string GetFieldName(PropertyModel property)
+		{
+			return string.Format("m_{0}{1}", char.ToLowerInvariant(property.Name[0]), property.Name.Substring(1));
 		}
 
 		private TypeModel GetCPlusPlusType(string definitionType)

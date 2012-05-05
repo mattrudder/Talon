@@ -63,6 +63,7 @@
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Generators\Model\InterfaceModel.cs" />
     <Compile Include="Generators\Model\MethodModel.cs" />
+    <Compile Include="Generators\Model\ParameterListOptions.cs" />
     <Compile Include="Generators\Model\ParameterModel.cs" />
     <Compile Include="Generators\Model\PlatformModel.cs" />
     <Compile Include="Generators\Model\PropertyModel.cs" />

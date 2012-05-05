@@ -32,12 +32,24 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 		public IList<string> StandardImports
 		{
-			get { return new[] { "System", "Talon.CodeGenerator", "Talon.CodeGenerator.Generators.Model", "System.Linq", "System.Collections.Generic" }; }
+			get
+			{
+				return new[] 
+				{ 
+					"System", 
+					"System.Collections.Generic",
+					"System.Linq", 
+					"Talon.CodeGenerator", 
+					"Talon.CodeGenerator.Generators.CPlusPlus", 
+					"Talon.CodeGenerator.Generators.Model", 
+				};
+			}
 		}
 
 		public string TemplateFile { get; internal set; }
 		public InterfaceModel CurrentInterface { get; internal set; }
 		public PlatformModel CurrentPlatform { get; set; }
+		public IGenerator Generator { get; set; }
 
 		public CPlusPlusTemplateHost()
 		{
@@ -56,6 +68,9 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 				break;
 			case "CurrentPlatform":
 				returnObject = CurrentPlatform;
+				break;
+			case "Generator":
+				returnObject = Generator;
 				break;
 			}
 			return returnObject;

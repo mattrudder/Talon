@@ -1,21 +1,110 @@
 ﻿<#@ template language="C#" debug="true" hostspecific="true" #>
 <#@ output extension=".cpp" encoding="utf-8" #>
 <#
+	CPlusPlusGenerator generator = (CPlusPlusGenerator) Host.GetHostOption("Generator");
 	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
 	string className = model.Name + "Base";
 #>
 
 #include <Talon/<#= model.Module #>/Base/<#= className #>.h>
+<#
+	foreach (TypeModel type in model.GetReferencedTypes())
+	{
+		if (TypeRegistry.IsValueType(type.UnderlyingType))
+			continue;
+
+		InterfaceModel includedType = type.Interface;
+		if (includedType == null)
+			continue;
+#>
+#include <Talon/<#= includedType.Module #>/<#= includedType.Name #>.h>
+<#
+	}
+#>
 
 namespace Talon
 {
+<#
+	foreach (MethodModel method in model.Constructors)
+	{
+#>
+	<#= className #>::<#= className #>(<# method.GenerateParameterList(this, t => t.FieldType); #>)
+<#
+		int i = 0;
+		foreach (ParameterModel parameter in method.Parameters)
+		{
+			PropertyModel property = model.GetProperty(parameter.Name);
+			if (property == null)
+				continue;
+
+			char separator = ',';
+			if (i == 0)
+				separator = ':';
+#>
+		<#= separator #> <#= generator.GetFieldName(property) #>(<#= parameter.Name #>)
+<#
+			++i;
+		}
+#>
+	{
+	}
+
+<#
+	}
+
+	if (model.Constructors.Count == 0)
+	{
+#>
 	<#= className #>::<#= className #>()
 	{
-
 	}
 
+<#	} #>
 	<#= className #>::~<#= className #>()
 	{
-
 	}
+
+<#
+	foreach (PropertyModel property in model.Properties)
+	{
+#>
+	<#= property.Type.ParameterType #> <#= className #>::Get<#= property.Name #>() const
+	{
+		return m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #>;
+	}
+
+<#
+		if (!property.IsReadOnly)
+		{
+#>
+	void <#= className #>::Set<#= property.Name #>(<#= property.Type.ParameterType #> value)
+	{
+		m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #> = value;
+	}
+
+<#
+		}
+	}
+
+	foreach (MethodModel method in model.Methods)
+	{
+#>
+	<#= method.ReturnType.ParameterType #> <#= className #>::<#= method.Name #>(<# method.GenerateParameterList(this); #>)
+	{
+	}
+
+<#
+	}
+
+	foreach (MethodModel method in model.Delegates)
+	{
+#>
+	<#= method.ReturnType.ParameterType #> <#= className #>::On<#= method.Name #>(<# method.GenerateParameterList(this); #>)
+	{
+		<#= method.Name #>(<# method.GenerateParameterList(this, options:ParameterListOptions.IncludeNames); #>);
+	}
+
+<#
+	}
+#>
 }

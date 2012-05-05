@@ -16,6 +16,24 @@ namespace Talon.CodeGenerator
 			return s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase);
 		}
 
+		public static InterfaceModel GetType(string typeName)
+		{
+			InterfaceModel returnModel = null;
+			s_interfaceMap.TryGetValue(typeName, out returnModel);
+			return returnModel;
+		}
+
+		internal static void RegisterType(InterfaceModel model)
+		{
+			s_interfaceMap[model.FullyQualifiedName] = model;
+		}
+
+		internal static void ForEachType(Action<InterfaceModel> fnEach)
+		{
+			s_interfaceMap.ForEach(kv => fnEach(kv.Value));
+		}
+
+		private static readonly Dictionary<string, InterfaceModel> s_interfaceMap = new Dictionary<string, InterfaceModel>();
 		private static readonly string[] s_valueTypes = new[]
 		{
 			"void", "int", "short", "long", "float", "double", "string"

@@ -1,6 +1,7 @@
 ﻿<#@ template language="C#" debug="true" hostspecific="true" #>
 <#@ output extension=".h" encoding="utf-8" #>
 <#
+	CPlusPlusGenerator generator = (CPlusPlusGenerator) Host.GetHostOption("Generator");
 	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
 	string className = model.Name + "Base";
 #>
@@ -8,6 +9,9 @@
 #pragma once
 
 #include <Talon/TalonPublic.h>
+<# if (model.Delegates.Count > 0) { #>
+#include <Talon/TalonDelegate.h>
+<# } #>
 
 namespace Talon
 {
@@ -25,17 +29,20 @@ namespace Talon
 	class TalonApi <#= className #>
 	{
 	public:
-		<#= className #>();
-		virtual ~<#= className #>();
-
 <#
-	foreach (MethodModel method in model.Delegates)
+	foreach (MethodModel method in model.Constructors)
 	{
 #>
-		delegate<<#= className #>, <#= method.ReturnType.ParameterType #>(<# method.GenerateParameterList(this, false); #>)> <#= method.Name #>;
+		<#= className #>(<# method.GenerateParameterList(this, t => t.FieldType); #>);
 <#
 	}
+
+	if (model.Constructors.Count == 0)
+	{
 #>
+		<#= className #>();
+<#	} #>
+		virtual ~<#= className #>();
 
 <#
 	foreach (PropertyModel property in model.Properties)
@@ -49,6 +56,15 @@ namespace Talon
 		void Set<#= property.Name #>(<#= property.Type.ParameterType #> value);
 <#
 		}
+	}
+#>
+
+<#
+	foreach (MethodModel method in model.Delegates)
+	{
+#>
+		delegate<<#= className #>, <#= method.ReturnType.ParameterType #>(<# method.GenerateParameterList(this, options: ParameterListOptions.IncludeTypes); #>)> <#= method.Name #>;
+<#
 	}
 #>
 
@@ -76,7 +92,7 @@ namespace Talon
 	foreach (PropertyModel property in model.Properties)
 	{
 #>
-		<#= property.Type.FieldType #> m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #>;
+		<#= property.Type.FieldType #> <#= generator.GetFieldName(property) #>;
 <#
 	}
 #>

@@ -3,6 +3,15 @@
 	'interfaces': [
 		{
 			'name': 'Window',
+			'constructors': [
+				{
+					'parameters': [
+						{ 'name': 'title', 'type': 'string' },
+						{ 'name': 'width', 'type': 'int' },
+						{ 'name': 'height', 'type': 'int' }
+					]
+				},
+			],
 			'delegates': [
 				{
 					'name': 'Resized',
@@ -31,7 +40,7 @@
 			'properties': [
 				{
 					'name': 'Title',
-					'type': 'UString',
+					'type': 'string',
 					'isReadOnly': false
 				},
 				{

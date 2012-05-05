@@ -11,5 +11,18 @@ namespace Talon.CodeGenerator.Generators.Model
 		public string UnderlyingType { get; set; }
 		public string ParameterType { get; set; }
 		public string FieldType { get; set; }
+
+		public InterfaceModel Interface
+		{
+			get
+			{
+				if (m_interface == null)
+					m_interface = TypeRegistry.GetType(UnderlyingType);
+
+				return m_interface;
+			}
+		}
+
+		InterfaceModel m_interface;
 	}
 }

@@ -29,7 +29,7 @@ namespace Talon.CodeGenerator
             Console.WriteLine("{0}", symbolName);
         }
 
-        static private void PropagateOuterScope(DefinitionModule module)
+		static private void ProcessModule(DefinitionModule module)
         {
             module.Interfaces.ForEach(i =>
             {
@@ -37,6 +37,18 @@ namespace Talon.CodeGenerator
                 i.OuterScope = module.Module;
 
                 LogSymbol(interfaceName);
+
+				i.Constructors.ForEach(m =>
+				{
+					m.Name = i.Name;
+
+					string methodScope = string.Format("{0}.{1}", interfaceName, m.Name);
+					m.OuterScope = interfaceName;
+					m.Parameters.ForEach(p => p.OuterScope = methodScope);
+					
+
+					LogSymbol(methodScope);
+				});
 
                 i.Methods.ForEach(m =>
                 {
@@ -76,18 +88,19 @@ namespace Talon.CodeGenerator
                     string file = tw.ReadToEnd();
                     module = JsonConvert.DeserializeObject<DefinitionModule>(file);
 
-                    PropagateOuterScope(module);
-					foreach (var iface in module.Interfaces)
+                    ProcessModule(module);
+
+					// Register all generated types before generation, so templates can access other types.
+					module.Interfaces.ForEach(i =>
 					{
-						InterfaceModel model = CreateInterfaceModel(module.Module, iface);
-						Console.WriteLine("Generating {0}...", model.Name);
-						s_generator.Generate(model);
-					}
+						InterfaceModel model = CreateInterfaceModel(module.Module, i);
+						TypeRegistry.RegisterType(model);
+					});
+
+					// Generate
+					TypeRegistry.ForEachType(i => s_generator.Generate(i));
                 }
             }
-
-            Console.WriteLine("Press enter to quit.");
-            Console.ReadLine();
         }
 
 		private static InterfaceModel CreateInterfaceModel(string module, InterfaceDefinition iface)

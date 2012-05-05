@@ -12,7 +12,13 @@ namespace Talon.CodeGenerator.Generators.Model
 		public TypeModel ReturnType { get; set; }
 		public IList<ParameterModel> Parameters { get; set; }
 
-		public void GenerateParameterList(dynamic templateClass, bool includeNames = true)
+		public void GenerateParameterList(dynamic templateClass, ParameterListOptions options = ParameterListOptions.IncludeAll)
+		{
+			Func<TypeModel, string> whichType = p => p.ParameterType;
+			GenerateParameterList(templateClass, whichType, options);
+		}
+
+		public void GenerateParameterList(dynamic templateClass, Func<TypeModel, string> whichType, ParameterListOptions options = ParameterListOptions.IncludeAll)
 		{
 			int i = 0;
 			foreach (ParameterModel param in Parameters)
@@ -20,10 +26,16 @@ namespace Talon.CodeGenerator.Generators.Model
 				if (i > 0)
 					templateClass.Write(", ");
 
-				if (includeNames)
-					templateClass.Write(string.Format("{0} {1}", param.Type.ParameterType, param.Name));
-				else
-					templateClass.Write(param.Type.ParameterType);
+				if (options.HasFlag(ParameterListOptions.IncludeTypes))
+				{
+					templateClass.Write(whichType(param.Type));
+					if (options.HasFlag(ParameterListOptions.IncludeNames))
+						templateClass.Write(" " + param.Name);
+				}
+				else if (options.HasFlag(ParameterListOptions.IncludeNames))
+				{
+					templateClass.Write(param.Name);
+				}
 
 				++i;
 			}
