@@ -19,3 +19,15 @@ if (model.Constructors.Count == 0)
 	<#= model.Name #>();
 <#	} #>
 	virtual ~<#= model.Name #>();
+
+protected:
+<#
+	foreach (MethodModel method in model.Delegates)
+	{
+#>
+	virtual <#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
+<#
+	}
+#>
+
+public:

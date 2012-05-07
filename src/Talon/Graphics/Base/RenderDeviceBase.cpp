@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	RenderDeviceBase::RenderDeviceBase(std::shared_ptr<Window> window)
+	RenderDeviceBase::RenderDeviceBase(Window* window)
 		: m_window(window)
 	{
 	}
@@ -12,14 +12,26 @@ namespace Talon
 	{
 	}
 
-	std::shared_ptr<Window> RenderDeviceBase::GetWindow() const
+	Window* RenderDeviceBase::GetWindow() const
 	{
 		return m_window;
 	}
 
-	bool RenderDeviceBase::GetInitialized() const
+
+	void RenderDeviceBase::SetWindow(Window* value)
+	{
+		m_window = value;
+	}
+
+	bool RenderDeviceBase::IsInitialized() const
 	{
 		return m_initialized;
+	}
+
+
+	void RenderDeviceBase::SetInitialized(bool value)
+	{
+		m_initialized = value;
 	}
 
 	void RenderDeviceBase::BeginFrame()

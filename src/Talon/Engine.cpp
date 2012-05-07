@@ -29,7 +29,7 @@ namespace Talon
 
 		m_running = true;
 
-		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
+		m_window = std::make_shared<Window>("Talon Engine"/*m_simulation->GetTitle()*/, 1280, 720);
 		m_window->Closed += [this] ()
 		{
 			m_running = false;
@@ -44,7 +44,7 @@ namespace Talon
 	{
 		m_window->DoEvents();
 
-		m_simulation->OnBeginFrame();
+		//m_simulation->OnBeginFrame();
 
 		auto device = m_window->GetRenderDevice();
 		device->BeginFrame();

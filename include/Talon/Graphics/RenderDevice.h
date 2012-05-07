@@ -17,21 +17,17 @@ namespace Talon
 	public:
 		typedef D3D11RenderDevice Base;
 
-		RenderDevice(Window* window);
-		virtual ~RenderDevice();
-
 	private:
+#include <Talon/Graphics/Generated/RenderDevice.h>
 	};
 #elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
 	class TalonApi RenderDevice : public GLRenderDevice
 	{
 	public:
 		typedef GLRenderDevice Base;
-
-		RenderDevice(Window* window);
-		virtual ~RenderDevice();
-
+		
 	private:
+#include <Talon/Graphics/Generated/RenderDevice.h>
 	};
 #endif
 }

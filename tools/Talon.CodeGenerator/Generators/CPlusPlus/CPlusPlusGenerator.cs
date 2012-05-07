@@ -9,6 +9,7 @@ using Talon.CodeGenerator.Generators.Model;
 using System.Reflection;
 using AutoMapper;
 using Talon.CodeGenerator.Parsing.Model;
+using System.Text.RegularExpressions;
 
 namespace Talon.CodeGenerator.Generators.CPlusPlus
 {
@@ -38,13 +39,13 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 			foreach (PlatformModel platform in model.Platforms)
 			{
-				includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.ShortName, platform.ClassName));
-				sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}/{2}.{3}", model.Module, platform.ShortName, platform.ClassName, platform.CPlusPlusExtension));
+				includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.Name, platform.ClassName));
+				sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}/{2}.{3}", model.Module, platform.Name, platform.ClassName, platform.CPlusPlusExtension));
 
 				Generate("TalonPlatformHeaderFile.t4", includePath, platform);
 
                 // Always regenerate platform method header, if interface was updated.
-                includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/Generated/{2}.h", model.Module, platform.ShortName, platform.ClassName));
+                includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/Generated/{2}.h", model.Module, platform.Name, platform.ClassName));
                 Generate("TalonPlatformGeneratedHeaderFile.t4", includePath, platform, GenerationOptions.AllowOverwrite);
 
 				Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
@@ -63,19 +64,44 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			return string.Format("m_{0}{1}", char.ToLowerInvariant(property.Name[0]), property.Name.Substring(1));
 		}
 
+        public string GetSetterName(PropertyModel property)
+        {
+            return string.Format("Set{0}", property.Name);
+        }
+
+        public string GetGetterName(PropertyModel property)
+        {
+            if (string.Equals(property.Type.UnderlyingType, "bool", StringComparison.InvariantCultureIgnoreCase))
+                return string.Format("Is{0}", property.Name);
+            else
+                return string.Format("Get{0}", property.Name);
+        }
+
 		private TypeModel GetCPlusPlusType(string definitionType)
 		{
 			TypeModel actualType;
-			if (!s_definitionsToCppTypes.TryGetValue(definitionType, out actualType))
-				actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
+            if (!s_definitionsToCppTypes.TryGetValue(definitionType, out actualType))
+            {
+                actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
 
-			if (!TypeRegistry.IsValueType(definitionType))
-			{
-				actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
-				actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
-			}
+                Match weakMatch = s_rgWeakReference.Match(definitionType);
+                if (weakMatch != null && weakMatch.Groups.Count > 1 && weakMatch.Groups[1].Length > 0)
+                {
+                    Capture classNameCapture = weakMatch.Groups[1];
 
-			actualType.UnderlyingType = definitionType;
+                    actualType.UnderlyingType = classNameCapture.Value;
+                    actualType.ParameterType = string.Format("{0}*", classNameCapture.Value);
+                    actualType.FieldType = actualType.ParameterType;
+                }
+                else if (!TypeRegistry.IsValueType(definitionType))
+                {
+                    actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
+                    actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
+                }
+            }
+
+            if (actualType.UnderlyingType == null)
+		    	actualType.UnderlyingType = definitionType;
 
 			return actualType;
 		}
@@ -183,6 +209,8 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		{
 			{ "string", new TypeModel { ParameterType = "const std::string&", FieldType = "std::string" } }
 		};
+
+        private static readonly Regex s_rgWeakReference = new Regex("weak<(\\w+)>");
 
 		private readonly Engine m_textEngine;
 		private readonly CPlusPlusTemplateHost m_textHost;

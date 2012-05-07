@@ -6,7 +6,7 @@
 			'constructors': [
 				{
 					'parameters': [
-						{ 'name': 'window', 'type': 'Window' }
+						{ 'name': 'window', 'type': 'weak<Window>' }
 					]
 				},
 			],
@@ -14,7 +14,7 @@
 			'properties': [
 				{
 					'name': 'Window',
-					'type': 'Window',
+					'type': 'weak<Window>',
 					'isReadOnly': true
 				},
 				{

@@ -16,4 +16,17 @@ namespace Talon
 	<#= model.ClassName #>::~<#= model.ClassName #>()
 	{
 	}
+
+<#
+	foreach (MethodModel method in model.Parent.Delegates)
+	{
+#>
+	<#= method.ReturnType.ParameterType #> <#= model.Name #>::On<#= method.Name #>(<# method.GenerateParameterList(this); #>)
+	{
+		Base::On<#= method.Name #>(<# method.GenerateParameterList(this, options:ParameterListOptions.IncludeNames); #>);
+	}
+
+<#
+	}
+#>
 }

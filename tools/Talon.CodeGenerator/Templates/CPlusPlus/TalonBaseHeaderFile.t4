@@ -48,12 +48,12 @@ namespace Talon
 	foreach (PropertyModel property in model.Properties)
 	{
 #>
-		<#= property.Type.ParameterType #> Get<#= property.Name #>() const;
+		<#= property.Type.ParameterType #> <#= generator.GetGetterName(property) #>() const;
 <#
 		if (!property.IsReadOnly)
 		{
 #>
-		void Set<#= property.Name #>(<#= property.Type.ParameterType #> value);
+		void <#= generator.GetSetterName(property) #>(<#= property.Type.ParameterType #> value);
 <#
 		}
 	}
@@ -82,8 +82,20 @@ namespace Talon
 	foreach (MethodModel method in model.Delegates)
 	{
 #>
-		<#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
+		virtual <#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
 <#
+	}
+#>
+
+<#
+	foreach (PropertyModel property in model.Properties)
+	{
+		if (property.IsReadOnly)
+		{
+#>
+		void <#= generator.GetSetterName(property) #>(<#= property.Type.ParameterType #> value);
+<#
+		}
 	}
 #>
 

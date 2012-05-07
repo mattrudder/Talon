@@ -95,8 +95,8 @@ namespace Talon
 
 			int attributes[] = 
 			{
-				WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-				WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+				WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+				WGL_CONTEXT_MINOR_VERSION_ARB, 2,
 				WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 				0
 			};
@@ -105,12 +105,22 @@ namespace Talon
 			if (WGLEW_ARB_create_context)
 			{
 				hRC = wglCreateContextAttribsARB(hDC, 0, attributes);
-				wglMakeCurrent(nullptr, nullptr);
-				wglDeleteContext(tempContext);
+				if (hRC != 0)
+				{
+					wglMakeCurrent(nullptr, nullptr);
+					wglDeleteContext(tempContext);
 
-				wglMakeCurrent(hDC, hRC);
-				sprintf_s(line, "OpenGL Version: %s\n", glGetString(GL_VERSION));
-				OutputDebugStringA(line);
+					wglMakeCurrent(hDC, hRC);
+					sprintf_s(line, "OpenGL Version: %s\n", glGetString(GL_VERSION));
+					OutputDebugStringA(line);
+				}
+				else
+				{
+					// Only GL 2.1 is supported
+					OutputDebugString(L"OpenGL 3.2 not supported! Falling back to OpenGL 2.1.\n");
+					hRC = tempContext;
+				}
+
 				wglMakeCurrent(nullptr, nullptr);
 			}
 			else

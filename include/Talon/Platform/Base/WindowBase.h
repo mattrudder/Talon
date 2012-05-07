@@ -28,10 +28,14 @@ namespace Talon
 		void DoEvents();
 
 	protected:
-		void OnResized(int width, int height);
-		void OnClosed();
-		void OnCreated();
-		void OnDestroyed();
+		virtual void OnResized(int width, int height);
+		virtual void OnClosed();
+		virtual void OnCreated();
+		virtual void OnDestroyed();
+
+		void SetWidth(int value);
+		void SetHeight(int value);
+		void SetRenderDevice(std::shared_ptr<RenderDevice> value);
 
 	private:
 		std::string m_title;

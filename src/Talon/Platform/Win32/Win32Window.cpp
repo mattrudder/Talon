@@ -37,6 +37,14 @@ namespace Talon
 
 	std::unique_ptr<WindowClass> Win32Window::s_windowClass;
 
+	std::wstring utf8_decode(const std::string &str)
+	{
+		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+		std::wstring wstrTo( size_needed, 0 );
+		MultiByteToWideChar                  (CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+		return wstrTo;
+	}
+
 	Win32Window::Win32Window(std::string title, int width, int height)
 		: WindowBase(title, width, height)
 	{
@@ -49,8 +57,10 @@ namespace Talon
 
 			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, FALSE);
 
-			m_hWnd = CreateWindowA(windowClass->Name.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
+			// WTF: CreateWindowA requires a wchar_t title?!
+			m_hWnd = CreateWindowA(windowClass->Name.c_str(), (char *)&utf8_decode(title)[0], WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), this);
+			
 
 			if (m_hWnd)
 			{
@@ -127,5 +137,25 @@ namespace Talon
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+
+	void Win32Window::OnResized(int width, int height)
+	{
+		Base::OnResized(width, height);
+	}
+
+	void Win32Window::OnClosed()
+	{
+		Base::OnClosed();
+	}
+
+	void Win32Window::OnCreated()
+	{
+		Base::OnCreated();
+	}
+
+	void Win32Window::OnDestroyed()
+	{
+		Base::OnDestroyed();
 	}
 }

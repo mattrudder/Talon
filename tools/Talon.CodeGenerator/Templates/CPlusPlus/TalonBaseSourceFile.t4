@@ -68,22 +68,18 @@ namespace Talon
 	foreach (PropertyModel property in model.Properties)
 	{
 #>
-	<#= property.Type.ParameterType #> <#= className #>::Get<#= property.Name #>() const
+	<#= property.Type.ParameterType #> <#= className #>::<#= generator.GetGetterName(property) #>() const
 	{
 		return m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #>;
 	}
 
-<#
-		if (!property.IsReadOnly)
-		{
-#>
-	void <#= className #>::Set<#= property.Name #>(<#= property.Type.ParameterType #> value)
+
+	void <#= className #>::<#= generator.GetSetterName(property) #>(<#= property.Type.ParameterType #> value)
 	{
 		m_<#= Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1) #> = value;
 	}
 
 <#
-		}
 	}
 
 	foreach (MethodModel method in model.Methods)

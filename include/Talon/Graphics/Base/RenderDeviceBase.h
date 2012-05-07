@@ -10,11 +10,11 @@ namespace Talon
 	class TalonApi RenderDeviceBase
 	{
 	public:
-		RenderDeviceBase(std::shared_ptr<Window> window);
+		RenderDeviceBase(Window* window);
 		virtual ~RenderDeviceBase();
 
-		std::shared_ptr<Window> GetWindow() const;
-		bool GetInitialized() const;
+		Window* GetWindow() const;
+		bool IsInitialized() const;
 
 
 		void BeginFrame();
@@ -22,8 +22,11 @@ namespace Talon
 
 	protected:
 
+		void SetWindow(Window* value);
+		void SetInitialized(bool value);
+
 	private:
-		std::shared_ptr<Window> m_window;
+		Window* m_window;
 		bool m_initialized;
 	};
 }

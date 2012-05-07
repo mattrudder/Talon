@@ -10,6 +10,8 @@ namespace Talon
 	class TalonApi Win32Window : public WindowBase
 	{
 	public:
+		typedef WindowBase Base;
+
 		inline HWND GetHandle() const { return m_hWnd; };
 
 	private:

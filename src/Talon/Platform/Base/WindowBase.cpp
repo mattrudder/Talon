@@ -19,6 +19,7 @@ namespace Talon
 		return m_title;
 	}
 
+
 	void WindowBase::SetTitle(const std::string& value)
 	{
 		m_title = value;
@@ -29,14 +30,32 @@ namespace Talon
 		return m_width;
 	}
 
+
+	void WindowBase::SetWidth(int value)
+	{
+		m_width = value;
+	}
+
 	int WindowBase::GetHeight() const
 	{
 		return m_height;
 	}
 
+
+	void WindowBase::SetHeight(int value)
+	{
+		m_height = value;
+	}
+
 	std::shared_ptr<RenderDevice> WindowBase::GetRenderDevice() const
 	{
 		return m_renderDevice;
+	}
+
+
+	void WindowBase::SetRenderDevice(std::shared_ptr<RenderDevice> value)
+	{
+		m_renderDevice = value;
 	}
 
 	void WindowBase::DoEvents()

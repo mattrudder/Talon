@@ -12,12 +12,6 @@ namespace Talon
 	public:
 		typedef RenderDeviceBase Base;
 
-		GLRenderDevice(Window* window);
-		virtual ~GLRenderDevice();
-
-		void BeginFrame();
-		void EndFrame();
-
 		struct Impl;
 		
 	private:
@@ -26,5 +20,6 @@ namespace Talon
 	private:
 		std::unique_ptr<Impl> m_impl;
 
+#include <Talon/Graphics/OpenGL/Generated/GLRenderDevice.h>
 	};
 }

@@ -29,3 +29,15 @@ foreach (MethodModel method in model.Parent.Methods)
 <#
 }
 #>
+
+protected:
+<#
+	foreach (MethodModel method in model.Parent.Delegates)
+	{
+#>
+	virtual <#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
+<#
+	}
+#>
+
+public:

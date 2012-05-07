@@ -11,9 +11,7 @@ namespace Talon
 	public:
 		typedef RenderDeviceBase Base;
 
-		D3D11RenderDevice(Window* window);
-		virtual ~D3D11RenderDevice();
-
 	private:
+#include <Talon/Graphics/Direct3D11/Generated/D3D11RenderDevice.h>
 	};
 }
