@@ -10,6 +10,7 @@ using Talon.CodeGenerator.Parsing.Model;
 using Talon.CodeGenerator.Generators;
 using Talon.CodeGenerator.Generators.CPlusPlus;
 using AutoMapper;
+using System.Reflection;
 
 namespace Talon.CodeGenerator
 {
@@ -24,19 +25,12 @@ namespace Talon.CodeGenerator
 
 	class Program
 	{
-        static private void LogSymbol(string symbolName)
-        {
-            Console.WriteLine("{0}", symbolName);
-        }
-
 		static private void ProcessModule(DefinitionModule module)
         {
             module.Interfaces.ForEach(i =>
             {
                 string interfaceName = string.Format("{0}.{1}", module.Module, i.Name);
                 i.OuterScope = module.Module;
-
-                LogSymbol(interfaceName);
 
 				i.Constructors.ForEach(m =>
 				{
@@ -45,9 +39,6 @@ namespace Talon.CodeGenerator
 					string methodScope = string.Format("{0}.{1}", interfaceName, m.Name);
 					m.OuterScope = interfaceName;
 					m.Parameters.ForEach(p => p.OuterScope = methodScope);
-					
-
-					LogSymbol(methodScope);
 				});
 
                 i.Methods.ForEach(m =>
@@ -55,8 +46,6 @@ namespace Talon.CodeGenerator
                     string methodScope = string.Format("{0}.{1}", interfaceName, m.Name);
                     m.OuterScope = interfaceName;
                     m.Parameters.ForEach(p => p.OuterScope = methodScope);
-
-                    LogSymbol(methodScope);
                 });
 
                 i.Delegates.ForEach(d =>
@@ -64,8 +53,6 @@ namespace Talon.CodeGenerator
                     string delegateScope = string.Format("{0}.{1}", interfaceName, d.Name);
                     d.OuterScope = interfaceName;
                     d.Parameters.ForEach(p => p.OuterScope = delegateScope);
-
-                    LogSymbol(delegateScope);
                 });
 
                 i.Properties.ForEach(p => p.OuterScope = interfaceName);
@@ -82,6 +69,7 @@ namespace Talon.CodeGenerator
             string[] definitionFiles = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
             foreach (string definitionFile in definitionFiles)
             {
+                DateTime lastUpdated = File.GetLastWriteTimeUtc(definitionFile);
                 DefinitionModule module = null;
                 using (TextReader tw = new StreamReader(definitionFile))
                 {
@@ -94,6 +82,7 @@ namespace Talon.CodeGenerator
 					module.Interfaces.ForEach(i =>
 					{
 						InterfaceModel model = CreateInterfaceModel(module.Module, i);
+                        model.UpdatedAt = lastUpdated;
 						TypeRegistry.RegisterType(model);
 					});
 
@@ -119,6 +108,7 @@ namespace Talon.CodeGenerator
 					Name = platform.Name,
 					ShortName = platform.ShortName,
 					Condition = platform.Condition,
+                    CPlusPlusExtension = platform.CPlusPlusExtension,
 					Parent = model
 				});
 			}
@@ -128,7 +118,8 @@ namespace Talon.CodeGenerator
 
 		static void Main(string[] args)
 		{
-			using (TextReader tw = new StreamReader("bin/Debug/Settings.json"))
+            string workingPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            using (TextReader tw = new StreamReader(Path.Combine(workingPath, "Settings.json")))
 			{
 				string file = tw.ReadToEnd();
 				s_settings = JsonConvert.DeserializeObject<CodeGeneratorSettings>(file);
@@ -137,13 +128,13 @@ namespace Talon.CodeGenerator
 			}
 
             // TODO: Take definition path as command line options.
-			s_generator = new CPlusPlusGenerator
-			{
-				OutputPath = Path.Combine(Directory.GetCurrentDirectory(), "include/Talon")
-			};
+            s_generator = new CPlusPlusGenerator
+            {
+                OutputPath = "C:\\Users\\Matt\\Code\\Talon"
+            };
 			SetupMappers();
 
-            ProcessDefinitions(Path.Combine(Directory.GetCurrentDirectory(), "bin/Debug/Definitions"));
+            ProcessDefinitions(Path.Combine(s_generator.OutputPath, "definitions"));
 		}
 
 		private static void SetupMappers()

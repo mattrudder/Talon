@@ -1,4 +1,4 @@
-﻿
+
 #pragma once
 
 #include <Talon/TalonPublic.h>
@@ -7,22 +7,23 @@ namespace Talon
 {
 	class Window;
 
-	class TalonApi RenderDeviceBase	{
+	class TalonApi RenderDeviceBase
+	{
 	public:
-		RenderDeviceBase(Window* window);
+		RenderDeviceBase(std::shared_ptr<Window> window);
 		virtual ~RenderDeviceBase();
 
-		inline Window* GetWindow() const { return m_window; }
-		inline bool IsInitialized() const { return m_initialized; }
+		std::shared_ptr<Window> GetWindow() const;
+		bool GetInitialized() const;
+
 
 		void BeginFrame();
 		void EndFrame();
 
 	protected:
-		inline void SetInitialized(bool value) { m_initialized = value; }
 
 	private:
-		Window* m_window;
+		std::shared_ptr<Window> m_window;
 		bool m_initialized;
 	};
 }

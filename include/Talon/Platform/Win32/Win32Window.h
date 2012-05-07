@@ -10,13 +10,7 @@ namespace Talon
 	class TalonApi Win32Window : public WindowBase
 	{
 	public:
-		Win32Window(std::wstring title, int width, int height);
-		virtual ~Win32Window();
-
 		inline HWND GetHandle() const { return m_hWnd; };
-
-	public:
-		void DoEvents();
 
 	private:
 		static LRESULT CALLBACK TalonWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -27,5 +21,7 @@ namespace Talon
 		static std::unique_ptr<WindowClass> s_windowClass;
 
 		HWND m_hWnd;
+
+#include <Talon/Platform/Win32/Generated/Win32Window.h>
 	};
 }

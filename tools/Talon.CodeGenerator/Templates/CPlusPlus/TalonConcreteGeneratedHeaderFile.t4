@@ -1,0 +1,21 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
+#>
+
+public:
+<#
+foreach (MethodModel method in model.Constructors)
+{
+#>
+	<#= model.Name #>(<# method.GenerateParameterList(this, t => t.FieldType); #>);
+<#
+}
+
+if (model.Constructors.Count == 0)
+{
+#>
+	<#= model.Name #>();
+<#	} #>
+	virtual ~<#= model.Name #>();

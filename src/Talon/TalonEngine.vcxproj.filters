@@ -61,6 +61,15 @@
     <Filter Include="Externals\glew">
       <UniqueIdentifier>{6d36fdfe-fb6e-4dfa-894f-7e8515d429bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Definitions">
+      <UniqueIdentifier>{e1f53374-6ad8-4544-93fa-aaeca32021fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Definitions\Platform">
+      <UniqueIdentifier>{75186d37-6626-4ce7-8c6f-9407ba3722a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Definitions\Graphics">
+      <UniqueIdentifier>{86b01d6a-2c71-42e2-95a4-1fb50ff98263}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -161,5 +170,13 @@
     <ClInclude Include="..\..\include\Talon\Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\definitions\Platform\Window.json">
+      <Filter>Definitions\Platform</Filter>
+    </None>
+    <None Include="..\..\definitions\Graphics\RenderDevice.json">
+      <Filter>Definitions\Graphics</Filter>
+    </None>
   </ItemGroup>
 </Project>

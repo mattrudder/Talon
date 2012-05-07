@@ -1,0 +1,40 @@
+﻿{
+	'module': 'Graphics',
+	'interfaces': [
+		{
+			'name': 'RenderDevice',
+			'constructors': [
+				{
+					'parameters': [
+						{ 'name': 'window', 'type': 'Window' }
+					]
+				},
+			],
+			'delegates': [],
+			'properties': [
+				{
+					'name': 'Window',
+					'type': 'Window',
+					'isReadOnly': true
+				},
+				{
+					'name': 'Initialized',
+					'type': 'bool',
+					'isReadOnly': true
+				}
+			],
+			'methods': [
+				{
+					'name': 'BeginFrame',
+					'returnType': 'void',
+					'parameters': []
+				},
+				{
+					'name': 'EndFrame',
+					'returnType': 'void',
+					'parameters': []
+				}
+			]
+		}
+	]
+}

@@ -1,19 +1,42 @@
 
 #include <Talon/Platform/Base/WindowBase.h>
 
-#include <Talon/Graphics/RenderDevice.h>
-
 namespace Talon
 {
-	WindowBase::WindowBase(std::wstring title, int width, int height)
+	WindowBase::WindowBase(std::string title, int width, int height)
+		: m_title(title)
+		, m_width(width)
+		, m_height(height)
 	{
-		m_title = title;
-		m_width = width;
-		m_height = height;
 	}
 
 	WindowBase::~WindowBase()
 	{
+	}
+
+	const std::string& WindowBase::GetTitle() const
+	{
+		return m_title;
+	}
+
+	void WindowBase::SetTitle(const std::string& value)
+	{
+		m_title = value;
+	}
+
+	int WindowBase::GetWidth() const
+	{
+		return m_width;
+	}
+
+	int WindowBase::GetHeight() const
+	{
+		return m_height;
+	}
+
+	std::shared_ptr<RenderDevice> WindowBase::GetRenderDevice() const
+	{
+		return m_renderDevice;
 	}
 
 	void WindowBase::DoEvents()
@@ -33,14 +56,11 @@ namespace Talon
 	void WindowBase::OnCreated()
 	{
 		Created();
-
-		m_renderDevice = std::make_shared<RenderDevice>((Window *) this);
 	}
 
 	void WindowBase::OnDestroyed()
 	{
-		m_renderDevice.reset();
-
 		Destroyed();
 	}
+
 }

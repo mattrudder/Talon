@@ -25,32 +25,37 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
         public void Generate(InterfaceModel model)
         {
-			string includePath = string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name);
-			string sourcePath = string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name);
+            string includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
+			string sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name));
 
-			if (!File.Exists(includePath))
-				Generate("TalonConcreteHeaderFile.t4", includePath, model);
-			if (!File.Exists(sourcePath))
-				Generate("TalonConcreteSourceFile.t4", sourcePath, model);
+			Generate("TalonConcreteHeaderFile.t4", includePath, model);
+
+            // Always regenerate concrete method header, if interface was updated.
+            includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/Generated/{1}.h", model.Module, model.Name));
+            Generate("TalonConcreteGeneratedHeaderFile.t4", includePath, model, GenerationOptions.AllowOverwrite);
+
+			Generate("TalonConcreteSourceFile.t4", sourcePath, model);
 
 			foreach (PlatformModel platform in model.Platforms)
 			{
-				includePath = string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.ShortName, platform.ClassName);
-				sourcePath = string.Format("src/Talon/{0}/{1}/{2}.cpp", model.Module, platform.ShortName, platform.ClassName);
+				includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.ShortName, platform.ClassName));
+				sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}/{2}.{3}", model.Module, platform.ShortName, platform.ClassName, platform.CPlusPlusExtension));
 
-				if (!File.Exists(includePath))
-					Generate("TalonPlatformHeaderFile.t4", includePath, platform);
+				Generate("TalonPlatformHeaderFile.t4", includePath, platform);
 
-				if (!File.Exists(sourcePath))
-					Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
+                // Always regenerate platform method header, if interface was updated.
+                includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/Generated/{2}.h", model.Module, platform.ShortName, platform.ClassName));
+                Generate("TalonPlatformGeneratedHeaderFile.t4", includePath, platform, GenerationOptions.AllowOverwrite);
+
+				Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
 			}
 
-			includePath = string.Format("include/Talon/{0}/Base/{1}Base.h", model.Module, model.Name);
-			sourcePath = string.Format("src/Talon/{0}/Base/{1}Base.cpp", model.Module, model.Name);
+			includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/Base/{1}Base.h", model.Module, model.Name));
+			sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/Base/{1}Base.cpp", model.Module, model.Name));
 
-			// Always regenerate base class definitions
-			Generate("TalonBaseHeaderFile.t4", includePath, model);
-			Generate("TalonBaseSourceFile.t4", sourcePath, model);
+            // Always regenerate base class definitions, if interface was updated
+            Generate("TalonBaseHeaderFile.t4", includePath, model, GenerationOptions.AllowOverwrite);
+            Generate("TalonBaseSourceFile.t4", sourcePath, model, GenerationOptions.AllowOverwrite);
 		}
 
 		public string GetFieldName(PropertyModel property)
@@ -75,7 +80,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			return actualType;
 		}
 
-		private void Generate(string templatePath, string outputPath, PlatformModel platform)
+		private void Generate(string templatePath, string outputPath, PlatformModel platform, GenerationOptions options = GenerationOptions.None)
 		{
 			if (templatePath == null)
 				throw new ArgumentNullException("templatePath");
@@ -88,10 +93,12 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			m_textHost.TemplateFile = ResolveTemplatePath(templatePath);
 			string templateText = GetTemplateText(m_textHost.TemplateFile);
 
-			GenerateFile(outputPath, templateText);
+            DateTime lastUpdated = File.Exists(outputPath) ? File.GetLastWriteTimeUtc(outputPath) : DateTime.MinValue;
+            if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && DateTime.Compare(lastUpdated, platform.Parent.UpdatedAt) < 0))
+                GenerateFile(outputPath, templateText);
 		}
 
-		private void Generate(string templatePath, string outputPath, InterfaceModel model)
+		private void Generate(string templatePath, string outputPath, InterfaceModel model, GenerationOptions options = GenerationOptions.None)
 		{
 			if (templatePath == null)
 				throw new ArgumentNullException("templatePath");
@@ -104,7 +111,9 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			m_textHost.TemplateFile = ResolveTemplatePath(templatePath);
 			string templateText = GetTemplateText(m_textHost.TemplateFile);
 
-			GenerateFile(outputPath, templateText);
+            DateTime lastUpdated = File.Exists(outputPath) ? File.GetLastWriteTimeUtc(outputPath) : DateTime.MinValue;
+            if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && DateTime.Compare(lastUpdated, model.UpdatedAt) < 0))
+			    GenerateFile(outputPath, templateText);
 		}
 
 		private string GetTemplateText(string templatePath)
@@ -115,7 +124,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			string templateText = File.ReadAllText(templatePath, Encoding.UTF8);
 			if (string.IsNullOrEmpty(templateText))
 			{
-				Console.Error.WriteLine("Unable to load template.");
+				Console.Error.WriteLine("Unable to load template \"{0}\".", templatePath);
 				return string.Empty;
 			}
 
@@ -134,6 +143,10 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			string templateOutput = m_textEngine.ProcessTemplate(templateText, m_textHost);
 			if (templateOutput != null)
 			{
+                string outputDirectory = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(outputDirectory))
+                    Directory.CreateDirectory(outputDirectory);
+
 				using (TextWriter tw = new StreamWriter(filePath))
 				{
 					Console.WriteLine("Generating {0}...", filePath);
@@ -157,7 +170,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 					templatePathFull = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.Combine("Templates/CPlusPlus", templatePath));
 					if (!File.Exists(templatePathFull))
 					{
-						Console.Error.WriteLine("Unable to locate template path.");
+						Console.Error.WriteLine("Unable to locate template path \"{0}\".", templatePath);
 						templatePathFull = null;
 					}
 				}

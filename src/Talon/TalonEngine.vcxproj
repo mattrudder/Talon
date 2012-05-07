@@ -46,6 +46,10 @@
     <ClInclude Include="..\..\include\Talon\TalonTypes.h" />
     <ClInclude Include="..\..\include\Talon\TalonVersion.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\definitions\Graphics\RenderDevice.json" />
+    <None Include="..\..\definitions\Platform\Window.json" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A356FBCD-C241-4CEE-9FB4-042BC5BB52F5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -105,6 +109,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\bin\$(PlatformShortName)\$(Configuration)\;$(ProjectDir)..\..\externals\zlib-1.2.6\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\libpng-1.5.10\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\cairo-1.8.8\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\glew-1.7.0\lib\vc\$(PlatformShortName)\;$(DXSDK_DIR)\Lib\$(PlatformShortName)\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\Build\vs2010\bin\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlibwapi.lib;libpng15.lib;cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(ProjectDir)..\..\bin\$(Configuration)\Talon.CodeGenerator.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +134,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\bin\$(PlatformShortName)\$(Configuration)\;$(ProjectDir)..\..\externals\zlib-1.2.6\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\libpng-1.5.10\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\cairo-1.8.8\lib\vc11\$(PlatformShortName)\;$(ProjectDir)..\..\externals\glew-1.7.0\lib\vc\$(PlatformShortName)\;$(DXSDK_DIR)\Lib\$(PlatformShortName)\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\Build\vs2010\bin\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;zlibwapi.lib;libpng15.lib;cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(ProjectDir)..\..\bin\$(Configuration)\Talon.CodeGenerator.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

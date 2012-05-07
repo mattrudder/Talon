@@ -9,7 +9,7 @@ namespace Talon
 	{
 		WindowClass(WNDPROC fnWndProc)
 		{
-			WNDCLASS wc = {0};
+			WNDCLASSA wc = {0};
 			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 			wc.lpfnWndProc = fnWndProc;
 			wc.cbClsExtra = 0;
@@ -18,26 +18,26 @@ namespace Talon
 			wc.hCursor = LoadCursor(0, IDC_ARROW);
 			wc.hbrBackground = nullptr;
 			wc.lpszMenuName = 0;
-			wc.lpszClassName = L"TalonWindow";
+			wc.lpszClassName = "TalonWindow";
 
 			// Allocate a pointer-sized chunk to be stored on the HWND, for our Window instance.
 			wc.cbWndExtra = sizeof(Win32Window*);
 
-			if (RegisterClass(&wc))
+			if (RegisterClassA(&wc))
 				Name = wc.lpszClassName;
 		}
 
 		~WindowClass()
 		{
-			UnregisterClass(Name.c_str(), GetModuleHandle(nullptr));
+			UnregisterClassA(Name.c_str(), GetModuleHandle(nullptr));
 		}
 
-		std::wstring Name;
+		std::string Name;
 	};
 
 	std::unique_ptr<WindowClass> Win32Window::s_windowClass;
 
-	Win32Window::Win32Window(std::wstring title, int width, int height)
+	Win32Window::Win32Window(std::string title, int width, int height)
 		: WindowBase(title, width, height)
 	{
 		auto windowClass = GetOrRegisterClass();
@@ -49,7 +49,7 @@ namespace Talon
 
 			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, FALSE);
 
-			m_hWnd = CreateWindow(windowClass->Name.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
+			m_hWnd = CreateWindowA(windowClass->Name.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), this);
 
 			if (m_hWnd)

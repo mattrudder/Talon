@@ -1,0 +1,31 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
+	string className = model.ClassName;
+#>
+
+public:
+<#
+foreach (MethodModel method in model.Parent.Constructors)
+{
+#>
+	<#= className #>(<# method.GenerateParameterList(this, t => t.FieldType); #>);
+<#
+}
+
+if (model.Parent.Constructors.Count == 0)
+{
+#>
+	<#= className #>();
+<#	} #>
+	virtual ~<#= className #>();
+
+<#
+foreach (MethodModel method in model.Parent.Methods)
+{
+#>
+	<#= method.ReturnType.ParameterType #> <#= method.Name #>(<# method.GenerateParameterList(this); #>);
+<#
+}
+#>

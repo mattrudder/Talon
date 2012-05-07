@@ -3,9 +3,9 @@
 
 namespace Talon
 {
-	const std::wstring Simulation::GetTitle() const
+	const std::string Simulation::GetTitle() const
 	{
-		return L"Talon Engine";
+		return "Talon Engine";
 	}
 
 	void Simulation::OnBeginFrame()

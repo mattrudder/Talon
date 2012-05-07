@@ -10,6 +10,7 @@ namespace Talon.CodeGenerator.Generators.Model
 		public string Name { get; set; }
 		public string ShortName { get; set; }
 		public string Condition { get; set; }
+        public string CPlusPlusExtension { get; set; }
 		public InterfaceModel Parent { get; set; }
 
 		public string ClassName
@@ -24,5 +25,5 @@ namespace Talon.CodeGenerator.Generators.Model
 		}
 
 		private string m_className;
-	}
+    }
 }

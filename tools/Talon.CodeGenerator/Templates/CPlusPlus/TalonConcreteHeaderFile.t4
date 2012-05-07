@@ -33,10 +33,8 @@ namespace Talon
 	public:
 		typedef <#= platform.ClassName #> Base;
 
-		<#= model.Name #>();
-		virtual ~<#= model.Name #>();
-
 	private:
+#include <Talon/<#= model.Module #>/Generated/<#= model.Name #>.h>
 	};
 <#
 		++i;

@@ -13,7 +13,7 @@ namespace Talon
 		delegate<Simulation, void()> FrameEnded;
 
 	protected:
-		virtual const std::wstring GetTitle() const;
+		virtual const std::string GetTitle() const;
 
 		virtual void OnBeginFrame();
 		virtual void OnEndFrame();

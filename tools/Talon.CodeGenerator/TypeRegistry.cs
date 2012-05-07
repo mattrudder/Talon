@@ -36,7 +36,7 @@ namespace Talon.CodeGenerator
 		private static readonly Dictionary<string, InterfaceModel> s_interfaceMap = new Dictionary<string, InterfaceModel>();
 		private static readonly string[] s_valueTypes = new[]
 		{
-			"void", "int", "short", "long", "float", "double", "string"
+			"void", "bool", "int", "short", "long", "float", "double", "string"
 		};
 	}
 }

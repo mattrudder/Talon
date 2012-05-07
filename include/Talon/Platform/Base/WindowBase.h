@@ -1,5 +1,6 @@
 
 #pragma once
+
 #include <Talon/TalonPublic.h>
 #include <Talon/TalonDelegate.h>
 
@@ -10,20 +11,20 @@ namespace Talon
 	class TalonApi WindowBase
 	{
 	public:
-		WindowBase(std::wstring title, int width, int height);
+		WindowBase(std::string title, int width, int height);
 		virtual ~WindowBase();
 
-		inline const std::wstring& GetTitle() const { return m_title; }
-		inline int GetWidth() const { return m_width; }
-		inline int GetHeight() const { return m_height; }
-		inline std::shared_ptr<RenderDevice> GetRenderDevice() const { return m_renderDevice; }
+		const std::string& GetTitle() const;
+		void SetTitle(const std::string& value);
+		int GetWidth() const;
+		int GetHeight() const;
+		std::shared_ptr<RenderDevice> GetRenderDevice() const;
 
 		delegate<WindowBase, void(int, int)> Resized;
 		delegate<WindowBase, void()> Closed;
 		delegate<WindowBase, void()> Created;
 		delegate<WindowBase, void()> Destroyed;
 
-	public:
 		void DoEvents();
 
 	protected:
@@ -33,9 +34,9 @@ namespace Talon
 		void OnDestroyed();
 
 	private:
-		i32 m_width;
-		i32 m_height;
-		std::wstring m_title;
+		std::string m_title;
+		int m_width;
+		int m_height;
 		std::shared_ptr<RenderDevice> m_renderDevice;
 	};
 }

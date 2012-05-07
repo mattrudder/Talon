@@ -16,6 +16,7 @@ namespace Talon.CodeGenerator.Generators.Model
 		public IList<MethodModel> Methods { get; set; }
 		public IList<PropertyModel> Properties { get; set; }
 		public IList<MethodModel> Delegates { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
 		public string FullyQualifiedName
 		{
@@ -46,5 +47,5 @@ namespace Talon.CodeGenerator.Generators.Model
 			foreach (PropertyModel property in Properties)
 				yield return property.Type;
 		}
-	}
+    }
 }

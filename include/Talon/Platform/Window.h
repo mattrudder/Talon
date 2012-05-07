@@ -17,11 +17,8 @@ namespace Talon
 	public:
 		typedef Win32Window Base;
 
-		Window(std::wstring title, int width, int height);
-		virtual ~Window();
-
-	public:
-		void DoEvents();
+	private:
+#include <Talon/Platform/Generated/Window.h>
 	};
 #elif TALON_MAC
 	class TalonApi Window : public MacWindow
@@ -29,12 +26,8 @@ namespace Talon
 	public:
 		typedef MacWindow Base;
 
-		Window(std::wstring title, int width, int height);
-		virtual ~Window();
-
-	public:
-		void DoEvents();
+	private:
+#include <Talon/Platform/Generated/Window.h>
 	};
 #endif
 }
-
