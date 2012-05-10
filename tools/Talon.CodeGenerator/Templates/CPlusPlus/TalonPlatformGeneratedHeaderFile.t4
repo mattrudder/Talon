@@ -35,7 +35,7 @@ protected:
 	foreach (MethodModel method in model.Parent.Delegates)
 	{
 #>
-	virtual <#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
+	<#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
 <#
 	}
 #>
