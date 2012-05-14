@@ -18,6 +18,9 @@ namespace Talon.CodeGenerator
     {
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> fnEach)
         {
+			if (enumerable == null)
+				return;
+
             foreach (T item in enumerable)
                 fnEach(item);
         }
@@ -57,6 +60,14 @@ namespace Talon.CodeGenerator
 
                 i.Properties.ForEach(p => p.OuterScope = interfaceName);
             });
+
+			module.Enumerables.ForEach(e =>
+			{
+				e.OuterScope = module.Module;
+
+				string enumName = string.Format("{0}.{1}", module.Module, e.Name);
+				e.Values.ForEach(v => v.OuterScope = enumName);
+			});
         }
 
         static private void ProcessDefinitions(string path)
@@ -83,14 +94,30 @@ namespace Talon.CodeGenerator
 					{
 						InterfaceModel model = CreateInterfaceModel(module.Module, i);
                         model.UpdatedAt = lastUpdated;
-						TypeRegistry.RegisterType(model);
+						TypeRegistry.RegisterInterface(model);
+					});
+
+					module.Enumerables.ForEach(e =>
+					{
+						EnumModel model = CreateEnumModel(module.Module, e);
+						model.UpdatedAt = lastUpdated;
+						TypeRegistry.RegisterEnum(model);
 					});
 
 					// Generate
-					TypeRegistry.ForEachType(i => s_generator.Generate(i));
+					TypeRegistry.ForEachInterface(i => s_generator.Generate(i));
+					TypeRegistry.ForEachEnum(i => s_generator.Generate(i));
                 }
             }
         }
+
+		private static EnumModel CreateEnumModel(string module, EnumDefinition e)
+		{
+			EnumModel model = Mapper.Map<EnumDefinition, EnumModel>(e);
+			model.Module = module;
+
+			return model;
+		}
 
 		private static InterfaceModel CreateInterfaceModel(string module, InterfaceDefinition iface)
 		{
@@ -128,9 +155,10 @@ namespace Talon.CodeGenerator
 			}
 
             // TODO: Take definition path as command line options.
+			string rootDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..");
             s_generator = new CPlusPlusGenerator
             {
-                OutputPath = "C:\\Users\\Matt\\Code\\Talon"
+				OutputPath = rootDir
             };
 			SetupMappers();
 

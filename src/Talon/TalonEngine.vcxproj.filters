@@ -178,5 +178,14 @@
     <None Include="..\..\definitions\Graphics\RenderDevice.json">
       <Filter>Definitions\Graphics</Filter>
     </None>
+    <None Include="..\..\definitions\Graphics\VertexBuffer.json">
+      <Filter>Definitions\Graphics</Filter>
+    </None>
+    <None Include="..\..\definitions\Graphics\IndexBuffer.json">
+      <Filter>Definitions\Graphics</Filter>
+    </None>
+    <None Include="..\..\definitions\Graphics\BufferFormat.json">
+      <Filter>Definitions\Graphics</Filter>
+    </None>
   </ItemGroup>
 </Project>

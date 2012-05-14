@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,9 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGeneratorSettings.cs" />
+    <Compile Include="Generators\Model\EnumModel.cs" />
     <Compile Include="Generators\CPlusPlus\CPlusPlusGenerator.cs" />
     <Compile Include="Generators\CPlusPlus\GenerationOptions.cs" />
     <Compile Include="Generators\IGenerator.cs" />
+    <Compile Include="Generators\Model\EnumValueModel.cs" />
     <Compile Include="Generators\Model\InterfaceModel.cs" />
     <Compile Include="Generators\Model\MethodModel.cs" />
     <Compile Include="Generators\Model\ParameterListOptions.cs" />
@@ -73,6 +76,8 @@
     <Compile Include="Generators\Model\PropertyModel.cs" />
     <Compile Include="Generators\Model\TypeModel.cs" />
     <Compile Include="Parsing\Model\DefinitionModule.cs" />
+    <Compile Include="Parsing\Model\EnumDefinition.cs" />
+    <Compile Include="Parsing\Model\EnumValueDefinition.cs" />
     <Compile Include="Parsing\Model\InterfaceDefinition.cs" />
     <Compile Include="Parsing\Model\MethodDefinition.cs">
       <SubType>Code</SubType>
@@ -121,6 +126,7 @@
     <Content Include="Templates\CPlusPlus\TalonConcreteGeneratedHeaderFile.t4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Templates\CPlusPlus\TalonEnumHeaderFile.t4" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

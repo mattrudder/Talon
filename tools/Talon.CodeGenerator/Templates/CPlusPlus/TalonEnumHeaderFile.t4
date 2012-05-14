@@ -1,0 +1,21 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ output extension=".h" encoding="utf-8" #>
+<#
+	CPlusPlusGenerator generator = (CPlusPlusGenerator) Host.GetHostOption("Generator");
+	EnumModel model = (EnumModel) Host.GetHostOption("CurrentEnum");
+	string className = model.Name + "Base";
+#>
+
+#pragma once
+
+#include <Talon/TalonPublic.h>
+
+namespace Talon
+{
+	enum class <#= model.Name #>
+	{
+<# foreach (var value in model.Values) {#>
+		<#= value.Name #><# if (value.Value != null) { #> = <#= value.Value #>,<# } #>
+<# }#>
+	};
+}

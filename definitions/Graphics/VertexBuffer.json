@@ -1,0 +1,24 @@
+{
+	'module': 'Graphics',
+	'interfaces': [
+		{
+			'name': 'VertexBuffer',
+			'constructors': [
+				{
+					'parameters': [
+						{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
+						{ 'name': 'vertexSize', 'type': 'int' }
+					]
+				},
+			],
+			'delegates': [],
+			'properties': [
+				{
+					'name': 'VertexSize',
+					'type': 'int',
+					'isReadOnly': true
+				}
+			]
+		}
+	]
+}

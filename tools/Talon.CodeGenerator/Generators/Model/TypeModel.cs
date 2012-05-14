@@ -17,7 +17,7 @@ namespace Talon.CodeGenerator.Generators.Model
 			get
 			{
 				if (m_interface == null)
-					m_interface = TypeRegistry.GetType(UnderlyingType);
+					m_interface = TypeRegistry.GetInterface(UnderlyingType);
 
 				return m_interface;
 			}

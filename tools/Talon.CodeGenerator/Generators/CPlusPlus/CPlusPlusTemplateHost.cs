@@ -49,6 +49,8 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		public string TemplateFile { get; internal set; }
 		public InterfaceModel CurrentInterface { get; internal set; }
 		public PlatformModel CurrentPlatform { get; set; }
+		public EnumModel CurrentEnum { get; set; }
+
 		public IGenerator Generator { get; set; }
 
 		public CPlusPlusTemplateHost()
@@ -68,6 +70,9 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 				break;
 			case "CurrentPlatform":
 				returnObject = CurrentPlatform;
+				break;
+			case "CurrentEnum":
+				returnObject = CurrentEnum;
 				break;
 			case "Generator":
 				returnObject = Generator;

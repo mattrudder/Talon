@@ -1,0 +1,11 @@
+{
+	'module': 'Graphics',
+	'enumerations': [
+		{
+			'name': 'BufferFormat',
+			'values': [
+				{ 'name': 'Unknown'	}
+			],
+		}
+	]
+}

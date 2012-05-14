@@ -24,6 +24,13 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			Mapper.CreateMap<string, TypeModel>().ConstructUsing(GetCPlusPlusType);
 		}
 
+		public void Generate(EnumModel model)
+		{
+			string includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
+
+			Generate("TalonEnumHeaderFile.t4", includePath, model);
+		}
+
         public void Generate(InterfaceModel model)
         {
             string includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
@@ -62,6 +69,11 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		public string GetFieldName(PropertyModel property)
 		{
 			return string.Format("m_{0}{1}", char.ToLowerInvariant(property.Name[0]), property.Name.Substring(1));
+		}
+
+		public string GetFieldName(ParameterModel parameter)
+		{
+			return string.Format("m_{0}{1}", char.ToLowerInvariant(parameter.Name[0]), parameter.Name.Substring(1));
 		}
 
         public string GetSetterName(PropertyModel property)
@@ -115,6 +127,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 			m_textHost.CurrentInterface = null;
 			m_textHost.CurrentPlatform = platform;
+			m_textHost.CurrentEnum = null;
 
 			m_textHost.TemplateFile = ResolveTemplatePath(templatePath);
 			string templateText = GetTemplateText(m_textHost.TemplateFile);
@@ -133,6 +146,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 			m_textHost.CurrentInterface = model;
 			m_textHost.CurrentPlatform = null;
+			m_textHost.CurrentEnum = null;
 
 			m_textHost.TemplateFile = ResolveTemplatePath(templatePath);
 			string templateText = GetTemplateText(m_textHost.TemplateFile);
@@ -140,6 +154,25 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
             DateTime lastUpdated = File.Exists(outputPath) ? File.GetLastWriteTimeUtc(outputPath) : DateTime.MinValue;
             if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && DateTime.Compare(lastUpdated, model.UpdatedAt) < 0))
 			    GenerateFile(outputPath, templateText);
+		}
+
+		private void Generate(string templatePath, string outputPath, EnumModel model, GenerationOptions options = GenerationOptions.AllowOverwrite)
+		{
+			if (templatePath == null)
+				throw new ArgumentNullException("templatePath");
+			if (outputPath == null)
+				throw new ArgumentNullException("outputPath");
+
+			m_textHost.CurrentInterface = null;
+			m_textHost.CurrentPlatform = null;
+			m_textHost.CurrentEnum = model;
+
+			m_textHost.TemplateFile = ResolveTemplatePath(templatePath);
+			string templateText = GetTemplateText(m_textHost.TemplateFile);
+
+			DateTime lastUpdated = File.Exists(outputPath) ? File.GetLastWriteTimeUtc(outputPath) : DateTime.MinValue;
+			if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && DateTime.Compare(lastUpdated, model.UpdatedAt) < 0))
+				GenerateFile(outputPath, templateText);
 		}
 
 		private string GetTemplateText(string templatePath)

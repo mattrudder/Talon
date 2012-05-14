@@ -15,5 +15,6 @@ namespace Talon.CodeGenerator.Generators
 		string OutputPath { get; set; }
 
         void Generate(InterfaceModel definition);
+		void Generate(EnumModel definition);
 	}
 }
