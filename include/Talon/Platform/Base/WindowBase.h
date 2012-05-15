@@ -4,6 +4,7 @@
 #include <Talon/TalonPublic.h>
 #include <Talon/TalonDelegate.h>
 
+
 namespace Talon
 {
 	class RenderDevice;
@@ -19,20 +20,17 @@ namespace Talon
 		int GetWidth() const;
 		int GetHeight() const;
 		std::shared_ptr<RenderDevice> GetRenderDevice() const;
-
 		delegate<WindowBase, void(int, int)> Resized;
 		delegate<WindowBase, void()> Closed;
 		delegate<WindowBase, void()> Created;
 		delegate<WindowBase, void()> Destroyed;
-
 		void DoEvents();
 
 	protected:
-		virtual void OnResized(int width, int height);
-		virtual void OnClosed();
-		virtual void OnCreated();
-		virtual void OnDestroyed();
-
+		void OnResized(int width, int height);
+		void OnClosed();
+		void OnCreated();
+		void OnDestroyed();
 		void SetWidth(int value);
 		void SetHeight(int value);
 		void SetRenderDevice(std::shared_ptr<RenderDevice> value);

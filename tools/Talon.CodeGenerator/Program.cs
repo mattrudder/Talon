@@ -106,6 +106,7 @@ namespace Talon.CodeGenerator
 					});
 
 					// Generate
+					s_generator.Settings = s_settings;
 					TypeRegistry.ForEachInterface(i => s_generator.Generate(i));
 					TypeRegistry.ForEachEnum(i => s_generator.Generate(i));
                 }
@@ -155,16 +156,17 @@ namespace Talon.CodeGenerator
 				s_platformsForModule = s_settings.Modules.ToDictionary(m => m.Name, m => m.Platforms, StringComparer.InvariantCultureIgnoreCase);
 			}
 
-            // TODO: Take definition path as command line options.
-			string rootDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..");
             s_generator = new CPlusPlusGenerator
             {
-				OutputPath = rootDir
+				Settings = s_settings
             };
-			SetupMappers();
+			
 
-            ProcessDefinitions(Path.Combine(s_generator.OutputPath, "definitions"));
-			Console.ReadLine();
+			s_settings.OutputPath = Path.Combine(workingPath, s_settings.OutputPath ?? "");
+			s_settings.DefinitionsPath = Path.Combine(workingPath, s_settings.DefinitionsPath ?? "");
+
+			SetupMappers();
+			ProcessDefinitions(s_settings.DefinitionsPath);
 		}
 
 		private static void SetupMappers()

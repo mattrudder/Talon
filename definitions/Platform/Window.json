@@ -65,6 +65,12 @@
 					'returnType': 'void',
 					'parameters': []
 				}
+			],
+			'fields': [
+				{ 'name': 'title', 'type': 'string' },
+				{ 'name': 'width', 'type': 'int' },
+				{ 'name': 'height', 'type': 'int' },
+				{ 'name': 'renderDevice', 'type': 'RenderDevice' }
 			]
 		}
 	]

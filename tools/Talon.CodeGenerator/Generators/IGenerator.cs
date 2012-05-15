@@ -12,7 +12,7 @@ namespace Talon.CodeGenerator.Generators
 {
 	internal interface IGenerator
 	{
-		string OutputPath { get; set; }
+		CodeGeneratorSettings Settings { set; }
 
         void Generate(InterfaceModel definition);
 		void Generate(EnumModel definition);

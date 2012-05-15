@@ -24,42 +24,44 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			Mapper.CreateMap<string, TypeModel>().ConstructUsing(GetCPlusPlusType);
 		}
 
+		public CodeGeneratorSettings Settings { get; set; }
+
 		public void Generate(EnumModel model)
 		{
-			string includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
+			string includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
 
 			Generate("TalonEnumHeaderFile.t4", includePath, model);
 		}
 
         public void Generate(InterfaceModel model)
         {
-            string includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
-			string sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name));
+            string includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
+			string sourcePath = Path.Combine(Settings.OutputPath, string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name));
 
 			Generate("TalonConcreteHeaderFile.t4", includePath, model);
 
             // Always regenerate concrete method header, if interface was updated.
-            includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/Generated/{1}.h", model.Module, model.Name));
+			includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/Generated/{1}.h", model.Module, model.Name));
             Generate("TalonConcreteGeneratedHeaderFile.t4", includePath, model, GenerationOptions.AllowOverwrite);
 
 			Generate("TalonConcreteSourceFile.t4", sourcePath, model);
 
 			foreach (PlatformModel platform in model.Platforms)
 			{
-				includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.Name, platform.ClassName));
-				sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/{1}/{2}.{3}", model.Module, platform.Name, platform.ClassName, platform.CPlusPlusExtension));
+				includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}/{2}.h", model.Module, platform.Name, platform.ClassName));
+				sourcePath = Path.Combine(Settings.OutputPath, string.Format("src/Talon/{0}/{1}/{2}.{3}", model.Module, platform.Name, platform.ClassName, platform.CPlusPlusExtension));
 
 				Generate("TalonPlatformHeaderFile.t4", includePath, platform);
 
                 // Always regenerate platform method header, if interface was updated.
-                includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/{1}/Generated/{2}.h", model.Module, platform.Name, platform.ClassName));
+				includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}/Generated/{2}.h", model.Module, platform.Name, platform.ClassName));
                 Generate("TalonPlatformGeneratedHeaderFile.t4", includePath, platform, GenerationOptions.AllowOverwrite);
 
 				Generate("TalonPlatformSourceFile.t4", sourcePath, platform);
 			}
 
-			includePath = Path.Combine(OutputPath, string.Format("include/Talon/{0}/Base/{1}Base.h", model.Module, model.Name));
-			sourcePath = Path.Combine(OutputPath, string.Format("src/Talon/{0}/Base/{1}Base.cpp", model.Module, model.Name));
+			includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/Base/{1}Base.h", model.Module, model.Name));
+			sourcePath = Path.Combine(Settings.OutputPath, string.Format("src/Talon/{0}/Base/{1}Base.cpp", model.Module, model.Name));
 
             // Always regenerate base class definitions, if interface was updated
             Generate("TalonBaseHeaderFile.t4", includePath, model, GenerationOptions.AllowOverwrite);
@@ -162,7 +164,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			string templateText = GetTemplateText(m_textHost.TemplateFile);
 
             DateTime lastUpdated = File.Exists(outputPath) ? File.GetLastWriteTimeUtc(outputPath) : DateTime.MinValue;
-            if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && DateTime.Compare(lastUpdated, model.UpdatedAt) < 0))
+            if (!File.Exists(outputPath) || (options.HasFlag(GenerationOptions.AllowOverwrite) && (Settings.ForceRegeneration || DateTime.Compare(lastUpdated, model.UpdatedAt) < 0)))
 			    GenerateFile(outputPath, templateText);
 		}
 
@@ -258,8 +260,5 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 		private readonly Engine m_textEngine;
 		private readonly CPlusPlusTemplateHost m_textHost;
-
-		public string OutputPath { get; set; }
-
 	}
 }

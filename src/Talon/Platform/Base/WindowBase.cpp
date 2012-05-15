@@ -1,16 +1,21 @@
 
 #include <Talon/TalonPrefix.h>
 #include <Talon/Platform/Base/WindowBase.h>
+#include <Talon/Graphics/RenderDevice.h>
 
 namespace Talon
 {
+// TODO: Code generation should mark unused parameters as such.
+#pragma warning(push)
+#pragma warning(disable : 4100)
 	WindowBase::WindowBase(std::string title, int width, int height)
 		: m_title(title)
 		, m_width(width)
 		, m_height(height)
+		, m_renderDevice(nullptr)
 	{
 	}
-
+#pragma warning(pop)
 	WindowBase::~WindowBase()
 	{
 	}

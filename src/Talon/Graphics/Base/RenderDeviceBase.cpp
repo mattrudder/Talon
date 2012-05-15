@@ -1,6 +1,7 @@
 
 #include <Talon/TalonPrefix.h>
 #include <Talon/Graphics/Base/RenderDeviceBase.h>
+#include <Talon/Platform/Window.h>
 
 namespace Talon
 {

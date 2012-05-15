@@ -1,4 +1,7 @@
 ﻿{
+	'outputPath': '..\\..',
+	'definitionsPath': '..\\..\\definitions',
+	'forceRegeneration': false,
 	'modules': [
 		{
 			'name': 'Platform',

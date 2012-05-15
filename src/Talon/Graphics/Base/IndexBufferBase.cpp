@@ -1,6 +1,7 @@
 
 #include <Talon/TalonPrefix.h>
 #include <Talon/Graphics/Base/IndexBufferBase.h>
+#include <Talon/Graphics/RenderDevice.h>
 
 namespace Talon
 {
