@@ -182,9 +182,6 @@
     <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLRenderDevice.h">
       <Filter>Header Files\Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\build\Talon\TalonBuildInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\glew.h">
       <Filter>Externals\glew</Filter>
     </ClInclude>
@@ -220,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLVertexBuffer.h">
       <Filter>Header Files\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\build\TalonBuildInfo.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

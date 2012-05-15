@@ -31,7 +31,7 @@
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\build\Talon\TalonBuildInfo.h" />
+    <ClInclude Include="..\..\build\TalonBuildInfo.h" />
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\glew.h" />
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\wglew.h" />
     <ClInclude Include="..\..\include\Talon\Engine.h" />
@@ -120,7 +120,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -143,7 +143,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
