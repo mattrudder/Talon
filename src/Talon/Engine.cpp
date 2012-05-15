@@ -3,6 +3,7 @@
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Simulation.h>
+#include <Talon/Graphics/BufferFormat.h>
 
 //#include <zlib.h>
 //#include <png.h>
@@ -12,6 +13,8 @@ namespace Talon
 {
 	void Engine::Initialize(Simulation* sim)
 	{
+		BufferFormat format = BufferFormat::Unknown;
+		printf("%d", format);
 		m_simulation.reset(sim);
 
 //		char line[MAX_PATH];

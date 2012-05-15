@@ -12,6 +12,11 @@ namespace Talon.CodeGenerator.Generators.Model
 		public TypeModel ReturnType { get; set; }
 		public IList<ParameterModel> Parameters { get; set; }
 
+		public ParameterModel GetParameter(string parameterName)
+		{
+			return Parameters.FirstOrDefault(p => string.Equals(p.Name, parameterName, StringComparison.InvariantCultureIgnoreCase));
+		}
+
 		public void GenerateParameterList(dynamic templateClass, ParameterListOptions options = ParameterListOptions.IncludeAll)
 		{
 			Func<TypeModel, string> whichType = p => p.ParameterType;

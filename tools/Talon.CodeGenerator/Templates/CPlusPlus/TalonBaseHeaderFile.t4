@@ -13,6 +13,22 @@
 #include <Talon/TalonDelegate.h>
 <# } #>
 
+<#
+	foreach (TypeModel type in model.GetReferencedTypes())
+	{
+		if (!TypeRegistry.IsGeneratedType(type.UnderlyingType))
+			continue;
+
+		EnumModel enumModel = TypeRegistry.GetEnum(type.UnderlyingType);
+		if (enumModel != null)
+		{
+#>
+#include <Talon/<#= enumModel.Module #>/<#= enumModel.Name #>.h>
+<#
+		}
+	}
+#>
+
 namespace Talon
 {
 <#
@@ -57,18 +73,14 @@ namespace Talon
 <#
 		}
 	}
-#>
 
-<#
 	foreach (MethodModel method in model.Delegates)
 	{
 #>
 		delegate<<#= className #>, <#= method.ReturnType.ParameterType #>(<# method.GenerateParameterList(this, options: ParameterListOptions.IncludeTypes); #>)> <#= method.Name #>;
 <#
 	}
-#>
 
-<#
 	foreach (MethodModel method in model.Methods)
 	{
 #>
@@ -85,9 +97,7 @@ namespace Talon
 		<#= method.ReturnType.ParameterType #> On<#= method.Name #>(<# method.GenerateParameterList(this); #>);
 <#
 	}
-#>
 
-<#
 	foreach (PropertyModel property in model.Properties)
 	{
 		if (property.IsReadOnly)
@@ -101,10 +111,10 @@ namespace Talon
 
 	private:
 <#
-	foreach (PropertyModel property in model.Properties)
+	foreach (FieldModel field in model.Fields)
 	{
 #>
-		<#= property.Type.FieldType #> <#= generator.GetFieldName(property) #>;
+		<#= field.Type.FieldType #> <#= generator.GetFieldName(field) #>;
 <#
 	}
 #>

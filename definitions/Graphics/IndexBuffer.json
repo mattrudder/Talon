@@ -18,6 +18,10 @@
 					'type': 'BufferFormat',
 					'isReadOnly': true
 				}
+			],
+			'fields': [
+				{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
+				{ 'name': 'format', 'type': 'BufferFormat' }
 			]
 		}
 	]

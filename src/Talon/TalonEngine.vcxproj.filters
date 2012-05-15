@@ -102,6 +102,30 @@
     <ClCompile Include="Simulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\IndexBuffer.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\VertexBuffer.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GLIndexBuffer.cpp">
+      <Filter>Source Files\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GLVertexBuffer.cpp">
+      <Filter>Source Files\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11IndexBuffer.cpp">
+      <Filter>Source Files\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp">
+      <Filter>Source Files\Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Base\IndexBufferBase.cpp">
+      <Filter>Source Files\Graphics\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Base\VertexBufferBase.cpp">
+      <Filter>Source Files\Graphics\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Talon\Engine.h">
@@ -169,6 +193,33 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Talon\Simulation.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\BufferFormat.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\IndexBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\VertexBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Base\IndexBufferBase.h">
+      <Filter>Header Files\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Base\VertexBufferBase.h">
+      <Filter>Header Files\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Direct3D11\D3D11IndexBuffer.h">
+      <Filter>Header Files\Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\Direct3D11\D3D11VertexBuffer.h">
+      <Filter>Header Files\Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLIndexBuffer.h">
+      <Filter>Header Files\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\Graphics\OpenGL\GLVertexBuffer.h">
+      <Filter>Header Files\Graphics\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

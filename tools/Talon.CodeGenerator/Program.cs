@@ -59,9 +59,10 @@ namespace Talon.CodeGenerator
                 });
 
                 i.Properties.ForEach(p => p.OuterScope = interfaceName);
+				i.Fields.ForEach(f => f.OuterScope = interfaceName);
             });
 
-			module.Enumerables.ForEach(e =>
+			module.Enums.ForEach(e =>
 			{
 				e.OuterScope = module.Module;
 
@@ -97,7 +98,7 @@ namespace Talon.CodeGenerator
 						TypeRegistry.RegisterInterface(model);
 					});
 
-					module.Enumerables.ForEach(e =>
+					module.Enums.ForEach(e =>
 					{
 						EnumModel model = CreateEnumModel(module.Module, e);
 						model.UpdatedAt = lastUpdated;
@@ -163,6 +164,7 @@ namespace Talon.CodeGenerator
 			SetupMappers();
 
             ProcessDefinitions(Path.Combine(s_generator.OutputPath, "definitions"));
+			Console.ReadLine();
 		}
 
 		private static void SetupMappers()
@@ -171,6 +173,9 @@ namespace Talon.CodeGenerator
 			Mapper.CreateMap<MethodDefinition, MethodModel>();
 			Mapper.CreateMap<ParameterDefinition, ParameterModel>();
 			Mapper.CreateMap<PropertyDefinition, PropertyModel>();
+			Mapper.CreateMap<FieldDefinition, FieldModel>();
+			Mapper.CreateMap<EnumDefinition, EnumModel>();
+			Mapper.CreateMap<EnumValueDefinition, EnumValueModel>();
 		}
 
 		private static CodeGeneratorSettings s_settings;

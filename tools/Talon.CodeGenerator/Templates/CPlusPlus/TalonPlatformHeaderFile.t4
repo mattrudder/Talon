@@ -18,6 +18,6 @@ namespace Talon
 		typedef <#= baseClassName #> Base;
 
 	private:
-#include <Talon/<#= model.Parent.Module #>/<#= model.ShortName #>/Generated/<#= model.ClassName #>.h>
+#include <Talon/<#= model.Parent.Module #>/<#= model.Name #>/Generated/<#= model.ClassName #>.h>
 	};
 }

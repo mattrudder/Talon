@@ -11,5 +11,6 @@ namespace Talon.CodeGenerator.Parsing.Model
 		public IList<MethodDefinition> Delegates { get; set; }
 		public IList<MethodDefinition> Methods { get; set; }
 		public IList<PropertyDefinition> Properties { get; set; }
+		public IList<FieldDefinition> Fields { get; set; }
 	}
 }

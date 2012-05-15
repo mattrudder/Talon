@@ -3,6 +3,7 @@
 
 #include <Talon/TalonPublic.h>
 
+
 namespace Talon
 {
 	class Window;
@@ -15,13 +16,10 @@ namespace Talon
 
 		Window* GetWindow() const;
 		bool IsInitialized() const;
-
-
 		void BeginFrame();
 		void EndFrame();
 
 	protected:
-
 		void SetWindow(Window* value);
 		void SetInitialized(bool value);
 

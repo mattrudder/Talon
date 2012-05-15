@@ -16,6 +16,12 @@ namespace Talon.CodeGenerator
 			return s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase) || s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase));
 		}
 
+		public static bool IsGeneratedType(string typeName)
+		{
+			return s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase)) ||
+				s_interfaceMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase));
+		}
+
 		public static InterfaceModel GetInterface(string typeName)
 		{
 			InterfaceModel returnModel = null;
@@ -31,6 +37,13 @@ namespace Talon.CodeGenerator
 		internal static void ForEachInterface(Action<InterfaceModel> fnEach)
 		{
 			s_interfaceMap.ForEach(kv => fnEach(kv.Value));
+		}
+
+		public static EnumModel GetEnum(string typeName)
+		{
+			EnumModel returnModel = null;
+			s_enumMap.TryGetValue(typeName, out returnModel);
+			return returnModel;
 		}
 
 		internal static void RegisterEnum(EnumModel model)

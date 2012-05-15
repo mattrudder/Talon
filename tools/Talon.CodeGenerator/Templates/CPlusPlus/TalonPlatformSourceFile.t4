@@ -4,14 +4,34 @@
 	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
 #>
 
-#include <Talon/<#= model.Parent.Module #>/<#= model.ShortName #>/<#= model.ClassName #>.h>
+#include <Talon/<#= model.Parent.Module #>/<#= model.Name #>/<#= model.ClassName #>.h>
 
 namespace Talon
 {
+<#
+	foreach (MethodModel method in model.Parent.Constructors)
+	{
+#>
+	<#= model.ClassName #>::<#= model.ClassName #>(<# method.GenerateParameterList(this, t => t.FieldType); #>)
+		: Base(<# method.GenerateParameterList(this, t => t.FieldType, ParameterListOptions.IncludeNames); #>)
+<#
+
+#>
+	{
+	}
+
+<#
+	}
+
+	if (model.Parent.Constructors.Count == 0)
+	{
+#>
 	<#= model.ClassName #>::<#= model.ClassName #>()
 		: Base()
 	{
 	}
+
+<#	} #>
 
 	<#= model.ClassName #>::~<#= model.ClassName #>()
 	{

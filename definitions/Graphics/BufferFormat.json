@@ -1,6 +1,6 @@
 {
 	'module': 'Graphics',
-	'enumerations': [
+	'enums': [
 		{
 			'name': 'BufferFormat',
 			'values': [

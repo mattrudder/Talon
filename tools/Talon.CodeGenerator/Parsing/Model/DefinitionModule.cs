@@ -9,6 +9,6 @@ namespace Talon.CodeGenerator.Parsing.Model
 	{
 		public string Module { get; set; }
 		public IList<InterfaceDefinition> Interfaces { get; set; }
-		public IList<EnumDefinition> Enumerables { get; set; }
+		public IList<EnumDefinition> Enums { get; set; }
 	}
 }

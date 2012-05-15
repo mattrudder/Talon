@@ -34,6 +34,10 @@
 					'returnType': 'void',
 					'parameters': []
 				}
+			],
+			'fields': [
+				{ 'name': 'window', 'type': 'weak<Window>' },
+				{ 'name': 'initialized', 'type': 'bool' }
 			]
 		}
 	]

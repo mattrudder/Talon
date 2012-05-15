@@ -31,18 +31,26 @@ namespace Talon
 	<#= className #>::<#= className #>(<# method.GenerateParameterList(this, t => t.FieldType); #>)
 <#
 		int i = 0;
-		foreach (ParameterModel parameter in method.Parameters)
+		foreach (FieldModel field in model.Fields)
 		{
-			PropertyModel property = model.GetProperty(parameter.Name);
-			if (property == null)
-				continue;
-
+			ParameterModel parameter = method.GetParameter(field.Name);
 			char separator = ',';
 			if (i == 0)
 				separator = ':';
+
+			if (parameter == null)
+			{
+				// TODO: Generate default constructor for fields.
 #>
-		<#= separator #> <#= generator.GetFieldName(property) #>(<#= parameter.Name #>)
+		<#= separator #> <#= generator.GetFieldName(field) #>(0)
 <#
+			}
+			else
+			{
+#>
+		<#= separator #> <#= generator.GetFieldName(field) #>(<#= parameter.Name #>)
+<#
+			}
 			++i;
 		}
 #>

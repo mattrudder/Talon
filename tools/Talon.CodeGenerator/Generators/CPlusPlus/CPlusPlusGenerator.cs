@@ -76,6 +76,11 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			return string.Format("m_{0}{1}", char.ToLowerInvariant(parameter.Name[0]), parameter.Name.Substring(1));
 		}
 
+		public string GetFieldName(FieldModel field)
+		{
+			return string.Format("m_{0}{1}", char.ToLowerInvariant(field.Name[0]), field.Name.Substring(1));
+		}
+
         public string GetSetterName(PropertyModel property)
         {
             return string.Format("Set{0}", property.Name);

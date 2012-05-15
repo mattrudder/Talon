@@ -32,13 +32,21 @@ namespace Talon.CodeGenerator.Generators.Model
 			return Properties.FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.InvariantCultureIgnoreCase));
 		}
 
+		public FieldModel GetField(string fieldName)
+		{
+			return Fields.FirstOrDefault(f => string.Equals(f.Name, fieldName, StringComparison.InvariantCultureIgnoreCase));
+		}
+
 		public IEnumerable<TypeModel> GetReferencedTypes()
 		{
-			return GetReferencedTypesCore().Distinct().OrderBy(t => t.UnderlyingType);
+			return GetReferencedTypesCore().Distinct().Where(t => t != null && t.UnderlyingType != null).OrderBy(t => t.UnderlyingType);
 		}
 
 		private IEnumerable<TypeModel> GetReferencedTypesCore()
 		{
+			foreach (TypeModel type in Constructors.SelectMany(c => c.Parameters.Select(p => p.Type)))
+				yield return type;
+
 			foreach (MethodModel method in Methods)
 				yield return method.ReturnType;
 

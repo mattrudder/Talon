@@ -8,11 +8,30 @@
 
 namespace Talon
 {
+<#
+	foreach (MethodModel method in model.Constructors)
+	{
+#>
+	<#= model.Name #>::<#= model.Name #>(<# method.GenerateParameterList(this, t => t.FieldType); #>)
+		: Base(<# method.GenerateParameterList(this, t => t.FieldType, ParameterListOptions.IncludeNames); #>)
+<#
+
+#>
+	{
+	}
+
+<#
+	}
+
+	if (model.Constructors.Count == 0)
+	{
+#>
 	<#= model.Name #>::<#= model.Name #>()
 		: Base()
 	{
-
 	}
+
+<#	} #>
 
 	<#= model.Name #>::~<#= model.Name #>()
 	{

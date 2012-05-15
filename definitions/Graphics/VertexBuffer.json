@@ -18,6 +18,10 @@
 					'type': 'int',
 					'isReadOnly': true
 				}
+			],
+			'fields': [
+				{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
+				{ 'name': 'vertexSize', 'type': 'int' }
 			]
 		}
 	]
