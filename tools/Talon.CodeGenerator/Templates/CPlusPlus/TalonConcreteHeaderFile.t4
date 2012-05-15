@@ -14,7 +14,7 @@
 	foreach (PlatformModel platform in model.Platforms) {
 #>
 <#= i == 0 ? "#if" : platform.Condition != null ? "#elif" : "#else" #> <#= platform.Condition != null ? platform.Condition : "" #>
-#include <Talon/<#= model.Module #>/<#= platform.ShortName #>/<#= platform.ClassName #>.h>
+#include <Talon/<#= model.Module #>/<#= platform.Name #>/<#= platform.ClassName #>.h>
 <#
 		++i;
 	}

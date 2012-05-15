@@ -85,7 +85,7 @@
     <ClInclude Include="..\..\include\Talon\TalonVersion.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\definitions\Graphics\BufferFormat.json" />
+    <None Include="..\..\definitions\Graphics\Enums.json" />
     <None Include="..\..\definitions\Graphics\IndexBuffer.json" />
     <None Include="..\..\definitions\Graphics\RenderDevice.json" />
     <None Include="..\..\definitions\Graphics\VertexBuffer.json" />

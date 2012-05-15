@@ -4,8 +4,8 @@
 
 namespace Talon
 {
-	D3D11VertexBuffer::D3D11VertexBuffer(RenderDevice* renderDevice, int vertexSize)
-		: Base(renderDevice, vertexSize)
+	D3D11VertexBuffer::D3D11VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
+		: Base(renderDevice, vertexSize, vertexCount, initialData, bufferUsage)
 	{
 	}
 

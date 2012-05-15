@@ -13,7 +13,9 @@ namespace Talon.CodeGenerator
 	{
 		public static bool IsValueType(string typeName)
 		{
-			return s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase) || s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase));
+			return s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase) ||
+				s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase)) ||
+				typeName.Trim().EndsWith("*");
 		}
 
 		public static bool IsGeneratedType(string typeName)

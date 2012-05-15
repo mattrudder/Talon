@@ -265,7 +265,7 @@
     <None Include="..\..\definitions\Graphics\IndexBuffer.json">
       <Filter>Definitions\Graphics</Filter>
     </None>
-    <None Include="..\..\definitions\Graphics\BufferFormat.json">
+    <None Include="..\..\definitions\Graphics\Enums.json">
       <Filter>Definitions\Graphics</Filter>
     </None>
   </ItemGroup>

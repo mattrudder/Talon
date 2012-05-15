@@ -101,6 +101,8 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
             {
                 actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
 
+				bool pointerType = definitionType.Trim().EndsWith("*");
+
                 Match weakMatch = s_rgWeakReference.Match(definitionType);
                 if (weakMatch != null && weakMatch.Groups.Count > 1 && weakMatch.Groups[1].Length > 0)
                 {
@@ -110,11 +112,11 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
                     actualType.ParameterType = string.Format("{0}*", classNameCapture.Value);
                     actualType.FieldType = actualType.ParameterType;
                 }
-                else if (!TypeRegistry.IsValueType(definitionType))
-                {
-                    actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
-                    actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
-                }
+				else if (!TypeRegistry.IsValueType(definitionType) && !pointerType)
+				{
+					actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
+					actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
+				}
             }
 
             if (actualType.UnderlyingType == null)

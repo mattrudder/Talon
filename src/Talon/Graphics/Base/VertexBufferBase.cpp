@@ -5,12 +5,17 @@
 
 namespace Talon
 {
-	VertexBufferBase::VertexBufferBase(RenderDevice* renderDevice, int vertexSize)
+// TODO: Code generation should mark unused parameters as such.
+#pragma warning(push)
+#pragma warning(disable : 4100)
+	VertexBufferBase::VertexBufferBase(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
 		: m_renderDevice(renderDevice)
 		, m_vertexSize(vertexSize)
+		, m_vertexCount(vertexCount)
+		, m_bufferUsage(bufferUsage)
 	{
 	}
-
+#pragma warning(pop)
 	VertexBufferBase::~VertexBufferBase()
 	{
 	}
