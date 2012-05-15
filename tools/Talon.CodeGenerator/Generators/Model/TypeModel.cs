@@ -11,6 +11,7 @@ namespace Talon.CodeGenerator.Generators.Model
 		public string UnderlyingType { get; set; }
 		public string ParameterType { get; set; }
 		public string FieldType { get; set; }
+		public string DefaultValue { get; set; }
 
 		public InterfaceModel Interface
 		{

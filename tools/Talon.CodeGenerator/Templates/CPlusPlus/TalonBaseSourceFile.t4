@@ -44,9 +44,8 @@ namespace Talon
 
 			if (parameter == null)
 			{
-				// TODO: Generate default constructor for fields.
 #>
-		<#= separator #> <#= generator.GetFieldName(field) #>(0)
+		<#= separator #> <#= generator.GetFieldName(field) #>(<#= field.Type.DefaultValue #>)
 <#
 			}
 			else

@@ -4,12 +4,15 @@
 
 namespace Talon
 {
+// TODO: Code generation should mark unused parameters as such.
+#pragma warning(push)
+#pragma warning(disable : 4100)
 	RenderDeviceBase::RenderDeviceBase(Window* window)
 		: m_window(window)
-		, m_initialized(0)
+		, m_initialized(false)
 	{
 	}
-
+#pragma warning(pop)
 	RenderDeviceBase::~RenderDeviceBase()
 	{
 	}

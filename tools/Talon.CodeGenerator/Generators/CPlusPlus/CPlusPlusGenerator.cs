@@ -97,11 +97,10 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		private TypeModel GetCPlusPlusType(string definitionType)
 		{
 			TypeModel actualType;
+			bool pointerType = definitionType.Trim().EndsWith("*");
             if (!s_definitionsToCppTypes.TryGetValue(definitionType, out actualType))
             {
-                actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
-
-				bool pointerType = definitionType.Trim().EndsWith("*");
+				actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
 
                 Match weakMatch = s_rgWeakReference.Match(definitionType);
                 if (weakMatch != null && weakMatch.Groups.Count > 1 && weakMatch.Groups[1].Length > 0)
@@ -111,16 +110,20 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
                     actualType.UnderlyingType = classNameCapture.Value;
                     actualType.ParameterType = string.Format("{0}*", classNameCapture.Value);
                     actualType.FieldType = actualType.ParameterType;
+					actualType.DefaultValue = "nullptr";
                 }
 				else if (!TypeRegistry.IsValueType(definitionType) && !pointerType)
 				{
 					actualType.ParameterType = string.Format("std::shared_ptr<{0}>", actualType.ParameterType);
 					actualType.FieldType = string.Format("std::shared_ptr<{0}>", actualType.FieldType);
+					actualType.DefaultValue = "nullptr";
 				}
             }
 
             if (actualType.UnderlyingType == null)
 		    	actualType.UnderlyingType = definitionType;
+			if (actualType.DefaultValue == null)
+				actualType.DefaultValue = pointerType ? "nullptr" : "0";
 
 			return actualType;
 		}
@@ -247,7 +250,8 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 		private static readonly Dictionary<string, TypeModel> s_definitionsToCppTypes = new Dictionary<string, TypeModel>()
 		{
-			{ "string", new TypeModel { ParameterType = "const std::string&", FieldType = "std::string" } }
+			{ "bool", new TypeModel { ParameterType = "bool", FieldType = "bool", DefaultValue = "false" } },
+			{ "string", new TypeModel { ParameterType = "const std::string&", FieldType = "std::string", DefaultValue = "\"\"" } }
 		};
 
         private static readonly Regex s_rgWeakReference = new Regex("weak<(\\w+)>");
