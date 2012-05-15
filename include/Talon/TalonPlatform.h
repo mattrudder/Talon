@@ -122,17 +122,19 @@
 #else // Building Talon as a static library.
 #	define TalonApi
 #	define TalonPrivate
-#endif
+#endif // TALON_DLL
 
 #if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 #	define TALON_ALIGN(a, decl) _declspec(align(a)) decl 
 #elif TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_GCC
 #	define TALON_ALIGN(a, decl) decl __attribute__((aligned(a)))
-#endif
+#endif // TALON_COMPILER_VENDOR
 
 #if TALON_WINDOWS
+#	ifndef _HAS_EXCEPTIONS
 #   define _HAS_EXCEPTIONS 0
+#	endif // _HAS_EXCEPTIONS
 #   pragma warning(disable : 4251)	// STL usage in DLL-interface class
 #   pragma warning(disable : 4275)	// non dll-interface used as base for dll-interface
-#endif
+#endif //TALON_WINDOWS
 

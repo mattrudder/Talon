@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Graphics/Base/RenderDeviceBase.h>
 
 namespace Talon

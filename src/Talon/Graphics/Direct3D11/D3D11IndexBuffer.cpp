@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Graphics/Direct3D11/D3D11IndexBuffer.h>
 
 namespace Talon

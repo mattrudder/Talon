@@ -11,7 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\externals\glew-1.7.0\src\glew.c" />
+    <ClCompile Include="..\..\externals\glew-1.7.0\src\glew.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\nowide\src\convert.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\nowide\src\streambuf.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Graphics\Base\IndexBufferBase.cpp" />
     <ClCompile Include="Graphics\Base\RenderDeviceBase.cpp" />
@@ -29,11 +40,20 @@
     <ClCompile Include="Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="Platform\Window.cpp" />
     <ClCompile Include="Simulation.cpp" />
+    <ClCompile Include="TalonPrefix.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\build\TalonBuildInfo.h" />
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\glew.h" />
     <ClInclude Include="..\..\externals\glew-1.7.0\include\GL\wglew.h" />
+    <ClInclude Include="..\..\externals\nowide\nowide\config.h" />
+    <ClInclude Include="..\..\externals\nowide\nowide\convert.h" />
+    <ClInclude Include="..\..\externals\nowide\nowide\cstdio.h" />
+    <ClInclude Include="..\..\externals\nowide\nowide\fstream.h" />
+    <ClInclude Include="..\..\externals\nowide\nowide\streambuf.h" />
     <ClInclude Include="..\..\include\Talon\Engine.h" />
     <ClInclude Include="..\..\include\Talon\Graphics\Base\IndexBufferBase.h" />
     <ClInclude Include="..\..\include\Talon\Graphics\Base\RenderDeviceBase.h" />
@@ -59,6 +79,7 @@
     <ClInclude Include="..\..\include\Talon\TalonDelegate.h" />
     <ClInclude Include="..\..\include\Talon\TalonMath.h" />
     <ClInclude Include="..\..\include\Talon\TalonPlatform.h" />
+    <ClInclude Include="..\..\include\Talon\TalonPrefix.h" />
     <ClInclude Include="..\..\include\Talon\TalonPublic.h" />
     <ClInclude Include="..\..\include\Talon\TalonTypes.h" />
     <ClInclude Include="..\..\include\Talon\TalonVersion.h" />
@@ -114,14 +135,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(ProjectDir)..\..\externals\nowide\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>Talon\TalonPrefix.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,15 +157,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>GLEW_BUILD;ZLIB_DLL;ZLIB_WINAPI;TALON_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_TALON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\externals\zlib-1.2.6\include\;$(ProjectDir)..\..\externals\libpng-1.5.10\include\;$(ProjectDir)..\..\externals\cairo-1.8.8\include\;$(ProjectDir)..\..\externals\glew-1.7.0\include\;$(ProjectDir)..\..\externals\Box2D_v2.2.1\;$(ProjectDir)..\..\externals\nowide\;$(DXSDK_DIR)\Include\;$(ProjectDir)..\..\build\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>Talon\TalonPrefix.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

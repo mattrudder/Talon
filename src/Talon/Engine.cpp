@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Engine.h>
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
@@ -32,7 +33,7 @@ namespace Talon
 
 		m_running = true;
 
-		m_window = std::make_shared<Window>("Talon Engine"/*m_simulation->GetTitle()*/, 1280, 720);
+		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
 		m_window->Closed += [this] ()
 		{
 			m_running = false;

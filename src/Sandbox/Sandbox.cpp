@@ -1,6 +1,7 @@
 
 #include <Talon/Talon.h>
 #include <Talon/Engine.h>
+#include <Talon/Simulation.h>
 
 using namespace Talon;
 
@@ -16,7 +17,7 @@ int main(int argc, char** argv)
 #endif
 {
 	Engine engine;
-	engine.Initialize(nullptr);
+	engine.Initialize(new Simulation());
 	while(engine.IsRunning())
 	{
 		engine.RunFrame();

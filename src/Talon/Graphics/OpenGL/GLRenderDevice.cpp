@@ -1,4 +1,5 @@
 ﻿
+#include <Talon/TalonPrefix.h>
 #include <GL/glew.h>
 
 #include <Talon/Graphics/OpenGL/GLRenderDevice.h>

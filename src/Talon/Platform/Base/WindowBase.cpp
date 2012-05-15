@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Platform/Base/WindowBase.h>
 
 namespace Talon

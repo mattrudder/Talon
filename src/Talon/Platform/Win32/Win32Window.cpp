@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Platform/Win32/Win32Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 #include <string>
@@ -9,7 +10,7 @@ namespace Talon
 	{
 		WindowClass(WNDPROC fnWndProc)
 		{
-			WNDCLASSA wc = {0};
+			WNDCLASSW wc = {0};
 			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 			wc.lpfnWndProc = fnWndProc;
 			wc.cbClsExtra = 0;
@@ -18,32 +19,24 @@ namespace Talon
 			wc.hCursor = LoadCursor(0, IDC_ARROW);
 			wc.hbrBackground = nullptr;
 			wc.lpszMenuName = 0;
-			wc.lpszClassName = "TalonWindow";
+			wc.lpszClassName = L"TalonWindow";
 
 			// Allocate a pointer-sized chunk to be stored on the HWND, for our Window instance.
 			wc.cbWndExtra = sizeof(Win32Window*);
 
-			if (RegisterClassA(&wc))
+			if (RegisterClassW(&wc))
 				Name = wc.lpszClassName;
 		}
 
 		~WindowClass()
 		{
-			UnregisterClassA(Name.c_str(), GetModuleHandle(nullptr));
+			UnregisterClassW(Name.c_str(), GetModuleHandle(nullptr));
 		}
 
-		std::string Name;
+		std::wstring Name;
 	};
 
 	std::unique_ptr<WindowClass> Win32Window::s_windowClass;
-
-	std::wstring utf8_decode(const std::string &str)
-	{
-		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
-		std::wstring wstrTo( size_needed, 0 );
-		MultiByteToWideChar                  (CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
-		return wstrTo;
-	}
 
 	Win32Window::Win32Window(std::string title, int width, int height)
 		: WindowBase(title, width, height)
@@ -57,8 +50,7 @@ namespace Talon
 
 			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, FALSE);
 
-			// WTF: CreateWindowA requires a wchar_t title?!
-			m_hWnd = CreateWindowA(windowClass->Name.c_str(), (char *)&utf8_decode(title)[0], WS_OVERLAPPEDWINDOW,
+			m_hWnd = CreateWindowW(windowClass->Name.c_str(), convert(title).c_str(), WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), this);
 			
 

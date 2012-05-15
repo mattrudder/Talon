@@ -70,6 +70,9 @@
     <Filter Include="Definitions\Graphics">
       <UniqueIdentifier>{86b01d6a-2c71-42e2-95a4-1fb50ff98263}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals\nowide">
+      <UniqueIdentifier>{001694a1-e33a-4b73-8aac-e99a8ac12893}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -125,6 +128,15 @@
     </ClCompile>
     <ClCompile Include="Graphics\Base\VertexBufferBase.cpp">
       <Filter>Source Files\Graphics\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\nowide\src\convert.cpp">
+      <Filter>Externals\nowide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\nowide\src\streambuf.cpp">
+      <Filter>Externals\nowide</Filter>
+    </ClCompile>
+    <ClCompile Include="TalonPrefix.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +231,24 @@
       <Filter>Header Files\Graphics\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\build\TalonBuildInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\nowide\nowide\config.h">
+      <Filter>Externals\nowide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\nowide\nowide\convert.h">
+      <Filter>Externals\nowide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\nowide\nowide\cstdio.h">
+      <Filter>Externals\nowide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\nowide\nowide\fstream.h">
+      <Filter>Externals\nowide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\nowide\nowide\streambuf.h">
+      <Filter>Externals\nowide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Talon\TalonPrefix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

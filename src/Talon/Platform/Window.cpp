@@ -1,4 +1,5 @@
 
+#include <Talon/TalonPrefix.h>
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 
