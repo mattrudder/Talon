@@ -36,6 +36,9 @@ namespace Talon
 #define TALON_UNUSED(x) do { (void) sizeof(x); } while(0)
 
 #ifdef TALON_ASSERTS_ENABLED
+#pragma warning(push)
+#pragma warning(disable : 4127)
+
 	#define TALON_ASSERT(cond) do \
 			{ \
 				if (!(cond)) \
@@ -69,6 +72,7 @@ namespace Talon
 
 	#define TALON_VERIFY(cond) TALON_ASSERT(cond)
 	#define TALON_VERIFY_MSG(cond, msg, ...) TALON_ASSERT_MSG(cond, msg, ##__VA_ARGS__)
+#pragma warning(pop)
 #else
 	#define TALON_ASSERT(condition) \
 		do { TALON_UNUSED(condition); } while(0)

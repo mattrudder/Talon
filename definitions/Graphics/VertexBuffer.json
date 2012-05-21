@@ -20,6 +20,16 @@
 					'name': 'VertexSize',
 					'type': 'int',
 					'isReadOnly': true
+				},
+				{
+					'name': 'VertexCount',
+					'type': 'int',
+					'isReadOnly': true
+				},
+				{
+					'name': 'BufferUsage',
+					'type': 'BufferUsage',
+					'isReadOnly': true
 				}
 			],
 			'fields': [

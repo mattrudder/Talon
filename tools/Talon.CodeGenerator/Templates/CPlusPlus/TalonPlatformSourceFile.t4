@@ -4,7 +4,7 @@
 	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
 #>
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/<#= model.Parent.Module #>/<#= model.Name #>/<#= model.ClassName #>.h>
 
 namespace Talon

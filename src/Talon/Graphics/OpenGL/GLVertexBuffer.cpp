@@ -1,5 +1,5 @@
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/Graphics/OpenGL/GLVertexBuffer.h>
 
 namespace Talon

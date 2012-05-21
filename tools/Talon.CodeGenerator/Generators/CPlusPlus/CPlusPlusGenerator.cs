@@ -220,7 +220,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 				using (TextWriter tw = new StreamWriter(filePath))
 				{
-					Console.WriteLine("Generating {0}...", filePath);
+					Console.WriteLine("Generating {0}...", Path.GetFileName(filePath));
 					tw.Write(templateOutput);
 				}
 			}

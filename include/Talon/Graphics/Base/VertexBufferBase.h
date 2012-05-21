@@ -16,9 +16,13 @@ namespace Talon
 		virtual ~VertexBufferBase();
 
 		int GetVertexSize() const;
+		int GetVertexCount() const;
+		BufferUsage GetBufferUsage() const;
 
 	protected:
 		void SetVertexSize(int value);
+		void SetVertexCount(int value);
+		void SetBufferUsage(BufferUsage value);
 
 	private:
 		RenderDevice* m_renderDevice;

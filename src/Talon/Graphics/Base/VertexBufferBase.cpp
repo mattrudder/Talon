@@ -1,5 +1,5 @@
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/Graphics/Base/VertexBufferBase.h>
 #include <Talon/Graphics/RenderDevice.h>
 
@@ -29,6 +29,28 @@ namespace Talon
 	void VertexBufferBase::SetVertexSize(int value)
 	{
 		m_vertexSize = value;
+	}
+
+	int VertexBufferBase::GetVertexCount() const
+	{
+		return m_vertexCount;
+	}
+
+
+	void VertexBufferBase::SetVertexCount(int value)
+	{
+		m_vertexCount = value;
+	}
+
+	BufferUsage VertexBufferBase::GetBufferUsage() const
+	{
+		return m_bufferUsage;
+	}
+
+
+	void VertexBufferBase::SetBufferUsage(BufferUsage value)
+	{
+		m_bufferUsage = value;
 	}
 
 }

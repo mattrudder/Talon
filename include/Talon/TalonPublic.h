@@ -3,6 +3,7 @@
 #include "TalonTypes.h"
 #include "TalonConfig.h"
 #include "TalonVersion.h"
+#include "TalonAssert.h"
 
 #include <string>
 #include <memory>

@@ -4,7 +4,7 @@
 	InterfaceModel model = (InterfaceModel) Host.GetHostOption("CurrentInterface");
 #>
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/<#= model.Module #>/<#= model.Name #>.h>
 
 namespace Talon

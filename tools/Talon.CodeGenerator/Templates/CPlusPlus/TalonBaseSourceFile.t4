@@ -6,7 +6,7 @@
 	string className = model.Name + "Base";
 #>
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/<#= model.Module #>/Base/<#= className #>.h>
 <#
 	foreach (TypeModel type in model.GetReferencedTypes())

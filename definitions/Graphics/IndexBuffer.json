@@ -7,7 +7,10 @@
 				{
 					'parameters': [
 						{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
-						{ 'name': 'format', 'type': 'BufferFormat' }
+						{ 'name': 'indexCount', 'type': 'int' },
+						{ 'name': 'format', 'type': 'BufferFormat' },
+						{ 'name': 'initialData', 'type': 'void*' },
+						{ 'name': 'bufferUsage', 'type': 'BufferUsage' }
 					]
 				},
 			],
@@ -17,11 +20,23 @@
 					'name': 'Format',
 					'type': 'BufferFormat',
 					'isReadOnly': true
+				},
+				{
+					'name': 'IndexCount',
+					'type': 'int',
+					'isReadOnly': true
+				},
+				{
+					'name': 'BufferUsage',
+					'type': 'BufferUsage',
+					'isReadOnly': true
 				}
 			],
 			'fields': [
 				{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
-				{ 'name': 'format', 'type': 'BufferFormat' }
+				{ 'name': 'format', 'type': 'BufferFormat' },
+				{ 'name': 'indexCount', 'type': 'int' },
+				{ 'name': 'bufferUsage', 'type': 'BufferUsage' }
 			]
 		}
 	]

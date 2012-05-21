@@ -12,6 +12,8 @@ namespace Talon
 		typedef IndexBufferBase Base;
 
 	private:
+		unsigned int m_elementBuffer;
+	private:
 #include <Talon/Graphics/OpenGL/Generated/GLIndexBuffer.h>
 	};
 }

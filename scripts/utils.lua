@@ -1,6 +1,6 @@
 
 function isgeneratoraction(action)
-        return action ~= "clean"
+    return action ~= "clean" and action ~= nil
 end
 
 function stringfromfile(file)
@@ -10,7 +10,7 @@ function stringfromfile(file)
     return t
 end
 
-function checkdirs(t)
+function makedirs(t)
 	for k,v in ipairs(t) do
 		if not os.isdir(v) then
 			os.mkdir(v)
