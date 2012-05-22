@@ -5,9 +5,10 @@ using System.Text;
 
 namespace Talon.CodeGenerator.Generators.Model
 {
-	public sealed class FieldModel
+	public interface ITypeModel
 	{
-		public string Name { get; set; }
-		public ReferencedType Type { get; set; }
+		string Name { get; set; }
+		string Module { get; set; }
+		DateTime UpdatedAt { get; set; }
 	}
 }

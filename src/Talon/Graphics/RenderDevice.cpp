@@ -7,11 +7,12 @@ namespace Talon
 	RenderDevice::RenderDevice(Window* window)
 		: Base(window)
 	{
-
 	}
+
 
 	RenderDevice::~RenderDevice()
 	{
 
 	}
+
 }

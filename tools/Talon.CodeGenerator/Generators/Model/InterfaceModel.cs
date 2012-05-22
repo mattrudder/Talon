@@ -6,7 +6,7 @@ using Talon.CodeGenerator.Parsing.Model;
 
 namespace Talon.CodeGenerator.Generators.Model
 {
-	public sealed class InterfaceModel
+	public sealed class InterfaceModel : ITypeModel
 	{
 		public string Name { get; set; }
 		public string Module { get; set; }
@@ -37,21 +37,29 @@ namespace Talon.CodeGenerator.Generators.Model
 			return Fields.FirstOrDefault(f => string.Equals(f.Name, fieldName, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		public IEnumerable<TypeModel> GetReferencedTypes()
+		public IEnumerable<ReferencedType> GetReferencedTypes()
 		{
 			return GetReferencedTypesCore().Distinct().Where(t => t != null && t.UnderlyingType != null).OrderBy(t => t.UnderlyingType);
 		}
 
-		private IEnumerable<TypeModel> GetReferencedTypesCore()
+		private IEnumerable<ReferencedType> GetReferencedTypesCore()
 		{
-			foreach (TypeModel type in Constructors.SelectMany(c => c.Parameters.Select(p => p.Type)))
+			foreach (ReferencedType type in Constructors.SelectMany(c => c.Parameters.Select(p => p.Type)))
 				yield return type;
 
 			foreach (MethodModel method in Methods)
+			{
 				yield return method.ReturnType;
+				foreach (var parameter in method.Parameters)
+					yield return parameter.Type;
+			}
 
 			foreach (MethodModel method in Delegates)
+			{
 				yield return method.ReturnType;
+				foreach (var parameter in method.Parameters)
+					yield return parameter.Type;
+			}
 
 			foreach (PropertyModel property in Properties)
 				yield return property.Type;

@@ -51,7 +51,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 		public PlatformModel CurrentPlatform { get; set; }
 		public EnumModel CurrentEnum { get; set; }
 
-		public IGenerator Generator { get; set; }
+		public Generator Generator { get; set; }
 
 		public CPlusPlusTemplateHost()
 		{

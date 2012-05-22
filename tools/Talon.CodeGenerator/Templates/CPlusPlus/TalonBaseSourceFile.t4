@@ -9,7 +9,7 @@
 #include "TalonPrefix.h"
 #include <Talon/<#= model.Module #>/Base/<#= className #>.h>
 <#
-	foreach (TypeModel type in model.GetReferencedTypes())
+	foreach (var type in model.GetReferencedTypes())
 	{
 		if (TypeRegistry.IsValueType(type.UnderlyingType))
 			continue;
@@ -96,7 +96,7 @@ namespace Talon
 	foreach (MethodModel method in model.Methods)
 	{
 #>
-	<#= method.ReturnType.ParameterType #> <#= className #>::<#= method.Name #>(<# method.GenerateParameterList(this); #>)
+	<#= method.ReturnType.ParameterType #> <#= className #>::<#= method.Name #>(<# method.GenerateParameterList(this, ParameterListOptions.IncludeTypes); #>)
 	{
 	}
 

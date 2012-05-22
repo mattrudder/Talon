@@ -95,22 +95,21 @@ namespace Talon.CodeGenerator
 					{
 						InterfaceModel model = CreateInterfaceModel(module.Module, i);
                         model.UpdatedAt = lastUpdated;
-						TypeRegistry.RegisterInterface(model);
+						TypeRegistry.RegisterType(model);
 					});
 
 					module.Enums.ForEach(e =>
 					{
 						EnumModel model = CreateEnumModel(module.Module, e);
 						model.UpdatedAt = lastUpdated;
-						TypeRegistry.RegisterEnum(model);
+						TypeRegistry.RegisterType(model);
 					});
-
-					// Generate
-					s_generator.Settings = s_settings;
-					TypeRegistry.ForEachInterface(i => s_generator.Generate(i));
-					TypeRegistry.ForEachEnum(i => s_generator.Generate(i));
                 }
             }
+
+			// Generate
+			s_generator.Settings = s_settings;
+			TypeRegistry.ForEachType(i => s_generator.Generate(i));
         }
 
 		private static EnumModel CreateEnumModel(string module, EnumDefinition e)
@@ -161,12 +160,14 @@ namespace Talon.CodeGenerator
 				Settings = s_settings
             };
 			
-
 			s_settings.OutputPath = Path.Combine(workingPath, s_settings.OutputPath ?? "");
 			s_settings.DefinitionsPath = Path.Combine(workingPath, s_settings.DefinitionsPath ?? "");
 
 			SetupMappers();
 			ProcessDefinitions(s_settings.DefinitionsPath);
+
+			int typeCount = s_generator.InterfaceCount + s_generator.EnumCount;
+			Console.WriteLine("Processed {0} types, generated {1} files.", typeCount, s_generator.FileCount);
 		}
 
 		private static void SetupMappers()
@@ -182,6 +183,6 @@ namespace Talon.CodeGenerator
 
 		private static CodeGeneratorSettings s_settings;
 		private static Dictionary<string, IList<PlatformSettings>> s_platformsForModule;
-		private static IGenerator s_generator;
+		private static Generator s_generator;
 	}
 }

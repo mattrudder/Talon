@@ -9,6 +9,6 @@ namespace Talon.CodeGenerator.Generators.Model
 	public sealed class ParameterModel
 	{
 		public string Name { get; set; }
-		public TypeModel Type { get; set; }
+		public ReferencedType Type { get; set; }
 	}
 }

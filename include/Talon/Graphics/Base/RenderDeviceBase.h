@@ -6,6 +6,8 @@
 
 namespace Talon
 {
+	class IndexBuffer;
+	class VertexBuffer;
 	class Window;
 
 	class TalonApi RenderDeviceBase
@@ -16,6 +18,10 @@ namespace Talon
 
 		Window* GetWindow() const;
 		bool IsInitialized() const;
+		IndexBuffer* GetActiveIndexBuffer() const;
+		void SetActiveIndexBuffer(IndexBuffer* value);
+		VertexBuffer* GetActiveVertexBuffer() const;
+		void SetActiveVertexBuffer(VertexBuffer* value);
 		void BeginFrame();
 		void EndFrame();
 
@@ -25,6 +31,8 @@ namespace Talon
 
 	private:
 		Window* m_window;
+		IndexBuffer* m_activeIndexBuffer;
+		VertexBuffer* m_activeVertexBuffer;
 		bool m_initialized;
 	};
 }

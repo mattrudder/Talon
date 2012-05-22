@@ -21,6 +21,14 @@
 					'name': 'Initialized',
 					'type': 'bool',
 					'isReadOnly': true
+				},
+				{
+					'name': 'ActiveIndexBuffer',
+					'type': 'weak<IndexBuffer>'
+				},
+				{
+					'name': 'ActiveVertexBuffer',
+					'type': 'weak<VertexBuffer>'
 				}
 			],
 			'methods': [
@@ -37,6 +45,8 @@
 			],
 			'fields': [
 				{ 'name': 'window', 'type': 'weak<Window>' },
+				{ 'name': 'activeIndexBuffer', 'type': 'weak<IndexBuffer>' },
+				{ 'name': 'activeVertexBuffer', 'type': 'weak<VertexBuffer>' },
 				{ 'name': 'initialized', 'type': 'bool' }
 			]
 		}

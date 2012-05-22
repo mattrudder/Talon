@@ -1,6 +1,7 @@
 ﻿<#@ template language="C#" debug="true" hostspecific="true" #>
 <#@ output extension=".h" encoding="utf-8" #>
 <#
+	CPlusPlusGenerator generator = (CPlusPlusGenerator) Host.GetHostOption("Generator");
 	PlatformModel model = (PlatformModel) Host.GetHostOption("CurrentPlatform");
 	string className = model.ClassName;
 #>

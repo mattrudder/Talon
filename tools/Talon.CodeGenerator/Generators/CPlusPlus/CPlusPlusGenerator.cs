@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace Talon.CodeGenerator.Generators.CPlusPlus
 {
-    public sealed class CPlusPlusGenerator : IGenerator
+    public sealed class CPlusPlusGenerator : Generator
     {
 		public CPlusPlusGenerator()
 		{
@@ -21,19 +21,19 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			m_textHost = new CPlusPlusTemplateHost();
 			m_textHost.Generator = this;
 
-			Mapper.CreateMap<string, TypeModel>().ConstructUsing(GetCPlusPlusType);
+			Mapper.CreateMap<string, ReferencedType>().ConstructUsing(GetCPlusPlusType);
 		}
 
-		public CodeGeneratorSettings Settings { get; set; }
+		public override CodeGeneratorSettings Settings { get; set; }
 
-		public void Generate(EnumModel model)
+		protected override void Generate(EnumModel model)
 		{
 			string includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
 
 			Generate("TalonEnumHeaderFile.t4", includePath, model);
 		}
 
-        public void Generate(InterfaceModel model)
+		protected override void Generate(InterfaceModel model)
         {
             string includePath = Path.Combine(Settings.OutputPath, string.Format("include/Talon/{0}/{1}.h", model.Module, model.Name));
 			string sourcePath = Path.Combine(Settings.OutputPath, string.Format("src/Talon/{0}/{1}.cpp", model.Module, model.Name));
@@ -96,13 +96,13 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
                 return string.Format("Get{0}", property.Name);
         }
 
-		private TypeModel GetCPlusPlusType(string definitionType)
+		private ReferencedType GetCPlusPlusType(string definitionType)
 		{
-			TypeModel actualType;
+			ReferencedType actualType;
 			bool pointerType = definitionType.Trim().EndsWith("*");
             if (!s_definitionsToCppTypes.TryGetValue(definitionType, out actualType))
             {
-				actualType = new TypeModel { ParameterType = definitionType, FieldType = definitionType };
+				actualType = new ReferencedType { ParameterType = definitionType, FieldType = definitionType };
 
                 Match weakMatch = s_rgWeakReference.Match(definitionType);
                 if (weakMatch != null && weakMatch.Groups.Count > 1 && weakMatch.Groups[1].Length > 0)
@@ -213,17 +213,7 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 
 			string templateOutput = m_textEngine.ProcessTemplate(templateText, m_textHost);
 			if (templateOutput != null)
-			{
-                string outputDirectory = Path.GetDirectoryName(filePath);
-                if (!Directory.Exists(outputDirectory))
-                    Directory.CreateDirectory(outputDirectory);
-
-				using (TextWriter tw = new StreamWriter(filePath))
-				{
-					Console.WriteLine("Generating {0}...", Path.GetFileName(filePath));
-					tw.Write(templateOutput);
-				}
-			}
+				OutputFile(filePath, templateOutput);
 		}
 
 		private static string ResolveTemplatePath(string templatePath)
@@ -250,10 +240,10 @@ namespace Talon.CodeGenerator.Generators.CPlusPlus
 			return templatePathFull;
 		}
 
-		private static readonly Dictionary<string, TypeModel> s_definitionsToCppTypes = new Dictionary<string, TypeModel>()
+		private static readonly Dictionary<string, ReferencedType> s_definitionsToCppTypes = new Dictionary<string, ReferencedType>()
 		{
-			{ "bool", new TypeModel { ParameterType = "bool", FieldType = "bool", DefaultValue = "false" } },
-			{ "string", new TypeModel { ParameterType = "const std::string&", FieldType = "std::string", DefaultValue = "\"\"" } }
+			{ "bool", new ReferencedType { ParameterType = "bool", FieldType = "bool", DefaultValue = "false" } },
+			{ "string", new ReferencedType { ParameterType = "const std::string&", FieldType = "std::string", DefaultValue = "\"\"" } }
 		};
 
         private static readonly Regex s_rgWeakReference = new Regex("weak<(\\w+)>");

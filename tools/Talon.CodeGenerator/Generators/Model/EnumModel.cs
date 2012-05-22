@@ -8,7 +8,7 @@ using Talon.CodeGenerator.Generators.Model;
 
 namespace Talon.CodeGenerator.Generators.Model
 {
-	public sealed class EnumModel
+	public sealed class EnumModel : ITypeModel
 	{
 		public string Name { get; set; }
 		public string Module { get; set; }

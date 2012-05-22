@@ -6,61 +6,57 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Talon.CodeGenerator.Generators.Model;
 using Talon.CodeGenerator.Parsing.Model;
+using System.Collections.ObjectModel;
 
 namespace Talon.CodeGenerator
 {
 	public static class TypeRegistry
 	{
+		public static int Count
+		{
+			get { return s_typeMap.Count; }
+		}
+
 		public static bool IsValueType(string typeName)
 		{
-			return s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase) ||
-				s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase)) ||
-				typeName.Trim().EndsWith("*");
+			ITypeModel typeModel = GetType(typeName);
+			return typeModel is EnumModel || typeName.Trim().EndsWith("*") || s_valueTypes.Contains(typeName, StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		public static bool IsGeneratedType(string typeName)
 		{
-			return s_enumMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase)) ||
-				s_interfaceMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase));
+			return s_typeMap.Any(kv => string.Equals(kv.Key, typeName, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public static InterfaceModel GetInterface(string typeName)
 		{
-			InterfaceModel returnModel = null;
-			s_interfaceMap.TryGetValue(typeName, out returnModel);
-			return returnModel;
-		}
-
-		internal static void RegisterInterface(InterfaceModel model)
-		{
-			s_interfaceMap[model.Name] = model;
-		}
-
-		internal static void ForEachInterface(Action<InterfaceModel> fnEach)
-		{
-			s_interfaceMap.ForEach(kv => fnEach(kv.Value));
+			return GetType(typeName) as InterfaceModel;
 		}
 
 		public static EnumModel GetEnum(string typeName)
 		{
-			EnumModel returnModel = null;
-			s_enumMap.TryGetValue(typeName, out returnModel);
+			return GetType(typeName) as EnumModel;
+		}
+
+		public static ITypeModel GetType(string typeName)
+		{
+			ITypeModel returnModel = null;
+			s_typeMap.TryGetValue(typeName, out returnModel);
 			return returnModel;
 		}
 
-		internal static void RegisterEnum(EnumModel model)
+		internal static void RegisterType(ITypeModel model)
 		{
-			s_enumMap[model.Name] = model;
+			s_typeMap[model.Name] = model;
 		}
 
-		internal static void ForEachEnum(Action<EnumModel> fnEach)
+		internal static void ForEachType(Action<ITypeModel> fnEach)
 		{
-			s_enumMap.ForEach(kv => fnEach(kv.Value));
+			s_typeMap.ForEach(kv => fnEach(kv.Value));
 		}
 
-		private static readonly Dictionary<string, InterfaceModel> s_interfaceMap = new Dictionary<string, InterfaceModel>();
-		private static readonly Dictionary<string, EnumModel> s_enumMap = new Dictionary<string, EnumModel>();
-
+		private static readonly Dictionary<string, ITypeModel> s_typeMap = new Dictionary<string, ITypeModel>();
+	
 		private static readonly string[] s_valueTypes = new[]
 		{
 			"void", "bool", "int", "short", "long", "float", "double", "string"

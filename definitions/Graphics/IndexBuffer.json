@@ -32,6 +32,7 @@
 					'isReadOnly': true
 				}
 			],
+			'methods': [],
 			'fields': [
 				{ 'name': 'renderDevice', 'type': 'weak<RenderDevice>' },
 				{ 'name': 'format', 'type': 'BufferFormat' },

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Talon.CodeGenerator.Generators.Model
 {
-	public sealed class TypeModel
+	public sealed class ReferencedType
 	{
 		public string UnderlyingType { get; set; }
 		public string ParameterType { get; set; }

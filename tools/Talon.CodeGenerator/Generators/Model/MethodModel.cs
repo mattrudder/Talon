@@ -9,7 +9,7 @@ namespace Talon.CodeGenerator.Generators.Model
 	public sealed class MethodModel
 	{
 		public string Name { get; set; }
-		public TypeModel ReturnType { get; set; }
+		public ReferencedType ReturnType { get; set; }
 		public IList<ParameterModel> Parameters { get; set; }
 
 		public ParameterModel GetParameter(string parameterName)
@@ -19,11 +19,11 @@ namespace Talon.CodeGenerator.Generators.Model
 
 		public void GenerateParameterList(dynamic templateClass, ParameterListOptions options = ParameterListOptions.IncludeAll)
 		{
-			Func<TypeModel, string> whichType = p => p.ParameterType;
+			Func<ReferencedType, string> whichType = p => p.ParameterType;
 			GenerateParameterList(templateClass, whichType, options);
 		}
 
-		public void GenerateParameterList(dynamic templateClass, Func<TypeModel, string> whichType, ParameterListOptions options = ParameterListOptions.IncludeAll)
+		public void GenerateParameterList(dynamic templateClass, Func<ReferencedType, string> whichType, ParameterListOptions options = ParameterListOptions.IncludeAll)
 		{
 			int i = 0;
 			foreach (ParameterModel param in Parameters)
