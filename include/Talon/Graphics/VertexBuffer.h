@@ -12,7 +12,7 @@ namespace Talon
 	class TalonApi VertexBuffer
 	{
 	public:
-		VertexBuffer(std::shared_ptr<RenderDevice> renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage);
+		VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage);
 		virtual ~VertexBuffer();
 
 		int GetVertexSize() const;
@@ -20,7 +20,7 @@ namespace Talon
 		BufferUsage GetBufferUsage() const;
 
 	private:
-		std::weak_ptr<RenderDevice> m_renderDevice;
+		RenderDevice* m_renderDevice;
 		int m_vertexSize;
 		int m_vertexCount;
 		BufferUsage m_bufferUsage;

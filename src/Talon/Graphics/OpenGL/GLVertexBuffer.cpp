@@ -11,7 +11,7 @@ namespace Talon
 		GLuint arrayBuffer;
 	};
 
-	VertexBuffer::VertexBuffer(std::shared_ptr<RenderDevice> renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
+	VertexBuffer::VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
 		: m_renderDevice(renderDevice)
 		, m_vertexSize(vertexSize)
 		, m_vertexCount(vertexCount)

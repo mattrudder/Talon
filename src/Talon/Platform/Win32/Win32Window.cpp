@@ -40,11 +40,11 @@ namespace Talon
 	public:
 		~Impl()
 		{
-			if (hWnd)
-			{
-				DestroyWindow(hWnd);
-				hWnd = 0;
-			}
+			//if (hWnd)
+			//{
+			//	DestroyWindow(hWnd);
+			//	hWnd = 0;
+			//}
 		}
 
 		static const WindowClass* GetOrRegisterClass()

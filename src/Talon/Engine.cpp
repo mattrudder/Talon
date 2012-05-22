@@ -38,6 +38,8 @@ namespace Talon
 		{
 			m_running = false;
 		};
+
+		sim->Device = m_window->GetRenderDevice().get();
 	}
 
 	void Engine::Shutdown()
@@ -49,12 +51,13 @@ namespace Talon
 		m_window->DoEvents();
 
 		//m_simulation->OnBeginFrame();
+		
 
 		auto device = m_window->GetRenderDevice();
 		device->BeginFrame();
+		m_simulation->BeginFrame();
 
-
-
+		m_simulation->EndFrame();
 		device->EndFrame();
 	}
 }

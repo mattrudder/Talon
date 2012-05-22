@@ -11,7 +11,7 @@ namespace Talon
 		GLuint elementArrayBuffer;
 	};
 
-	IndexBuffer::IndexBuffer(std::shared_ptr<RenderDevice> renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
+	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
 		: m_renderDevice(renderDevice)
 		, m_format(format)
 		, m_indexCount(indexCount)

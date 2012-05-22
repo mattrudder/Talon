@@ -3,6 +3,8 @@
 #include <Talon/Engine.h>
 #include <Talon/Simulation.h>
 
+#include "BufferTestSimulation.h"
+
 using namespace Talon;
 
 #if TALON_WINDOWS
@@ -17,7 +19,7 @@ int main(int argc, char** argv)
 #endif
 {
 	Engine engine;
-	engine.Initialize(new Simulation());
+	engine.Initialize(new BufferTestSimulation());
 	while(engine.IsRunning())
 	{
 		engine.RunFrame();
