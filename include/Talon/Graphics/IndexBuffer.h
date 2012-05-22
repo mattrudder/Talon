@@ -13,20 +13,15 @@ namespace Talon
 	class TalonApi IndexBuffer
 	{
 	public:
-		IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage);
+		IndexBuffer(std::shared_ptr<RenderDevice> renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage);
 		virtual ~IndexBuffer();
 
 		BufferFormat GetFormat() const;
 		int GetIndexCount() const;
 		BufferUsage GetBufferUsage() const;
 
-	protected:
-		void SetFormat(BufferFormat value);
-		void SetIndexCount(int value);
-		void SetBufferUsage(BufferUsage value);
-
 	private:
-		RenderDevice* m_renderDevice;
+		std::weak_ptr<RenderDevice> m_renderDevice;
 		BufferFormat m_format;
 		int m_indexCount;
 		BufferUsage m_bufferUsage;

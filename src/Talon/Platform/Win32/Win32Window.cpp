@@ -38,6 +38,15 @@ namespace Talon
 	class Window::Impl
 	{
 	public:
+		~Impl()
+		{
+			if (hWnd)
+			{
+				DestroyWindow(hWnd);
+				hWnd = 0;
+			}
+		}
+
 		static const WindowClass* GetOrRegisterClass()
 		{
 			if (!s_windowClass.get())
