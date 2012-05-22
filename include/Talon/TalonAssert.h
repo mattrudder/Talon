@@ -46,7 +46,7 @@ namespace Talon
 					if (talonReportFailure(#cond, __FILE__, __LINE__, 0) == afHalt) \
 						TALON_HALT(); \
 				} \
-			} while(0)
+			} while(__LINE__ == -1)
 
 	#define TALON_ASSERT_MSG(cond, msg, ...) do \
 			{ \
@@ -55,13 +55,13 @@ namespace Talon
 					if (talonReportFailure(#cond, __FILE__, __LINE__, msg, ##__VA_ARGS__) == afHalt) \
 						TALON_HALT(); \
 				} \
-			} while(0)
+			} while(__LINE__ == -1)
 
 	#define TALON_ASSERT_FAIL(msg, ...) do \
 			{ \
 				if (talonReportFailure(0, __FILE__, __LINE__, msg, ##__VA_ARGS__) == afHalt) \
 					TALON_HALT(); \
-			} while(0)
+			} while(__LINE__ == -1)
 
 #if TALON_WINDOWS
 	#define TALON_BREAK() __debugbreak();
