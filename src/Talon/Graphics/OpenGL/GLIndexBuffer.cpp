@@ -1,28 +1,34 @@
 
 #include "TalonPrefix.h"
 #include <GL/glew.h>
-#include <Talon/Graphics/OpenGL/GLIndexBuffer.h>
+#include <Talon/Graphics/IndexBuffer.h>
 
 namespace Talon
 {
-	GLIndexBuffer::GLIndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
-		: Base(renderDevice, indexCount, format, initialData, bufferUsage)
-		, m_elementBuffer(0)
+	class IndexBuffer::Impl
 	{
-#pragma warning(push)
-#pragma warning(disable : 4127)
-		TALON_ASSERT(bufferUsage == BufferUsage::Dynamic || bufferUsage == BufferUsage::Default);
-#pragma warning(pop)
+	public:
+		GLuint elementArrayBuffer;
+	};
+
+	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
+		: m_renderDevice(renderDevice)
+		, m_format(format)
+		, m_indexCount(indexCount)
+		, m_bufferUsage(bufferUsage)
+		, m_pImpl(make_unique<Impl>())
+	{
+		//TALON_ASSERT(bufferUsage == BufferUsage::Dynamic || bufferUsage == BufferUsage::Default);
 
 		size_t indexSize = format == BufferFormat::I16 ? sizeof(short) : sizeof(int);
-		glGenBuffers(1, &m_elementBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
+		glGenBuffers(1, &m_pImpl->elementArrayBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pImpl->elementArrayBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, initialData, bufferUsage == BufferUsage::Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	GLIndexBuffer::~GLIndexBuffer()
+	IndexBuffer::~IndexBuffer()
 	{
-		glDeleteBuffers(1, &m_elementBuffer);
-		m_elementBuffer = 0;
+		glDeleteBuffers(1, &m_pImpl->elementArrayBuffer);
 	}
 }

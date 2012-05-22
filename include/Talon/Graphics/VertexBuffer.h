@@ -3,31 +3,34 @@
 
 #include <Talon/TalonPublic.h>
 
-#if TALON_GRAPHICS == TALON_GRAPHICS_DIRECT3D11
-#include <Talon/Graphics/Direct3D11/D3D11VertexBuffer.h>
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-#include <Talon/Graphics/OpenGL/GLVertexBuffer.h>
-#endif
+#include <Talon/Graphics/BufferUsage.h>
 
 namespace Talon
 {
-#if TALON_GRAPHICS == TALON_GRAPHICS_DIRECT3D11
-	class TalonApi VertexBuffer : public D3D11VertexBuffer
+	class RenderDevice;
+
+	class TalonApi VertexBuffer
 	{
 	public:
-		typedef D3D11VertexBuffer Base;
+		VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage);
+		virtual ~VertexBuffer();
+
+		int GetVertexSize() const;
+		int GetVertexCount() const;
+		BufferUsage GetBufferUsage() const;
+
+	protected:
+		void SetVertexSize(int value);
+		void SetVertexCount(int value);
+		void SetBufferUsage(BufferUsage value);
 
 	private:
-#include <Talon/Graphics/Generated/VertexBuffer.h>
-	};
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-	class TalonApi VertexBuffer : public GLVertexBuffer
-	{
-	public:
-		typedef GLVertexBuffer Base;
+		RenderDevice* m_renderDevice;
+		int m_vertexSize;
+		int m_vertexCount;
+		BufferUsage m_bufferUsage;
 
-	private:
-#include <Talon/Graphics/Generated/VertexBuffer.h>
+		class Impl;
+		std::unique_ptr<Impl> m_pImpl;
 	};
-#endif
 }

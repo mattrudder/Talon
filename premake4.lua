@@ -37,16 +37,17 @@ if not _OPTIONS["scripts"] then
 	_OPTIONS["scripts"] = "Scripts"
 end
 
-if not os.isfile(codeGenPath) then
-    print "WARN: Code generator has not been built. Please build the project in tools/Talon.CodeGenerator."
-else
-    print "Processing definitions..."
-    if os.is("windows") then
-        os.execute(codeGenPath)
-    else
-        os.execute("mono " .. codeGenPath)
-    end
-end
+-- Code generator not yet ready for use.
+-- if not os.isfile(codeGenPath) then
+--     print "WARN: Code generator has not been built. Please build the project in tools/Talon.CodeGenerator."
+-- else
+--     print "Processing definitions..."
+--     if os.is("windows") then
+--         os.execute(codeGenPath)
+--     else
+--         os.execute("mono " .. codeGenPath)
+--     end
+-- end
 
 makedirs {
 	"bin/x86/Debug",
@@ -90,17 +91,12 @@ solution "Talon"
 
 			"include/Talon/*.h",
 			"include/Talon/Graphics/*.h",
-            "include/Talon/Graphics/Base/*.h",
-            "include/Talon/Graphics/Generated/*.h",
 			"include/Talon/Platform/*.h",
-            "include/Talon/Platform/Generated/*.h",
 
 			"src/Talon/TalonPrefix.h",
 			"src/Talon/*.cpp",
 			"src/Talon/Graphics/*.cpp",
-            "src/Talon/Graphics/Base/*.cpp",
 			"src/Talon/Platform/*.cpp",
-            "src/Talon/Platform/Base/*.cpp"
 		}
 
 		includedirs {
@@ -120,13 +116,11 @@ solution "Talon"
         -- Generic platform includes
         configuration "Windows"
             files {
-                "include/Talon/Platform/Win32/**.h",
                 "src/Talon/Platform/Win32/**.cpp"
             }
 
         configuration "MacOSX"
             files {
-                "include/Talon/Platform/Mac/**.h",
                 "src/Talon/Platform/Mac/**.cpp",
                 "src/Talon/Platform/Mac/**.m",
                 "src/Talon/Platform/Mac/**.mm"
@@ -137,7 +131,6 @@ solution "Talon"
 
         configuration { _OPTIONS["gfx"] }
             files {
-                "include/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.h",
                 "src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp"
             }
 

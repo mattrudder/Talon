@@ -2,7 +2,7 @@
 #include "TalonPrefix.h"
 #include <GL/glew.h>
 
-#include <Talon/Graphics/OpenGL/GLRenderDevice.h>
+#include <Talon/Graphics/RenderDevice.h>
 
 #if TALON_WINDOWS
 #include <GL/wglew.h>
@@ -16,8 +16,9 @@
 namespace Talon
 {
 #if TALON_WINDOWS
-	struct GLRenderDevice::Impl
+	class RenderDevice::Impl
 	{
+	public:
 		HDC hDC;
 		HGLRC hRC;
 		
@@ -47,8 +48,9 @@ namespace Talon
 		return true;
 	}
 #elif TALON_MAC
-	struct GLRenderDevice::Impl
+	class RenderDevice::Impl
 	{
+	public:
 		NSOpenGLContext* context;
 		
 		void Bind() { [context makeCurrentContext]; }
@@ -59,7 +61,7 @@ namespace Talon
 	class GLContext
 	{
 	public:
-		GLContext(GLRenderDevice::Impl* impl)
+		GLContext(RenderDevice::Impl* impl)
 		: m_pImpl(impl)
 		{
 			m_pImpl->Bind();
@@ -70,12 +72,12 @@ namespace Talon
 		}
 		
 	private:
-		GLRenderDevice::Impl* m_pImpl;
+		RenderDevice::Impl* m_pImpl;
 	};
 
-	GLRenderDevice::GLRenderDevice(Window* window)
-		: RenderDeviceBase(window)
-		, m_impl(make_unique<Impl>())
+	RenderDevice::RenderDevice(Window* window)
+		: m_window(window)
+		, m_pImpl(make_unique<Impl>())
 	{
 #if TALON_WINDOWS
 		HWND hWnd = window->GetHandle();
@@ -131,8 +133,8 @@ namespace Talon
 				hRC = tempContext;
 			}
 
-			m_impl->hDC = hDC;
-			m_impl->hRC = hRC;
+			m_pImpl->hDC = hDC;
+			m_pImpl->hRC = hRC;
 		}
 #elif TALON_MAC
 		GLuint attrs[] =
@@ -148,7 +150,7 @@ namespace Talon
 		};
 		
 		NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-		m_impl->context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+		m_pImpl->context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
 #endif
 
 		SetInitialized(true);
@@ -165,7 +167,7 @@ namespace Talon
 				
 #if TALON_MAC
 			NSWindow* cocoaWindow = (__bridge NSWindow*)window->GetWindow();
-			NSOpenGLContext* context = (NSOpenGLContext*) m_impl->context;
+			NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
 			[context setView:[cocoaWindow contentView]];
 #endif
 		});
@@ -179,45 +181,45 @@ namespace Talon
 		};
 	}
 
-	GLRenderDevice::~GLRenderDevice()
+	RenderDevice::~RenderDevice()
 	{
 #if TALON_WINDOWS
-		wglMakeCurrent(m_impl->hDC, nullptr);
-		wglDeleteContext(m_impl->hRC);
-		::ReleaseDC(GetWindow()->GetHandle(), m_impl->hDC);
+		wglMakeCurrent(m_pImpl->hDC, nullptr);
+		wglDeleteContext(m_pImpl->hRC);
+		::ReleaseDC(GetWindow()->GetHandle(), m_pImpl->hDC);
 #elif TALON_MAC
 		[NSOpenGLContext clearCurrentContext];
 #endif
 	}
 
-	void GLRenderDevice::BeginFrame()
+	void RenderDevice::BeginFrame()
 	{
 #if TALON_WINDOWS
-		wglMakeCurrent(m_impl->hDC, m_impl->hRC);
+		wglMakeCurrent(m_pImpl->hDC, m_pImpl->hRC);
 #elif TALON_MAC
-		NSOpenGLContext* context = (NSOpenGLContext*) m_impl->context;
+		NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
 		[context makeCurrentContext];
 #endif
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void GLRenderDevice::EndFrame()
+	void RenderDevice::EndFrame()
 	{
 #if TALON_WINDOWS
-		SwapBuffers(m_impl->hDC);
+		SwapBuffers(m_pImpl->hDC);
 		ValidateRect(GetWindow()->GetHandle(), nullptr);
-		wglMakeCurrent(m_impl->hDC, nullptr);
+		wglMakeCurrent(m_pImpl->hDC, nullptr);
 #elif TALON_MAC
-		NSOpenGLContext* context = (NSOpenGLContext*) m_impl->context;
+		NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
 		[context flushBuffer];
 		[NSOpenGLContext clearCurrentContext];
 #endif
 	}
 
-	void GLRenderDevice::WithContext(std::function<void()> fn)
+	void RenderDevice::WithContext(std::function<void()> fn)
 	{
-		GLContext context(m_impl.get());
+		GLContext context(m_pImpl.get());
 		
 		fn();
 	}

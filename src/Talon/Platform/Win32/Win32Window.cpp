@@ -1,8 +1,7 @@
 
 #include "TalonPrefix.h"
-#include <Talon/Platform/Win32/Win32Window.h>
+#include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
-#include <string>
 
 namespace Talon
 {
@@ -22,7 +21,7 @@ namespace Talon
 			wc.lpszClassName = L"TalonWindow";
 
 			// Allocate a pointer-sized chunk to be stored on the HWND, for our Window instance.
-			wc.cbWndExtra = sizeof(Win32Window*);
+			wc.cbWndExtra = sizeof(Window*);
 
 			if (RegisterClassW(&wc))
 				Name = wc.lpszClassName;
@@ -36,118 +35,113 @@ namespace Talon
 		std::wstring Name;
 	};
 
-	std::unique_ptr<WindowClass> Win32Window::s_windowClass;
-
-	Win32Window::Win32Window(std::string title, int width, int height)
-		: WindowBase(title, width, height)
+	class Window::Impl
 	{
-		auto windowClass = GetOrRegisterClass();
+	public:
+		static const WindowClass* GetOrRegisterClass()
+		{
+			if (!s_windowClass.get())
+				s_windowClass = make_unique<WindowClass>(TalonWndProc);
+
+			return s_windowClass.get();
+		}
+
+		static LRESULT CALLBACK TalonWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+		{
+			Window* pWindow = (Window *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			switch (msg)
+			{
+			case WM_CREATE:
+				{
+					// Hook up wrapper with HWND in both directions.
+					CREATESTRUCT* pCS = (CREATESTRUCT*)lParam;
+					if (pCS != nullptr && pCS->lpCreateParams != nullptr)
+					{
+						pWindow = (Window*)pCS->lpCreateParams;
+						SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)pWindow);
+
+						pWindow->m_pImpl->hWnd = hWnd;
+						pWindow->OnCreated();
+					}
+				}
+				return 0;
+			case WM_DESTROY:
+				{
+					pWindow->OnDestroyed();
+				}
+				return 0;
+			case WM_CLOSE:
+				{
+					pWindow->OnClosed();
+				}
+				return 0;
+			case WM_SIZE:
+				{
+					int w = LOWORD(lParam);
+					int h = HIWORD(lParam);
+
+					pWindow->OnResized(w, h);
+				}
+				return 0;
+			}
+
+			return DefWindowProc(hWnd, msg, wParam, lParam);
+		}
+
+	public:
+		HWND hWnd;
+
+		static std::unique_ptr<WindowClass> s_windowClass;
+	};
+
+	std::unique_ptr<WindowClass> Window::Impl::s_windowClass;
+
+	Window::Window(std::string title, int width, int height)
+		: m_title(title)
+		, m_width(width)
+		, m_height(height)
+		, m_renderDevice(nullptr)
+		, m_pImpl(make_unique<Impl>())
+	{
+		auto windowClass = Impl::GetOrRegisterClass();
 		if (windowClass)
 		{
 			RECT rClient = { 0 };
-			rClient.bottom = height;
-			rClient.right = width;
+			rClient.bottom = m_height;
+			rClient.right = m_width;
 
 			AdjustWindowRect(&rClient, WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, FALSE);
 
-			m_hWnd = CreateWindowW(windowClass->Name.c_str(), convert(title).c_str(), WS_OVERLAPPEDWINDOW,
+			m_pImpl->hWnd = CreateWindowW(windowClass->Name.c_str(), convert(m_title).c_str(), WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT, rClient.right - rClient.left, rClient.bottom - rClient.top, 0, 0, GetModuleHandle(nullptr), this);
-			
 
-			if (m_hWnd)
+
+			if (m_pImpl->hWnd)
 			{
-				SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (LONG_PTR)this);
+				SetWindowLongPtr(m_pImpl->hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-				ShowWindow(m_hWnd, SW_SHOW);
-				UpdateWindow(m_hWnd);
+				ShowWindow(m_pImpl->hWnd, SW_SHOW);
+				UpdateWindow(m_pImpl->hWnd);
 			}
 		}
 	}
 
-	Win32Window::~Win32Window()
+	Window::~Window()
 	{
-		DestroyWindow(m_hWnd);
 	}
 
-	void Win32Window::DoEvents()
+	void Window::DoEvents()
 	{
-		WindowBase::DoEvents();
-
 		MSG msg = {0};
-		while (PeekMessage(&msg, m_hWnd, 0, 0, PM_REMOVE))
+		while (PeekMessage(&msg, m_pImpl->hWnd, 0, 0, PM_REMOVE))
 		{	
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 	}
 
-	const WindowClass* Win32Window::GetOrRegisterClass()
+	HWND Window::GetHandle() const
 	{
-		if (!s_windowClass.get())
-			s_windowClass = make_unique<WindowClass>(Win32Window::TalonWndProc);
-
-		return s_windowClass.get();
-	}
-
-	LRESULT CALLBACK Win32Window::TalonWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		Win32Window* pWindow = (Win32Window *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		switch (msg)
-		{
-		case WM_CREATE:
-			{
-				// Hook up wrapper with HWND in both directions.
-				CREATESTRUCT* pCS = (CREATESTRUCT*)lParam;
-				if (pCS != nullptr && pCS->lpCreateParams != nullptr)
-				{
-					pWindow = (Win32Window*)pCS->lpCreateParams;
-					SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)pWindow);
-
-					pWindow->m_hWnd = hWnd;
-					pWindow->OnCreated();
-				}
-			}
-			return 0;
-		case WM_DESTROY:
-			{
-				pWindow->OnDestroyed();
-			}
-			return 0;
-		case WM_CLOSE:
-			{
-				pWindow->OnClosed();
-			}
-			return 0;
-		case WM_SIZE:
-			{
-				int w = LOWORD(lParam);
-				int h = HIWORD(lParam);
-
-				pWindow->OnResized(w, h);
-			}
-			return 0;
-		}
-
-		return DefWindowProc(hWnd, msg, wParam, lParam);
-	}
-
-	void Win32Window::OnResized(int width, int height)
-	{
-		Base::OnResized(width, height);
-	}
-
-	void Win32Window::OnClosed()
-	{
-		Base::OnClosed();
-	}
-
-	void Win32Window::OnCreated()
-	{
-		Base::OnCreated();
-	}
-
-	void Win32Window::OnDestroyed()
-	{
-		Base::OnDestroyed();
+		return m_pImpl->hWnd;
 	}
 }

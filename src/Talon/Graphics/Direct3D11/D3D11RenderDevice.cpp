@@ -1,17 +1,30 @@
 ﻿
 #include <Talon/TalonPrefix.h>
-#include <Talon/Graphics/Direct3D11/D3D11RenderDevice.h>
+#include <Talon/Graphics/RenderDevice.h>
 
 namespace Talon
 {
-	D3D11RenderDevice::D3D11RenderDevice(Window* window)
-		: RenderDeviceBase(window)
-	{
+    class RenderDevice::Impl
+    {
+    public:
 
+    };
+
+    RenderDevice::RenderDevice(Window* window)
+        : m_window(window)
+        , m_pImpl(make_unique<Impl>())
+    {
 	}
 
-	D3D11RenderDevice::~D3D11RenderDevice()
+	RenderDevice::~RenderDevice()
 	{
-
 	}
+
+    void RenderDevice::BeginFrame()
+    {
+    }
+
+    void RenderDevice::EndFrame()
+    {
+    }
 }

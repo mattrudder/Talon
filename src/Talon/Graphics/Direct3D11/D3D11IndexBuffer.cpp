@@ -1,16 +1,25 @@
 
 #include <Talon/TalonPrefix.h>
-#include <Talon/Graphics/Direct3D11/D3D11IndexBuffer.h>
+#include <Talon/Graphics/IndexBuffer.h>
 
 namespace Talon
 {
-	D3D11IndexBuffer::D3D11IndexBuffer(RenderDevice* renderDevice, BufferFormat format)
-		: Base(renderDevice, format)
-	{
+    class IndexBuffer::Impl
+    {
+    public:
+    };
+
+    IndexBuffer::IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
+        : m_renderDevice(renderDevice)
+        , m_format(format)
+        , m_indexCount(indexCount)
+        , m_bufferUsage(bufferUsage)
+        , m_pImpl(make_unique<Impl>())
+    {
 	}
 
 
-	D3D11IndexBuffer::~D3D11IndexBuffer()
+	IndexBuffer::~IndexBuffer()
 	{
 	}
 

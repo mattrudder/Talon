@@ -4,15 +4,33 @@
 
 namespace Talon
 {
-	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
-		: Base(renderDevice, indexCount, format, initialData, bufferUsage)
+	BufferFormat IndexBuffer::GetFormat() const
 	{
+		return m_format;
 	}
 
-
-	IndexBuffer::~IndexBuffer()
+	void IndexBuffer::SetFormat(BufferFormat value)
 	{
-
+		m_format = value;
 	}
 
+	int IndexBuffer::GetIndexCount() const
+	{
+		return m_indexCount;
+	}
+
+	void IndexBuffer::SetIndexCount(int value)
+	{
+		m_indexCount = value;
+	}
+
+	BufferUsage IndexBuffer::GetBufferUsage() const
+	{
+		return m_bufferUsage;
+	}
+
+	void IndexBuffer::SetBufferUsage(BufferUsage value)
+	{
+		m_bufferUsage = value;
+	}
 }

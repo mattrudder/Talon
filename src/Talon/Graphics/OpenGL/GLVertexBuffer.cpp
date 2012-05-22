@@ -1,16 +1,26 @@
 
 #include "TalonPrefix.h"
-#include <Talon/Graphics/OpenGL/GLVertexBuffer.h>
+#include <GL/glew.h>
+#include <Talon/Graphics/VertexBuffer.h>
 
 namespace Talon
 {
-	GLVertexBuffer::GLVertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
-		: Base(renderDevice, vertexSize, vertexCount, initialData, bufferUsage)
+	class VertexBuffer::Impl
+	{
+	public:
+		GLuint elementBuffer;
+	};
+
+	VertexBuffer::VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* /*initialData*/, BufferUsage bufferUsage)
+		: m_renderDevice(renderDevice)
+		, m_vertexSize(vertexSize)
+		, m_vertexCount(vertexCount)
+		, m_bufferUsage(bufferUsage)
+		, m_pImpl(make_unique<Impl>())
 	{
 	}
 
-
-	GLVertexBuffer::~GLVertexBuffer()
+	VertexBuffer::~VertexBuffer()
 	{
 	}
 

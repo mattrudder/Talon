@@ -2,32 +2,48 @@
 #pragma once
 
 #include <Talon/TalonPublic.h>
-
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-#include <Talon/Graphics/Direct3D11/D3D11RenderDevice.h>
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-#include <Talon/Graphics/OpenGL/GLRenderDevice.h>
-#endif
+#include <functional>
 
 namespace Talon
 {
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-	class TalonApi RenderDevice : public D3D11RenderDevice
+	class IndexBuffer;
+	class VertexBuffer;
+	class Window;
+
+	class TalonApi RenderDevice
 	{
 	public:
-		typedef D3D11RenderDevice Base;
+		RenderDevice(Window* window);
+		virtual ~RenderDevice();
+
+		Window* GetWindow() const;
+		bool IsInitialized() const;
+
+		IndexBuffer* GetActiveIndexBuffer() const;
+		void SetActiveIndexBuffer(IndexBuffer* value);
+
+		VertexBuffer* GetActiveVertexBuffer() const;
+		void SetActiveVertexBuffer(VertexBuffer* value);
+
+		void BeginFrame();
+		void EndFrame();
+
+	protected:
+		void SetWindow(Window* value);
+		void SetInitialized(bool value);
+
+#if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
+		friend class GLContext;
+		void WithContext(std::function<void()> fn);
+#endif
 
 	private:
-#include <Talon/Graphics/Generated/RenderDevice.h>
+		Window* m_window;
+		IndexBuffer* m_activeIndexBuffer;
+		VertexBuffer* m_activeVertexBuffer;
+		bool m_initialized;
+
+		class Impl;
+		std::unique_ptr<Impl> m_pImpl;
 	};
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-	class TalonApi RenderDevice : public GLRenderDevice
-	{
-	public:
-		typedef GLRenderDevice Base;
-		
-	private:
-#include <Talon/Graphics/Generated/RenderDevice.h>
-	};
-#endif
 }

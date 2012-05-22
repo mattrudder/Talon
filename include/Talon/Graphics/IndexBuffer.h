@@ -3,31 +3,35 @@
 
 #include <Talon/TalonPublic.h>
 
-#if TALON_GRAPHICS == TALON_GRAPHICS_DIRECT3D11
-#include <Talon/Graphics/Direct3D11/D3D11IndexBuffer.h>
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-#include <Talon/Graphics/OpenGL/GLIndexBuffer.h>
-#endif
+#include <Talon/Graphics/BufferFormat.h>
+#include <Talon/Graphics/BufferUsage.h>
 
 namespace Talon
 {
-#if TALON_GRAPHICS == TALON_GRAPHICS_DIRECT3D11
-	class TalonApi IndexBuffer : public D3D11IndexBuffer
+	class RenderDevice;
+
+	class TalonApi IndexBuffer
 	{
 	public:
-		typedef D3D11IndexBuffer Base;
+		IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage);
+		virtual ~IndexBuffer();
+
+		BufferFormat GetFormat() const;
+		int GetIndexCount() const;
+		BufferUsage GetBufferUsage() const;
+
+	protected:
+		void SetFormat(BufferFormat value);
+		void SetIndexCount(int value);
+		void SetBufferUsage(BufferUsage value);
 
 	private:
-#include <Talon/Graphics/Generated/IndexBuffer.h>
-	};
-#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-	class TalonApi IndexBuffer : public GLIndexBuffer
-	{
-	public:
-		typedef GLIndexBuffer Base;
+		RenderDevice* m_renderDevice;
+		BufferFormat m_format;
+		int m_indexCount;
+		BufferUsage m_bufferUsage;
 
-	private:
-#include <Talon/Graphics/Generated/IndexBuffer.h>
+		class Impl;
+		std::unique_ptr<Impl> m_pImpl;
 	};
-#endif
 }

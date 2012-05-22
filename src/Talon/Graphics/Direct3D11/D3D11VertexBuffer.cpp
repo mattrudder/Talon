@@ -1,19 +1,24 @@
 
 #include <Talon/TalonPrefix.h>
-#include <Talon/Graphics/Direct3D11/D3D11VertexBuffer.h>
-#include <Talon/Graphics/BufferCpuUsage.h>
+#include <Talon/Graphics/VertexBuffer.h>
 
 namespace Talon
 {
-	D3D11VertexBuffer::D3D11VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
-		: Base(renderDevice, vertexSize, vertexCount, initialData, bufferUsage)
-	{
+    class VertexBuffer::Impl
+    {
+    public:
+    };
 
-	}
+    VertexBuffer::VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* /*initialData*/, BufferUsage bufferUsage)
+        : m_renderDevice(renderDevice)
+        , m_vertexSize(vertexSize)
+        , m_vertexCount(vertexCount)
+        , m_bufferUsage(bufferUsage)
+        , m_pImpl(make_unique<Impl>())
+    {
+    }
 
-
-	D3D11VertexBuffer::~D3D11VertexBuffer()
-	{
-	}
-
+    VertexBuffer::~VertexBuffer()
+    {
+    }
 }

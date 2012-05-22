@@ -2,32 +2,55 @@
 #pragma once
 
 #include <Talon/TalonPublic.h>
+#include <Talon/TalonDelegate.h>
 
-#if TALON_WINDOWS
-#include <Talon/Platform/Win32/Win32Window.h>
-#elif TALON_MAC
-#include <Talon/Platform/Mac/MacWindow.h>
-#endif
 
 namespace Talon
 {
+	class RenderDevice;
+
+	class TalonApi Window
+	{
+	public:
+		Window(std::string title, int width, int height);
+		virtual ~Window();
+
+		const std::string& GetTitle() const;
+		void SetTitle(const std::string& value);
+
+		int GetWidth() const;
+		int GetHeight() const;
+
+		std::shared_ptr<RenderDevice> GetRenderDevice() const;
+
+		delegate<Window, void(int, int)> Resized;
+		delegate<Window, void()> Closed;
+		delegate<Window, void()> Created;
+		delegate<Window, void()> Destroyed;
+
+		void DoEvents();
+
 #if TALON_WINDOWS
-	class TalonApi Window : public Win32Window
-	{
-	public:
-		typedef Win32Window Base;
-
-	private:
-#include <Talon/Platform/Generated/Window.h>
-	};
-#elif TALON_MAC
-	class TalonApi Window : public MacWindow
-	{
-	public:
-		typedef MacWindow Base;
-
-	private:
-#include <Talon/Platform/Generated/Window.h>
-	};
+		HWND GetHandle() const;
 #endif
+
+	protected:
+		void OnResized(int width, int height);
+		void OnClosed();
+		void OnCreated();
+		void OnDestroyed();
+
+		void SetWidth(int value);
+		void SetHeight(int value);
+		void SetRenderDevice(std::shared_ptr<RenderDevice> value);
+
+	private:
+		int m_width;
+		int m_height;
+		std::string m_title;
+		std::shared_ptr<RenderDevice> m_renderDevice;
+
+		class Impl;
+		std::unique_ptr<Impl> m_pImpl;
+	};
 }
