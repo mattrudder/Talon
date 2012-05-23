@@ -1,6 +1,8 @@
 
-#include <Talon/TalonPrefix.h>
+#include "TalonPrefix.h"
 #include <Talon/Graphics/VertexBuffer.h>
+
+using namespace std;
 
 namespace Talon
 {

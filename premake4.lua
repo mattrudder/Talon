@@ -79,9 +79,9 @@ solution "Talon"
 		targetname  "Talon"
 		language    "C++"
 		kind        "SharedLib"
-		defines     { "ZLIB_DLL", "ZLIB_WINAPI","TALON_DLL", "BUILDING_TALON" }
+		defines     { "ZLIB_DLL", "ZLIB_WINAPI","TALON_DLL", "BUILDING_TALON"  }
 		flags       { "FatalWarnings" }
-		links		{ "nowide", "glew" }
+		links		{ "nowide" }
 
 		pchheader	"TalonPrefix.h"
 		pchsource	"src/Talon/TalonPrefix.cpp"
@@ -127,13 +127,17 @@ solution "Talon"
             }
 
         configuration "OpenGL"
-            defines { "GLEW_STATIC" }
+            defines { "GLEW_STATIC", "TALON_OPENGL" }
+            links { "glew" }
+
+        configuration "Direct3D11"
+        	defines { "TALON_D3D11" }
+        	links	{ "dxguid", "dxgi", "d3d11", "d3dcompiler" }
 
         configuration { _OPTIONS["gfx"] }
             files {
                 "src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp"
             }
-
 
 	-- 
 	-- Client Applications

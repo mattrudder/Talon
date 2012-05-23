@@ -28,6 +28,12 @@ namespace Talon
 		void BeginFrame();
 		void EndFrame();
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+		D3D_FEATURE_LEVEL GetFeatureLevel() const;
+		ID3D11Device* GetDevice() const;
+		ID3D11DeviceContext* GetDeviceContext() const;
+#endif
+
 	protected:
 		void SetWindow(Window* value);
 		void SetInitialized(bool value);

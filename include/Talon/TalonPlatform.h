@@ -26,8 +26,6 @@
 #define TALON_GRAPHICS_OPENGLES1 3
 #define TALON_GRAPHICS_OPENGLES2 4
 
-#define TALON_GRAPHICS TALON_GRAPHICS_OPENGL
-
 #define TALON_MATH_FPU 1
 #define TALON_MATH_SSE2 2
 #define TALON_MATH_EIGEN 3
@@ -138,3 +136,10 @@
 #   pragma warning(disable : 4275)	// non dll-interface used as base for dll-interface
 #endif //TALON_WINDOWS
 
+#if defined(TALON_OPENGL)
+#	define TALON_GRAPHICS TALON_GRAPHICS_OPENGL
+#elif defined(TALON_D3D11)
+#	define TALON_GRAPHICS TALON_GRAPHICS_D3D11
+#elif TALON_IOS
+#	define TALON_GRAPHICS TALON_GRAPHICS_OPENGLES2
+#endif

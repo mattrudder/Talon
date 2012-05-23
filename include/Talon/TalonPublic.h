@@ -19,20 +19,26 @@
 #	include <windows.h>
 #endif
 
-#if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS && (defined(BUILDING_TALON) || !defined(TALON_DLL))
-#	if TALON_GRAPHICS_OPENGL
+
+#if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL 
+#	include <GL/glew.h>
+#	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS && (defined(BUILDING_TALON) || !defined(TALON_DLL))
 #		pragma comment(lib, "OpenGL32.lib")
 #	endif
+#elif TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+#	include <d3d11.h>
+#	include <d3dcompiler.h>
+#	define TALON_SAFE_RELEASE(x) if (x) { x->Release(); x = nullptr; }
 #endif
 
-namespace Talon
+// Placeholders for functions missing from the C++11 spec.
+namespace std
 {
-	// Placeholders for non-member methods missing from the C++11 spec.
-//	template<class T>
-//	auto cbegin(const T& t) -> decltype(t.cbegin()) { return t.cbegin(); }
-//
-//	template<class T>
-//	auto cend(const T& t) -> decltype(t.cend()) { return t.cend(); }
+	template<class T>
+	auto cbegin(const T& t) -> decltype(t.cbegin()) { return t.cbegin(); }
+
+	template<class T>
+	auto cend(const T& t) -> decltype(t.cend()) { return t.cend(); }
 
 	// Variadic template version of unique_ptr
 	//template<typename T, typename ...Args>

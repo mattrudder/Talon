@@ -3,6 +3,8 @@
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 
+using namespace std;
+
 namespace Talon
 {
 	struct WindowClass
