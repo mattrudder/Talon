@@ -9,7 +9,7 @@ namespace Talon
 	class TalonApi Engine
 	{
 	public:
-		bool Initialize(Simulation* sim);
+		bool Initialize(std::shared_ptr<Simulation> sim);
 		void Shutdown();
 		void RunFrame();
 

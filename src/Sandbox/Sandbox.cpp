@@ -3,6 +3,7 @@
 #include <Talon/Engine.h>
 #include <Talon/Simulation.h>
 
+
 #include "BufferTestSimulation.h"
 
 using namespace Talon;
@@ -19,7 +20,7 @@ int main(int argc, char** argv)
 #endif
 {
 	Engine engine;
-	if (!engine.Initialize(new BufferTestSimulation()))
+	if (!engine.Initialize(std::make_shared<BufferTestSimulation>()))
 		return -1;
 
 	while(engine.IsRunning())

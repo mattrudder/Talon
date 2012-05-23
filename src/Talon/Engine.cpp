@@ -11,11 +11,11 @@
 
 namespace Talon
 {
-	bool Engine::Initialize(Simulation* sim)
+	bool Engine::Initialize(std::shared_ptr<Simulation> sim)
 	{
 		try
 		{
-			m_simulation.reset(sim);
+			m_simulation = sim;
 
 //		char line[MAX_PATH];
 //		sprintf_s(line, "Talon version: %s\n", TALON_VERSION_STRING);
