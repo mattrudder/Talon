@@ -10,19 +10,6 @@
 #include <string>
 #include <memory>
 
-#if TALON_IOS
-#elif TALON_MAC
-#elif TALON_WINDOWS
-#	define WIN32_LEAN_AND_MEAN // TODO: Define additional NO_* defines to slim down windows.h
-#	define NOMINMAX
-#	define PATH_MAX MAX_PATH
-#	define NAME_MAX 255
-#	include <atlbase.h> // For CComPtr
-#	include <windows.h>
-#	include <Talon/Platform/Win32/ComException.h>
-#endif
-
-
 #if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL 
 #	include <GL/glew.h>
 #	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS && (defined(BUILDING_TALON) || !defined(TALON_DLL))
