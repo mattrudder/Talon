@@ -4,7 +4,6 @@
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Simulation.h>
-#include <Talon/Graphics/BufferFormat.h>
 
 //#include <zlib.h>
 //#include <png.h>
@@ -12,11 +11,11 @@
 
 namespace Talon
 {
-	void Engine::Initialize(Simulation* sim)
+	bool Engine::Initialize(Simulation* sim)
 	{
-		BufferFormat format = BufferFormat::Unknown;
-		printf("%d", format);
-		m_simulation.reset(sim);
+		try
+		{
+			m_simulation.reset(sim);
 
 //		char line[MAX_PATH];
 //		sprintf_s(line, "Talon version: %s\n", TALON_VERSION_STRING);
@@ -31,15 +30,32 @@ namespace Talon
 //		sprintf_s(line, "Cairo version: %s\n", cairo_version_string());
 //		OutputDebugStringA(line);
 
-		m_running = true;
+			m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
+			if (!m_window->GetRenderDevice())
+			{
+				m_window = nullptr;
+				return false;
+			}
 
-		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
-		m_window->Closed += [this] ()
+			m_window->Closed += [this] ()
+			{
+				m_running = false;
+			};
+
+			sim->Device = m_window->GetRenderDevice().get();
+
+			m_running = true;
+		}
+		catch (std::exception& e)
 		{
-			m_running = false;
-		};
+			// TODO: Better error reporting.
+#if TALON_WINDOWS
+			OutputDebugString(convert(e.what()).c_str());
+#endif
+			return false;
+		}
 
-		sim->Device = m_window->GetRenderDevice().get();
+		return true;
 	}
 
 	void Engine::Shutdown()
@@ -50,14 +66,14 @@ namespace Talon
 	{
 		m_window->DoEvents();
 
-		//m_simulation->OnBeginFrame();
-		
-
 		auto device = m_window->GetRenderDevice();
-		device->BeginFrame();
-		m_simulation->BeginFrame();
+		if (device)
+		{	
+			device->BeginFrame();
+			m_simulation->BeginFrame();
 
-		m_simulation->EndFrame();
-		device->EndFrame();
+			m_simulation->EndFrame();
+			device->EndFrame();
+		}
 	}
 }

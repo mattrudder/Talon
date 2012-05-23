@@ -8,75 +8,70 @@ using namespace std;
 
 namespace Talon
 {
+	
     class RenderDevice::Impl
     {
+	public:
+		void CreateDevice(Window* window)
+		{
+			UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+			TALON_HR(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, creationFlags, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &context));
+
+			TALON_HR(device.QueryInterface(&dxgiDevice));
+			TALON_HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter1), (void **)&dxgiAdapter));
+			TALON_HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&dxgiFactory));
+
+			// #if TALON_WINRT
+			// TODO: Handle creation from Metro (Win 8).
+			// #else
+			DXGI_SWAP_CHAIN_DESC swapDesc;
+			ZeroMemory(&swapDesc, sizeof(swapDesc));
+			swapDesc.BufferCount = 1;
+			swapDesc.BufferDesc.Width = window->GetWidth();
+			swapDesc.BufferDesc.Height = window->GetHeight();
+			swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+			swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+			swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+			swapDesc.OutputWindow = window->GetHandle();
+			swapDesc.SampleDesc.Count = 1;
+			swapDesc.SampleDesc.Quality = 0;
+			swapDesc.Windowed = TRUE;
+			TALON_HR(dxgiFactory->CreateSwapChain(device, &swapDesc, &swapChain));
+			// #endif
+
+			CComPtr<ID3D11Texture2D> backBuffer;
+			TALON_HR(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer));
+			TALON_HR(device->CreateRenderTargetView(backBuffer, nullptr, &backBufferRTV));
+		}
     public:
-		IDXGISwapChain* swapChain;
-		ID3D11RenderTargetView* backBufferRTV;
-		ID3D11Device* device;
-		ID3D11DeviceContext* context;
+		CComPtr<IDXGISwapChain> swapChain;
+		CComPtr<ID3D11RenderTargetView> backBufferRTV;
+		CComPtr<ID3D11Device> device;
+		CComPtr<ID3D11DeviceContext> context;
+		CComPtr<IDXGIDevice1> dxgiDevice;
+		CComPtr<IDXGIAdapter1> dxgiAdapter;
+		CComPtr<IDXGIFactory1> dxgiFactory;
+
+		DXGI_ADAPTER_DESC1 adapterDesc;
 		D3D_FEATURE_LEVEL featureLevel;
-		
-
-		static IDXGIFactory1* s_DXGI;
     };
-
-	IDXGIFactory1* RenderDevice::Impl::s_DXGI = nullptr;
 
     RenderDevice::RenderDevice(Window* window)
         : m_window(window)
         , m_pImpl(make_unique<Impl>())
     {
-		if (RenderDevice::Impl::s_DXGI == nullptr)
-			CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&RenderDevice::Impl::s_DXGI);
-		else
-			RenderDevice::Impl::s_DXGI->AddRef();
-
-		UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-		HRESULT hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, creationFlags, nullptr, 0, D3D11_SDK_VERSION, &m_pImpl->device, &m_pImpl->featureLevel, &m_pImpl->context);
-		
-		// #if TALON_WINRT
-		// TODO: Handle creation from Metro (Win 8).
-		// #else
-		DXGI_SWAP_CHAIN_DESC swapDesc;
-		ZeroMemory(&swapDesc, sizeof(swapDesc));
-		swapDesc.BufferCount = 1;
-		swapDesc.BufferDesc.Width = window->GetWidth();
-		swapDesc.BufferDesc.Height = window->GetHeight();
-		swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		swapDesc.BufferDesc.RefreshRate.Numerator = 60;
-		swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-		swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapDesc.OutputWindow = window->GetHandle();
-		swapDesc.SampleDesc.Count = 1;
-		swapDesc.SampleDesc.Quality = 0;
-		swapDesc.Windowed = TRUE;
-		hr = RenderDevice::Impl::s_DXGI->CreateSwapChain(m_pImpl->device, &swapDesc, &m_pImpl->swapChain);
-		// #endif
-
-		ID3D11Texture2D* backBuffer;
-		hr = m_pImpl->swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
-		hr = m_pImpl->device->CreateRenderTargetView(backBuffer, nullptr, &m_pImpl->backBufferRTV);
+		m_pImpl->CreateDevice(window);
 	}
 
 	RenderDevice::~RenderDevice()
 	{
-		TALON_SAFE_RELEASE(m_pImpl->backBufferRTV);
-		TALON_SAFE_RELEASE(m_pImpl->swapChain);
-		TALON_SAFE_RELEASE(m_pImpl->context);
-		TALON_SAFE_RELEASE(m_pImpl->device);
-		TALON_SAFE_RELEASE(m_pImpl->device);
-
-		if (RenderDevice::Impl::s_DXGI)
-		{
-			if (RenderDevice::Impl::s_DXGI->Release() == 0)
-				RenderDevice::Impl::s_DXGI = nullptr;
-		}
 	}
 
     void RenderDevice::BeginFrame()
     {
-		m_pImpl->context->OMSetRenderTargets(1, &m_pImpl->backBufferRTV, nullptr);
+		ID3D11RenderTargetView* views = m_pImpl->backBufferRTV;
+		m_pImpl->context->OMSetRenderTargets(1, &views, nullptr);
 		D3D11_VIEWPORT vp;
 		vp.Width = (FLOAT) GetWindow()->GetWidth();
 		vp.Height = (FLOAT) GetWindow()->GetHeight();
@@ -93,7 +88,10 @@ namespace Talon
 
     void RenderDevice::EndFrame()
     {
-		m_pImpl->context->OMSetRenderTargets(1, nullptr, nullptr);
+		TALON_HR(m_pImpl->swapChain->Present(1, 0));
+
+		ID3D11RenderTargetView* nullView = nullptr;
+		m_pImpl->context->OMSetRenderTargets(1, &nullView, nullptr);
     }
 
 	D3D_FEATURE_LEVEL RenderDevice::GetFeatureLevel() const

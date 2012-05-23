@@ -19,7 +19,9 @@ int main(int argc, char** argv)
 #endif
 {
 	Engine engine;
-	engine.Initialize(new BufferTestSimulation());
+	if (!engine.Initialize(new BufferTestSimulation()))
+		return -1;
+
 	while(engine.IsRunning())
 	{
 		engine.RunFrame();

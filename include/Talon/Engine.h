@@ -9,7 +9,7 @@ namespace Talon
 	class TalonApi Engine
 	{
 	public:
-		void Initialize(Simulation* sim);
+		bool Initialize(Simulation* sim);
 		void Shutdown();
 		void RunFrame();
 

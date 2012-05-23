@@ -5,6 +5,8 @@
 #include "TalonVersion.h"
 #include "TalonAssert.h"
 
+#include "Exception.h"
+
 #include <string>
 #include <memory>
 
@@ -15,8 +17,9 @@
 #	define NOMINMAX
 #	define PATH_MAX MAX_PATH
 #	define NAME_MAX 255
-#	include <comdef.h>
+#	include <atlbase.h> // For CComPtr
 #	include <windows.h>
+#	include <Talon/Platform/Win32/ComException.h>
 #endif
 
 
@@ -28,7 +31,6 @@
 #elif TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 #	include <d3d11.h>
 #	include <d3dcompiler.h>
-#	define TALON_SAFE_RELEASE(x) if (x) { x->Release(); x = nullptr; }
 #endif
 
 // Placeholders for functions missing from the C++11 spec.

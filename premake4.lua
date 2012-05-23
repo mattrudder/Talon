@@ -116,11 +116,13 @@ solution "Talon"
         -- Generic platform includes
         configuration "Windows"
             files {
+                "include/Talon/Platform/Win32/**.h",
                 "src/Talon/Platform/Win32/**.cpp"
             }
 
         configuration "MacOSX"
             files {
+                "include/Talon/Platform/Mac/**.h",
                 "src/Talon/Platform/Mac/**.cpp",
                 "src/Talon/Platform/Mac/**.m",
                 "src/Talon/Platform/Mac/**.mm"
