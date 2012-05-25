@@ -103,11 +103,13 @@ solution "Talon"
 			"build",
 			"src/Talon",
 			"externals/nowide",
-			"externals/zlib-1.2.6/include",
-			"externals/libpng-1.5.10/include",
-			"externals/cairo-1.8.8/include",
-			"externals/glew-1.7.0/include"
+			"externals/glew-1.7.0/include",
 		}
+
+		apply_external("freeimage-3.15.3", "FreeImage")
+		apply_external("cairo-1.8.8", "cairo", true)
+		apply_external("libpng-1.5.10", "libpng15", true)
+		apply_external("zlib-1.2.6", "zlibwapi", true)
 
 		-- Configuration
 		configuration "Release"
@@ -115,10 +117,12 @@ solution "Talon"
 
         -- Generic platform includes
         configuration "Windows"
+        	defines { "_CRT_SECURE_NO_WARNINGS" }
             files {
                 "include/Talon/Platform/Win32/**.h",
                 "src/Talon/Platform/Win32/**.cpp"
             }
+            postbuildcommands { copy_cmd("externals/freeimage-3.15.3/lib/vc/x86/FreeImage.dll", "bin/x86/Debug/") }
 
         configuration "MacOSX"
             files {

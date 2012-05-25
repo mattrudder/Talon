@@ -4,7 +4,7 @@
 #include <Talon/TalonPublic.h>
 #include <Talon/Exception.h>
 
-#define TALON_HR(expr) Talon::ComException::CheckResult(expr, #expr, __FILE__, __LINE__)
+#define ThrowIfFailed(expr) Talon::ComException::CheckResult(expr, #expr, __FILE__, __LINE__)
 
 namespace Talon
 {

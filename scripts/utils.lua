@@ -17,3 +17,41 @@ function makedirs(t)
 		end
 	end
 end
+
+function getAbsoluteFromSolution(p)
+    local sol = solution() 
+    return path.getabsolute(path.join(sol.basedir, p))
+end
+
+function copy_cmd(src, dest)
+	local srcAbsolute = path.translate(getAbsoluteFromSolution(src))
+	local destAbsolute = path.translate(getAbsoluteFromSolution(dest))
+	local cmd = ""
+	if os.is("windows") then
+		cmd = "xcopy " .. srcAbsolute .. " " .. destAbsolute .. " /Y"
+
+		if os.isdir(src) then
+			cmd = cmd .. " /E" 
+		end
+	else
+		cmd = "cp -R " .. srcAbsolute .. " " .. destAbsolute
+	end
+
+	return cmd
+end
+
+function apply_external(api, lib, specifics)
+	specifics=specifics or false
+	local vs_specifics = ""
+
+	if specifics then
+		vs_specifics = "$(PlatformToolset)/"
+	end
+
+	configuration "vs*"
+		libdirs("externals/" .. api .. "/lib/vc/" .. vs_specifics .. "$(PlatformShortName)/")
+		links(lib)
+	
+	configuration "*"
+		includedirs("externals/" .. api .. "/include/")
+end

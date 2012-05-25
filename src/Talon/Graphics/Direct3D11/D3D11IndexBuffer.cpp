@@ -35,7 +35,7 @@ namespace Talon
 		bufferData.SysMemPitch = 0;
 		bufferData.SysMemSlicePitch = 0;
 
-		TALON_HR(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, &bufferData, &m_pImpl->indexBuffer));
+		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, &bufferData, &m_pImpl->indexBuffer));
 	}
 
 
