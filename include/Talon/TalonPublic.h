@@ -8,6 +8,7 @@
 #include "Exception.h"
 
 #include <string>
+#include <vector>
 #include <memory>
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL 

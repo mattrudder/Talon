@@ -1,6 +1,8 @@
 
 #include "TalonPrefix.h"
 #include <Talon/Engine.h>
+#include <Talon/Input/InputManager.h>
+
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Simulation.h>
@@ -12,8 +14,16 @@
 
 namespace Talon
 {
+	Engine& Engine::Instance()
+	{
+		static Engine s_engine;
+		return s_engine;
+	}
+
 	bool Engine::Initialize(std::shared_ptr<Simulation> sim)
 	{
+		CreateManagers();
+
 		m_simulation = sim;
 
 		char line[MAX_PATH];
@@ -55,6 +65,11 @@ namespace Talon
 
 	void Engine::Shutdown()
 	{
+		m_window = nullptr;
+		m_simulation = nullptr;
+
+		m_inputManager = nullptr;
+
 		FreeImage_DeInitialise();
 	}
 
@@ -71,5 +86,18 @@ namespace Talon
 			m_simulation->EndFrame();
 			device->EndFrame();
 		}
+	}
+
+	void Engine::CreateManagers()
+	{
+		m_inputManager = std::make_shared<InputManager>();
+	}
+
+	Engine::Engine()
+	{
+	}
+
+	Engine::~Engine()
+	{
 	}
 }

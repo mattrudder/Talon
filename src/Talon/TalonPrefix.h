@@ -20,3 +20,5 @@ using namespace nowide;
 #	include <windows.h>
 #	include <Talon/Platform/Win32/ComException.h>
 #endif
+
+#include "Graphics/GraphicsUtility.h"

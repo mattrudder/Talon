@@ -107,7 +107,7 @@ namespace Talon
 
 	std::unique_ptr<WindowClass> Window::Impl::s_windowClass;
 
-	Window::Window(std::string title, int width, int height)
+	Window::Window(const std::string title, int width, int height)
 		: m_title(title)
 		, m_width(width)
 		, m_height(height)

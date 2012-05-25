@@ -5,6 +5,7 @@
 dofile("scripts/utils.lua")
 
 local localHostName = os.getenv("COMPUTERNAME")
+local dxPath = os.getenv("DXSDK_DIR")
 local codeGenPath = path.getabsolute("bin/Debug/Talon.CodeGenerator.exe")
 
 if not _OPTIONS["to"] then
@@ -91,11 +92,13 @@ solution "Talon"
 
 			"include/Talon/*.h",
 			"include/Talon/Graphics/*.h",
+			"include/Talon/Input/*.h",
 			"include/Talon/Platform/*.h",
 
 			"src/Talon/TalonPrefix.h",
 			"src/Talon/*.cpp",
 			"src/Talon/Graphics/*.cpp",
+			"src/Talon/Input/*.cpp",
 			"src/Talon/Platform/*.cpp",
 		}
 
@@ -120,8 +123,13 @@ solution "Talon"
         	defines { "_CRT_SECURE_NO_WARNINGS" }
             files {
                 "include/Talon/Platform/Win32/**.h",
+				"src/Talon/Input/RawInput/**.h",
+            	"src/Talon/Input/RawInput/**.cpp",
+				"src/Talon/Input/XInput/**.h",
+            	"src/Talon/Input/XInput/**.cpp",
                 "src/Talon/Platform/Win32/**.cpp"
             }
+            links { "xinput" }
             postbuildcommands { copy_cmd("externals/freeimage-3.15.3/lib/vc/x86/FreeImage.dll", "bin/x86/Debug/") }
 
         configuration "MacOSX"
@@ -137,8 +145,10 @@ solution "Talon"
             links { "glew" }
 
         configuration "Direct3D11"
-        	defines { "TALON_D3D11" }
-        	links	{ "dxguid", "dxgi", "d3d11", "d3dcompiler" }
+        	defines 	{ "TALON_D3D11" }
+        	--includedirs { path.translate(path.join(dxPath, "Include")) }
+        	libdirs 	{ path.translate(path.join(dxPath, "Lib/$(PlatformShortName)")) }
+        	links		{ "dxguid", "dxgi", "d3d11", "d3dcompiler" }
 
         configuration { _OPTIONS["gfx"] }
             files {

@@ -1,5 +1,6 @@
 #include "BufferTestSimulation.h"
 #include <Talon/Graphics/BufferUsage.h>
+#include <Talon/Graphics/Texture.h>
 
 using namespace std;
 using namespace Talon;
@@ -8,6 +9,7 @@ BufferTestSimulation::BufferTestSimulation()
 	: m_vertexBuffer(nullptr)
 	, m_indexBuffer(nullptr)
 {
+
 }
 
 BufferTestSimulation::~BufferTestSimulation(void)
@@ -18,6 +20,10 @@ void BufferTestSimulation::OnBeginFrame()
 {
 	if (m_vertexBuffer == nullptr)
 	{
+#ifdef HOST_WS1470VM01
+		Texture::FromFile(Device, "C:\\Users\\mrudder\\Downloads\\bg.png");
+#endif
+
 		float verts[] = 
 		{ 
 			0, 1, 0, 0.5, 1.0,

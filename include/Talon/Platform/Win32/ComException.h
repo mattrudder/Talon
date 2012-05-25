@@ -8,7 +8,7 @@
 
 namespace Talon
 {
-	class ComException : public Exception
+	class TalonApi ComException : public Exception
 	{
 	public:
 		explicit ComException(HRESULT status, LPCSTR expression, LPCSTR file, UINT line)

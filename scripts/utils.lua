@@ -18,14 +18,9 @@ function makedirs(t)
 	end
 end
 
-function getAbsoluteFromSolution(p)
-    local sol = solution() 
-    return path.getabsolute(path.join(sol.basedir, p))
-end
-
 function copy_cmd(src, dest)
-	local srcAbsolute = path.translate(getAbsoluteFromSolution(src))
-	local destAbsolute = path.translate(getAbsoluteFromSolution(dest))
+	local srcAbsolute = path.translate(path.getabsolute(src))
+	local destAbsolute = path.translate(path.getabsolute(dest))
 	local cmd = ""
 	if os.is("windows") then
 		cmd = "xcopy " .. srcAbsolute .. " " .. destAbsolute .. " /Y"

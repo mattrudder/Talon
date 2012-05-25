@@ -19,7 +19,7 @@ int CALLBACK WinMain(
 int main(int argc, char** argv)
 #endif
 {
-	Engine engine;
+	Engine& engine = Engine::Instance();
 	if (!engine.Initialize(std::make_shared<BufferTestSimulation>()))
 		return -1;
 
