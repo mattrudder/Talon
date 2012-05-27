@@ -19,6 +19,7 @@ function makedirs(t)
 end
 
 function copy_cmd(src, dest)
+	dest = dest or "bin/$(PlatformShortName)/$(Configuration)/"
 	local srcAbsolute = path.translate(path.getabsolute(src))
 	local destAbsolute = path.translate(path.getabsolute(dest))
 	local cmd = ""
@@ -32,7 +33,7 @@ function copy_cmd(src, dest)
 		cmd = "cp -R " .. srcAbsolute .. " " .. destAbsolute
 	end
 
-	return cmd
+	return cmd .. "\n"
 end
 
 function apply_external(api, lib, specifics)

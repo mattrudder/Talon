@@ -8,10 +8,10 @@
 
 namespace Talon
 {
-	class TalonApi InputManager
+	class TalonApi InputService
 	{
 	public:
-		InputManager();
+		InputService();
 
 		void Update();
 

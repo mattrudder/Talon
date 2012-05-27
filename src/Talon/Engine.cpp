@@ -1,7 +1,7 @@
 
 #include "TalonPrefix.h"
 #include <Talon/Engine.h>
-#include <Talon/Input/InputManager.h>
+#include <Talon/Input/InputService.h>
 
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
@@ -22,7 +22,7 @@ namespace Talon
 
 	bool Engine::Initialize(std::shared_ptr<Simulation> sim)
 	{
-		CreateManagers();
+		CreateServices();
 
 		m_simulation = sim;
 
@@ -68,14 +68,18 @@ namespace Talon
 		m_window = nullptr;
 		m_simulation = nullptr;
 
-		m_inputManager = nullptr;
+		DestroyServices();
 
 		FreeImage_DeInitialise();
 	}
 
 	void Engine::RunFrame()
 	{
+		UpdateServices();
+
 		m_window->DoEvents();
+
+		m_inputService->Update();
 
 		auto device = m_window->GetRenderDevice();
 		if (device)
@@ -88,9 +92,27 @@ namespace Talon
 		}
 	}
 
-	void Engine::CreateManagers()
+	void Engine::CreateServices()
 	{
-		m_inputManager = std::make_shared<InputManager>();
+		// Initialize managers
+		m_inputService = std::make_shared<InputService>();
+
+		// Setup managers for automatic throttled updates.
+		m_serviceUpdates.push_back(TimedUpdate(33, std::bind(&InputService::Update, m_inputService)));
+	}
+
+	void Engine::UpdateServices()
+	{
+		for (auto i = m_serviceUpdates.begin(); i != m_serviceUpdates.end(); ++i)
+		{
+			// TODO: Throttle updates.
+			i->UpdateFunc();
+		}
+	}
+
+	void Engine::DestroyServices()
+	{
+		m_inputService = nullptr;
 	}
 
 	Engine::Engine()

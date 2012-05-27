@@ -2,6 +2,7 @@
 #pragma once
 #include <Talon/TalonPublic.h>
 #include <Talon/TalonDelegate.h>
+#include <Talon/Input/InputDeviceType.h>
 
 namespace Talon
 {
@@ -15,6 +16,7 @@ namespace Talon
 
 		virtual void PollForUpdates() = 0;
 
+		inline InputDeviceType GetType() const { return m_type; }
 		inline bool IsConnected() const { return m_isConnected; }
 
 		struct Kind
@@ -25,9 +27,11 @@ namespace Talon
 		};
 
 	protected:
+		InputDevice(InputDeviceType type);
 		void SetIsConnected(bool value);
 
 	private:
 		bool m_isConnected;
+		InputDeviceType m_type;
 	};
 }

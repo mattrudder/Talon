@@ -130,7 +130,13 @@ solution "Talon"
                 "src/Talon/Platform/Win32/**.cpp"
             }
             links { "xinput" }
-            postbuildcommands { copy_cmd("externals/freeimage-3.15.3/lib/vc/x86/FreeImage.dll", "bin/x86/Debug/") }
+            postbuildcommands
+            {
+                copy_cmd("externals/freeimage-3.15.3/lib/vc/$(PlatformShortName)/FreeImage.dll") ..
+                copy_cmd("externals/cairo-1.8.8/lib/vc/$(PlatformToolset)/$(PlatformShortName)/cairo.dll") ..
+                copy_cmd("externals/libpng-1.5.10/lib/vc/$(PlatformToolset)/$(PlatformShortName)/libpng15.dll") ..
+                copy_cmd("externals/zlib-1.2.6/lib/vc/$(PlatformToolset)/$(PlatformShortName)/zlibwapi.dll")
+            }
 
         configuration "MacOSX"
             files {

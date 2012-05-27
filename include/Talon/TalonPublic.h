@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL 
 #	include <GL/glew.h>

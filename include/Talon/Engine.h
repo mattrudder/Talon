@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	class InputManager;
+	class InputService;
 	class Simulation;
 	class Window;
 
@@ -16,7 +16,7 @@ namespace Talon
 		void Shutdown();
 		void RunFrame();
 
-		inline std::shared_ptr<InputManager> GetInputManager() const { return m_inputManager; }
+		inline std::shared_ptr<InputService> GetInputService() const { return m_inputService; }
 
 		inline bool IsRunning() const { return m_running; }
 
@@ -27,13 +27,31 @@ namespace Talon
 		Engine(const Engine&);
 		const Engine& operator=(const Engine&);
 
-		void CreateManagers();
+		void CreateServices();
+		void UpdateServices();
+		void DestroyServices();
 
 		bool m_running;
 
-		std::shared_ptr<InputManager> m_inputManager;
+		std::shared_ptr<InputService> m_inputService;
 
 		std::shared_ptr<Simulation> m_simulation;
 		std::shared_ptr<Window> m_window;
+
+		struct TimedUpdate
+		{
+			TimedUpdate(float frequency, std::function<void()> func)
+				: UpdateFrequency(frequency)
+				, SinceLastUpdate(0)
+				, UpdateFunc(func)
+			{
+			}
+
+			float UpdateFrequency;
+			float SinceLastUpdate;
+			std::function<void()> UpdateFunc;
+		};
+
+		std::vector<TimedUpdate> m_serviceUpdates;
 	};
 }

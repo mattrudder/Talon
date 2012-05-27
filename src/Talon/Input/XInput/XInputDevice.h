@@ -1,11 +1,11 @@
 
 #pragma once
-#include <Talon/Input/InputDevice.h>
+#include <Talon/Input/GamepadInputDevice.h>
 #include <Xinput.h>
 
 namespace Talon
 {
-	class XInputDevice : public InputDevice
+	class XInputDevice : public GamepadInputDevice
 	{
 	public:
 		static Kind Kind;

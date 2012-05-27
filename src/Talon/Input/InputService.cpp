@@ -1,6 +1,6 @@
 
 #include "TalonPrefix.h"
-#include <Talon/Input/InputManager.h>
+#include <Talon/Input/InputService.h>
 
 #if TALON_WINDOWS
 #include "Input/XInput/XInputDevice.h"
@@ -12,9 +12,9 @@ using namespace std;
 
 namespace Talon
 {
-	InputManager::InputManager()
+	InputService::InputService()
 	{
-		TalonLog("InputManager started.\n Input devices:\n");
+		TalonLog("InputService started.\n Input devices:\n");
 		
 		InputDevice::Kind* kind = s_inputDeviceKinds;
 		while (kind->Name != nullptr)
@@ -30,13 +30,13 @@ namespace Talon
 		};
 	}
 
-	void InputManager::Update()
+	void InputService::Update()
 	{
 		for (auto i = m_devices.begin(); i != m_devices.end(); ++i)
 			(*i)->PollForUpdates();
 	}
 
-	InputDevice::Kind InputManager::s_inputDeviceKinds[] = {
+	InputDevice::Kind InputService::s_inputDeviceKinds[] = {
 #if TALON_WINDOWS
 		XInputDevice::Kind,
 		RawInputDevice::Kind,

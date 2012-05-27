@@ -24,6 +24,12 @@ namespace Talon
 	void XInputDevice::PollForUpdates()
 	{
 		SetIsConnected(XInputGetState(m_controllerId, &m_state) == ERROR_SUCCESS);
+
+		//if (m_state.Gamepad.wButtons & VK_PAD_A)
+
+		XINPUT_VIBRATION vib = { 0 };
+		vib.wRightMotorSpeed = m_state.Gamepad.wButtons & VK_PAD_A ? 32768 : 0;
+		XInputSetState(m_controllerId, &vib);
 	}
 
 	XInputDevice::~XInputDevice()

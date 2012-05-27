@@ -1,10 +1,14 @@
 
 #include "TalonPrefix.h"
-#include <Talon/Input/InputManager.h>
 #include <Talon/Input/InputDevice.h>
 
 namespace Talon
 {
+	InputDevice::InputDevice(InputDeviceType type)
+		: m_type(type)
+	{
+	}
+
 	InputDevice::~InputDevice()
 	{
 	}
