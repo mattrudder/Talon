@@ -4,7 +4,8 @@
 
 #if TALON_WINDOWS
 #include "Input/XInput/XInputDevice.h"
-#include "Input/RawInput/RawInputDevice.h"
+#include "Input/RawInput/RawInputKeyboardDevice.h"
+#include "Input/RawInput/RawInputMouseDevice.h"
 #endif
 
 #include <algorithm>
@@ -38,8 +39,8 @@ namespace Talon
 
 	InputDevice::Kind InputService::s_inputDeviceKinds[] = {
 #if TALON_WINDOWS
-		XInputDevice::Kind,
 		RawInputDevice::Kind,
+		XInputDevice::Kind,
 #endif
 		{ nullptr, nullptr }
 	};

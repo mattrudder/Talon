@@ -13,6 +13,10 @@ namespace Talon
 	public:
 		InputService();
 
+#if TALON_WINDOWS
+		void OnInput();
+#endif
+
 		void Update();
 
 	private:

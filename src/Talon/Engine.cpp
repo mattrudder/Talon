@@ -59,7 +59,6 @@ namespace Talon
 
 		m_running = true;
 
-
 		return true;
 	}
 
