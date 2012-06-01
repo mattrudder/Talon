@@ -6,13 +6,20 @@ namespace Talon
 {
 	enum class InputDeviceButton
 	{
-		Button0,
-		Button1,
-		Button2,
-		Button3,
+		None,
 		Up,
 		Down,
 		Left,
 		Right,
+		Start,
+		Back,
+		LeftThumb,
+		RightThumb,
+		LeftShoulder,
+		RightShoulder,
+		Button0,
+		Button1,
+		Button2,
+		Button3,
 	};
 }

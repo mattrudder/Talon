@@ -4,11 +4,13 @@
 
 namespace Talon
 {
-	enum class InputDeviceType
+	enum class InputDeviceAxis
 	{
 		LeftX,
 		LeftY,
+		LeftZ,
 		RightX,
-		RightY
+		RightY,
+		RightZ
 	};
 }

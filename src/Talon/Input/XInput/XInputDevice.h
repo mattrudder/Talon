@@ -12,6 +12,9 @@ namespace Talon
 
 		static std::vector<std::shared_ptr<InputDevice>> Enumerate();
 
+		virtual f32 GetAxis(InputDeviceAxis axis) const;
+		virtual bool GetButton(InputDeviceButton button) const;
+
 		virtual void PollForUpdates();
 
 		~XInputDevice();
@@ -22,5 +25,6 @@ namespace Talon
 		static u32 c_maxDevices;
 		u32 m_controllerId;
 		XINPUT_STATE m_state;
+		XINPUT_STATE m_lastState;
 	};
 }
