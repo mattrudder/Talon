@@ -4,14 +4,18 @@
 #include "Input/RawInput/RawInputKeyboardDevice.h"
 #include "Input/RawInput/RawInputMouseDevice.h"
 
+using namespace std;
+
 namespace Talon
 {
-	std::regex RawInputDevice::s_rgDeviceId("\\{2}\?\\([^#]+)#([^#]+)#([^#]+)#");
+	regex RawInputDevice::s_rgDeviceId("\\\\{2}\\?\\\\([^#]+)#([^#]+)#([^#]+)#([^#]+)?");
+	regex RawInputDevice::s_rgRdpDevices("\\\\{2}\\?\\\\Root#RDP_(.+)");
+
     InputDevice::Kind RawInputDevice::Kind = { "RawInput", RawInputDevice::Enumerate };
 
-    std::vector<std::shared_ptr<InputDevice>> RawInputDevice::Enumerate()
+    vector<shared_ptr<InputDevice>> RawInputDevice::Enumerate()
     {
-        std::vector<std::shared_ptr<InputDevice>> devices;
+        vector<shared_ptr<InputDevice>> devices;
 
         u32 deviceCount;
         PRAWINPUTDEVICELIST deviceList;
@@ -22,25 +26,39 @@ namespace Talon
 
             for (u32 i = 0; i < deviceCount; ++i)
             {
+				if (deviceList[i].dwType == RIM_TYPEHID)
+					continue;
+
 				u32 deviceInfoSize;
 				HANDLE hDevice = deviceList[i].hDevice;
+				string deviceName;
+				if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICENAME, nullptr, &deviceInfoSize) == 0)
+				{
+					wchar_t* tmpName = (wchar_t*) malloc(deviceInfoSize * sizeof(wchar_t));
+					if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICENAME, tmpName, &deviceInfoSize))
+						deviceName = convert(tmpName);
+
+					free(tmpName);
+				}
+
 				if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICEINFO, nullptr, &deviceInfoSize) == 0)
 				{
 					RID_DEVICE_INFO deviceInfo = { 0 };
 					deviceInfo.cbSize = sizeof(RID_DEVICE_INFO);
 
 					if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICEINFO, &deviceInfo, &deviceInfoSize))
-						m_deviceInfo = deviceInfo;
+					{
+						// Skip remote desktop devices (for now)
+						smatch matches;
+						if (regex_match(deviceName, matches, s_rgRdpDevices))
+							continue;
+						
+						if (deviceInfo.dwType == RIM_TYPEKEYBOARD)
+							devices.push_back(std::make_shared<RawInputKeyboardDevice>(deviceList[i].hDevice));
+						else if (deviceInfo.dwType == RIM_TYPEMOUSE)
+							devices.push_back(std::make_shared<RawInputMouseDevice>(deviceList[i].hDevice));
+					}
 				}
-
-				std::smatch matches;
-
-				if (regex_match(deviceList[i].)
-
-                if (deviceList[i].dwType == RIM_TYPEKEYBOARD)
-                    devices.push_back(std::make_shared<RawInputKeyboardDevice>(deviceList[i].hDevice));
-                else if (deviceList[i].dwType == RIM_TYPEMOUSE)
-                    devices.push_back(std::make_shared<RawInputMouseDevice>(deviceList[i].hDevice));
             }
 
             free(deviceList);
@@ -64,6 +82,8 @@ namespace Talon
 			wchar_t* deviceName = (wchar_t*) malloc(deviceInfoSize * sizeof(wchar_t));
 			if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICENAME, deviceName, &deviceInfoSize))
 				m_deviceName = convert(deviceName);
+
+			free(deviceName);
 		}
 
 		if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICEINFO, nullptr, &deviceInfoSize) == 0)

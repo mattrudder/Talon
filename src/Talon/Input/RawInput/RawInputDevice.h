@@ -26,7 +26,8 @@ namespace Talon
         HANDLE m_deviceHandle;
 		RID_DEVICE_INFO m_deviceInfo;
 		std::string m_deviceName;
-		//\\{2}\?\\([^#]+)#([^#]+)#([^#]+)#
+		
 		static std::regex s_rgDeviceId;
+		static std::regex s_rgRdpDevices;
     };
 }
