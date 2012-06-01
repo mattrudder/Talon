@@ -129,9 +129,6 @@
 #endif // TALON_COMPILER_VENDOR
 
 #if TALON_WINDOWS
-#	ifndef _HAS_EXCEPTIONS
-#   define _HAS_EXCEPTIONS 0
-#	endif // _HAS_EXCEPTIONS
 #   pragma warning(disable : 4251)	// STL usage in DLL-interface class
 #   pragma warning(disable : 4275)	// non dll-interface used as base for dll-interface
 #endif //TALON_WINDOWS
