@@ -14,18 +14,14 @@
 
 namespace Talon
 {
-	Engine& Engine::Instance()
+	Engine* Engine::Instance()
 	{
 		static Engine s_engine;
-		return s_engine;
+		return &s_engine;
 	}
 
 	bool Engine::Initialize(std::shared_ptr<Simulation> sim)
 	{
-		CreateServices();
-
-		m_simulation = sim;
-
 		char line[MAX_PATH];
 		sprintf(line, "Talon version: %s\n", TALON_VERSION_STRING);
 		TalonLog(line);
@@ -43,12 +39,17 @@ namespace Talon
 		TalonLog(line);
 		FreeImage_Initialise();
 
+		m_simulation = sim;
 		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
 		if (!m_window->GetRenderDevice())
 		{
 			m_window = nullptr;
 			return false;
 		}
+
+		CreateServices();
+
+		m_simulation->Initialize();
 
 		m_window->Closed += [this] ()
 		{
@@ -94,7 +95,8 @@ namespace Talon
 	void Engine::CreateServices()
 	{
 		// Initialize managers
-		m_inputService = std::make_shared<InputService>();
+		m_inputService = std::make_shared<InputService>(m_window.get());
+		m_inputService->Initialize();
 
 		// Setup managers for automatic throttled updates.
 		m_serviceUpdates.push_back(TimedUpdate(33, std::bind(&InputService::Update, m_inputService)));

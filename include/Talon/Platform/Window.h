@@ -9,6 +9,10 @@ namespace Talon
 {
 	class RenderDevice;
 
+#if TALON_WINDOWS
+	struct RawInputEventArgs;
+#endif
+
 	class TalonApi Window
 	{
 	public:
@@ -31,6 +35,8 @@ namespace Talon
 		void DoEvents();
 
 #if TALON_WINDOWS
+		delegate<Window, void(RawInputEventArgs&)> RawInput;
+
 		HWND GetHandle() const;
 #endif
 
@@ -43,6 +49,10 @@ namespace Talon
 		void SetWidth(int value);
 		void SetHeight(int value);
 		void SetRenderDevice(std::shared_ptr<RenderDevice> value);
+
+#if TALON_WINDOWS
+		void OnRawInput(RawInputEventArgs& e);
+#endif
 
 	private:
 		int m_width;

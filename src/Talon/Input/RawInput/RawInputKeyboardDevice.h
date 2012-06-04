@@ -12,6 +12,6 @@ namespace Talon
 		RawInputKeyboardDevice(HANDLE hDevice);
 		~RawInputKeyboardDevice();
 
-		virtual void PollForUpdates();
+		virtual void ProcessEvent(RawInputEventArgs& e);
 	};
 }

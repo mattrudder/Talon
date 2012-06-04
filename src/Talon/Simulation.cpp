@@ -10,23 +10,33 @@ namespace Talon
 		return "๏̯͡๏ Talon Sandbox ᵔᴥᵔ";
 	}
 
+	void Simulation::Initialize()
+	{
+		OnInitialized();
+		Initialized();
+	}
+
 	void Simulation::BeginFrame()
 	{
+		FrameStarted();
 		OnBeginFrame();
 	}
 
 	void Simulation::EndFrame()
 	{
 		OnEndFrame();
+		FrameEnded();
+	}
+
+	void Simulation::OnInitialized()
+	{
 	}
 
 	void Simulation::OnBeginFrame()
 	{
-		FrameStarted();
 	}
 
 	void Simulation::OnEndFrame()
 	{
-		FrameEnded();
 	}
 }

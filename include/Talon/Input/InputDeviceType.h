@@ -1,6 +1,7 @@
 
 #pragma once
 #include <Talon/TalonPublic.h>
+#include <ostream>
 
 namespace Talon
 {
@@ -11,4 +12,6 @@ namespace Talon
 		Mouse,
 		Touch
 	};
+
+	TalonApi std::ostream& operator<<(std::ostream& os, const InputDeviceType& e);
 }

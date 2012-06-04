@@ -1,11 +1,11 @@
 
 #include "TalonPrefix.h"
+#include <Talon/Platform/Window.h>
 #include <Talon/Input/InputService.h>
 
 #if TALON_WINDOWS
 #include "Input/XInput/XInputDevice.h"
-#include "Input/RawInput/RawInputKeyboardDevice.h"
-#include "Input/RawInput/RawInputMouseDevice.h"
+#include "Input/RawInput/RawInputDevice.h"
 #endif
 
 #include <algorithm>
@@ -13,10 +13,15 @@ using namespace std;
 
 namespace Talon
 {
-	InputService::InputService()
+	InputService::InputService(Window* window)
+		: m_window(window)
+	{
+	}
+
+	void InputService::Initialize()
 	{
 		TalonLog("InputService started.\n Input devices:\n");
-		
+
 		InputDevice::Kind* kind = s_inputDeviceKinds;
 		while (kind->Name != nullptr)
 		{
@@ -29,12 +34,35 @@ namespace Talon
 
 			++kind;
 		};
+
+		for (auto device : m_devices)
+		{
+			device->Connected += [this](InputDevice* dev)
+			{
+				OnDeviceConnected(dev);
+			};
+
+			device->Disconnected += [this](InputDevice* dev)
+			{
+				OnDeviceDisconnected(dev);
+			};
+		}
 	}
 
 	void InputService::Update()
 	{
 		for (auto i = m_devices.begin(); i != m_devices.end(); ++i)
 			(*i)->PollForUpdates();
+	}
+
+	void InputService::OnDeviceConnected(InputDevice* device)
+	{
+		DeviceConnected(device);
+	}
+
+	void InputService::OnDeviceDisconnected(InputDevice* device)
+	{
+		DeviceDisconnected(device);
 	}
 
 	InputDevice::Kind InputService::s_inputDeviceKinds[] = {

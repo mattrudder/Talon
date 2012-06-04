@@ -4,8 +4,10 @@
 
 namespace Talon
 {
-	enum class InputDeviceKey
+	enum class InputDeviceKey : u32
 	{
 
 	};
+
+	TalonApi std::ostream& operator<<(std::ostream& os, const InputDeviceKey& e);
 }

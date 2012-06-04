@@ -3,6 +3,11 @@
 #include "Input/RawInput/RawInputDevice.h"
 #include "Input/RawInput/RawInputKeyboardDevice.h"
 #include "Input/RawInput/RawInputMouseDevice.h"
+#include "Input/RawInput/RawInputEventArgs.h"
+
+#include <Talon/Engine.h>
+#include <Talon/Input/InputService.h>
+#include <Talon/Platform/Window.h>
 
 using namespace std;
 
@@ -10,8 +15,13 @@ namespace Talon
 {
 	regex RawInputDevice::s_rgDeviceId("\\\\{2}\\?\\\\([^#]+)#([^#]+)#([^#]+)#([^#]+)?");
 	regex RawInputDevice::s_rgRdpDevices("\\\\{2}\\?\\\\Root#RDP_(.+)");
+	vector<RAWINPUT> RawInputDevice::s_polledInputs;
 
-    InputDevice::Kind RawInputDevice::Kind = { "RawInput", RawInputDevice::Enumerate };
+    InputDevice::Kind RawInputDevice::Kind =
+	{
+		"RawInput",
+		RawInputDevice::Enumerate,
+	};
 
     vector<shared_ptr<InputDevice>> RawInputDevice::Enumerate()
     {
@@ -53,10 +63,29 @@ namespace Talon
 						if (regex_match(deviceName, matches, s_rgRdpDevices))
 							continue;
 						
+						RawInputDevice* riDevice;
+						std::shared_ptr<InputDevice> device;
 						if (deviceInfo.dwType == RIM_TYPEKEYBOARD)
-							devices.push_back(std::make_shared<RawInputKeyboardDevice>(deviceList[i].hDevice));
+						{
+							auto keyboard = std::make_shared<RawInputKeyboardDevice>(deviceList[i].hDevice);
+							device = keyboard;
+							riDevice = keyboard.get();
+						}
 						else if (deviceInfo.dwType == RIM_TYPEMOUSE)
-							devices.push_back(std::make_shared<RawInputMouseDevice>(deviceList[i].hDevice));
+						{
+							auto mouse = std::make_shared<RawInputMouseDevice>(deviceList[i].hDevice);
+							device = mouse;
+							riDevice = mouse.get();
+						}
+
+						devices.push_back(device);
+						Window* window = Engine::Instance()->GetInputService()->GetWindow();
+						window->RawInput += [device, riDevice, deviceInfo](RawInputEventArgs& e)
+						{
+							// Check that the event matches this device type.
+							if (e.RawInputData && e.RawInputData->header.hDevice == riDevice->GetHandle())
+								riDevice->ProcessEvent(e);
+						};
 					}
 				}
             }
@@ -69,7 +98,6 @@ namespace Talon
 
     RawInputDevice::~RawInputDevice()
     {
-
     }
 
     RawInputDevice::RawInputDevice(HANDLE hDevice)
@@ -92,11 +120,18 @@ namespace Talon
 			deviceInfo.cbSize = sizeof(RID_DEVICE_INFO);
 
 			if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICEINFO, &deviceInfo, &deviceInfoSize))
+			{
 				m_deviceInfo = deviceInfo;
+
+				Window* window = Engine::Instance()->GetInputService()->GetWindow();
+				RAWINPUTDEVICE device;
+				device.usUsagePage = 1;
+				device.usUsage = m_deviceInfo.dwType == RIM_TYPEKEYBOARD ? 6 : 2;
+				device.hwndTarget = window->GetHandle();
+				device.dwFlags = 0;
+
+				RegisterRawInputDevices(&device, 1, sizeof(RAWINPUTDEVICE));
+			}
 		}
     }
-
-	void RawInputDevice::PollForUpdatesCore()
-	{
-	}
 }

@@ -1,6 +1,8 @@
 
 #include "TalonPrefix.h"
 #include "Input/RawInput/RawInputKeyboardDevice.h"
+#include "Input/RawInput/RawInputEventArgs.h"
+#include <sstream>
 
 namespace Talon
 {
@@ -14,8 +16,15 @@ namespace Talon
 	{
 	}
 
-	void RawInputKeyboardDevice::PollForUpdates()
+	void RawInputKeyboardDevice::ProcessEvent(RawInputEventArgs& e)
 	{
-		RawInputDevice::PollForUpdatesCore();
+		if (!IsConnected())
+			SetIsConnected(true);
+
+		auto& keyboardEvent = e.RawInputData->data.keyboard;
+		std::stringstream ss;
+		ss << "INPUT [Keys]: (" << keyboardEvent.VKey << ")" << std::endl;
+
+		//TalonLog(ss.str().c_str());
 	}
 }

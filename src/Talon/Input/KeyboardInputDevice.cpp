@@ -12,4 +12,14 @@ namespace Talon
         : InputDevice(InputDeviceType::Keyboard)
     {
     }
+
+	void KeyboardInputDevice::OnPressed(InputDeviceKey key)
+	{
+		Pressed(key);
+	}
+
+	void KeyboardInputDevice::OnReleased(InputDeviceKey key)
+	{
+		Released(key);
+	}
 }

@@ -10,7 +10,7 @@ namespace Talon
 	class TalonApi Engine
 	{
 	public:
-		static Engine& Instance();
+		static Engine* Instance();
 
 		bool Initialize(std::shared_ptr<Simulation> sim);
 		void Shutdown();

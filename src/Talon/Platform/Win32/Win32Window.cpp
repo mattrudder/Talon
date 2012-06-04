@@ -1,5 +1,7 @@
 
 #include "TalonPrefix.h"
+#include "Input/RawInput/RawInputEventArgs.h"
+
 #include <Talon/Platform/Window.h>
 #include <Talon/Graphics/RenderDevice.h>
 
@@ -42,11 +44,6 @@ namespace Talon
 	public:
 		~Impl()
 		{
-			//if (hWnd)
-			//{
-			//	DestroyWindow(hWnd);
-			//	hWnd = 0;
-			//}
 		}
 
 		static const WindowClass* GetOrRegisterClass()
@@ -94,6 +91,32 @@ namespace Talon
 					pWindow->OnResized(w, h);
 				}
 				return 0;
+			case WM_INPUT:
+				{
+					RawInputEventArgs e;
+					e.IsForeground = (wParam == RIM_INPUT);
+					e.InputHandle = (HRAWINPUT) lParam;
+					
+					u32 bufferSize;
+					if (GetRawInputData(e.InputHandle, RID_INPUT, nullptr, &bufferSize, sizeof(RAWINPUTHEADER)) == 0 && bufferSize > 0)
+					{
+						PRAWINPUT pRawInput = (PRAWINPUT) malloc(bufferSize);
+						u32 bytesCopied = GetRawInputData(e.InputHandle, RID_INPUT, pRawInput, &bufferSize, sizeof(RAWINPUTHEADER));
+						if (bytesCopied == (u32)-1)
+						{
+							DWORD dwError = GetLastError();
+							TALON_ASSERT(dwError);
+						}
+						else if (bytesCopied > 0)
+						{
+							e.RawInputData = pRawInput;
+						}
+
+						pWindow->OnRawInput(e);
+						free(pRawInput);
+					}
+				}
+				break; // WM_INPUT requires a call to DefWindowProc
 			}
 
 			return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -154,5 +177,10 @@ namespace Talon
 	HWND Window::GetHandle() const
 	{
 		return m_pImpl->hWnd;
+	}
+
+	void Window::OnRawInput(RawInputEventArgs& e)
+	{
+		RawInput(e);
 	}
 }

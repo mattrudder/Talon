@@ -13,9 +13,11 @@ namespace Talon
 	public:
 		friend class Engine;
 
+		void Initialize();
 		void BeginFrame();
 		void EndFrame();
 
+		delegate<Simulation, void()> Initialized;
 		delegate<Simulation, void()> FrameStarted;
 		delegate<Simulation, void()> FrameEnded;
 
@@ -25,6 +27,7 @@ namespace Talon
 	protected:
 		virtual const std::string GetTitle() const;
 
+		virtual void OnInitialized();
 		virtual void OnBeginFrame();
 		virtual void OnEndFrame();
 

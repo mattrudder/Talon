@@ -7,7 +7,11 @@
 namespace Talon
 {
 	u32 XInputDevice::c_maxDevices = 4;
-	InputDevice::Kind XInputDevice::Kind = { "XInput", XInputDevice::Enumerate };
+	InputDevice::Kind XInputDevice::Kind =
+	{
+		"XInput",
+		XInputDevice::Enumerate,
+	};
 
 	struct tXInputToInputDeviceButton
 	{
@@ -136,6 +140,6 @@ namespace Talon
 	XInputDevice::XInputDevice(u32 controllerId)
 		: m_controllerId(controllerId)
 	{
-		SetIsConnected(XInputGetState(controllerId, &m_state) == ERROR_SUCCESS);
+		XInputGetState(controllerId, &m_state);
 	}
 }

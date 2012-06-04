@@ -12,6 +12,6 @@ namespace Talon
 		RawInputMouseDevice(HANDLE hDevice);
         ~RawInputMouseDevice();
 
-		virtual void PollForUpdates();
+		virtual void ProcessEvent(RawInputEventArgs& e);
     };
 }

@@ -4,7 +4,7 @@
 
 namespace Talon
 {
-	enum class InputDeviceAxis
+	enum class InputDeviceAxis : u32
 	{
 		LeftX,
 		LeftY,
@@ -13,4 +13,6 @@ namespace Talon
 		RightY,
 		RightZ
 	};
+
+	TalonApi std::ostream& operator<<(std::ostream& os, const InputDeviceAxis& e);
 }

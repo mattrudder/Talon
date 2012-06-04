@@ -21,4 +21,3 @@ typedef double f64;
 
 //typedef char CHAR8;
 //typedef wchar_t CHAR16;
-

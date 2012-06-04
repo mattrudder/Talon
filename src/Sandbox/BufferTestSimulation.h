@@ -1,8 +1,18 @@
 #pragma once
 
 #include <Talon/Simulation.h>
-#include <Talon/Graphics/IndexBuffer.h>
-#include <Talon/Graphics/VertexBuffer.h>
+
+namespace Talon
+{
+	class Engine;
+	class IndexBuffer;
+	class InputDevice;
+	class VertexBuffer;
+
+	class GamepadInputDevice;
+	class KeyboardInputDevice;
+	class MouseInputDevice;
+}
 
 class BufferTestSimulation : public Talon::Simulation
 {
@@ -11,11 +21,21 @@ public:
 	virtual ~BufferTestSimulation(void);
 
 protected:
+
+	void Foo();
+
+	void OnInitialized();
 	void OnBeginFrame();
 	void OnEndFrame();
 
 private:
 	std::unique_ptr<Talon::VertexBuffer> m_vertexBuffer;
 	std::unique_ptr<Talon::IndexBuffer> m_indexBuffer;
+
+	Talon::Engine* m_engine;
+	Talon::InputDevice* m_primaryDevice;
+	Talon::GamepadInputDevice* m_gamepad;
+	Talon::KeyboardInputDevice* m_keyboard;
+	Talon::MouseInputDevice* m_mouse;
 };
 

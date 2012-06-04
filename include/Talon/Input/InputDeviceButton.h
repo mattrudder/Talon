@@ -4,7 +4,7 @@
 
 namespace Talon
 {
-	enum class InputDeviceButton
+	enum class InputDeviceButton : u32
 	{
 		None,
 		Up,
@@ -21,5 +21,8 @@ namespace Talon
 		Button1,
 		Button2,
 		Button3,
+		Button4,
 	};
+
+	TalonApi std::ostream& operator<<(std::ostream& os, const InputDeviceButton& e);
 }

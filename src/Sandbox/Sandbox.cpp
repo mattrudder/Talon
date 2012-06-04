@@ -19,15 +19,15 @@ int CALLBACK WinMain(
 int main(int argc, char** argv)
 #endif
 {
-	Engine& engine = Engine::Instance();
-	if (!engine.Initialize(std::make_shared<BufferTestSimulation>()))
+	Engine* engine = Engine::Instance();
+	if (!engine->Initialize(std::make_shared<BufferTestSimulation>()))
 		return -1;
 
-	while(engine.IsRunning())
+	while(engine->IsRunning())
 	{
-		engine.RunFrame();
+		engine->RunFrame();
 	}
-	engine.Shutdown();
+	engine->Shutdown();
 
 	return 0;
 }
