@@ -10,6 +10,5 @@ namespace Talon
 		Default,
 		Immutable,
 		Dynamic,
-		Staging,
 	};
 }

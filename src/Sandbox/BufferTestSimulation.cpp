@@ -64,26 +64,29 @@ void BufferTestSimulation::OnInitialized()
 
 void BufferTestSimulation::OnBeginFrame()
 {
+	short indicies[] = { 0, 1, 2 };
+	float verts[] = 
+	{ 
+		0, 1, 0, 0.5, 1.0,
+		-1, -1, 0, 0.0, 0.0,
+		1, -1, 0, 1.0, 0.0
+	};
+
 	if (m_vertexBuffer == nullptr)
 	{
-#ifdef HOST_WS1470VM01
-		Texture::FromFile(Device, "C:\\Users\\mrudder\\Downloads\\bg.png");
-#endif
+		m_vertexBuffer = make_unique<VertexBuffer>(Device, sizeof(float) * 5, 3, verts, BufferUsage::Dynamic);		
+	}
+	else
+	{
+		// Offset x component by 0.5 per frame.
+		for (u32 i = 0; i < 15; i += 5)
+			verts[i + 0] += 0.5;
 
-		float verts[] = 
-		{ 
-			0, 1, 0, 0.5, 1.0,
-			-1, -1, 0, 0.0, 0.0,
-			1, -1, 0, 1.0, 0.0
-		};
-		m_vertexBuffer = make_unique<VertexBuffer>(Device, sizeof(float) * 5, 3, verts, BufferUsage::Default);
+		m_vertexBuffer->Update(3, verts);
 	}
 
 	if (m_indexBuffer == nullptr)
-	{
-		short indicies[] = { 0, 1, 2 };
 		m_indexBuffer = make_unique<IndexBuffer>(Device, 3, BufferFormat::I16, indicies, BufferUsage::Default);
-	}
 }
 
 void BufferTestSimulation::OnEndFrame()

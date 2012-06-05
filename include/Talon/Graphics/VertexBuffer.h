@@ -12,17 +12,19 @@ namespace Talon
 	class TalonApi VertexBuffer
 	{
 	public:
-		VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage);
+		VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, void* initialData, BufferUsage bufferUsage);
 		virtual ~VertexBuffer();
 
 		int GetVertexSize() const;
 		int GetVertexCount() const;
 		BufferUsage GetBufferUsage() const;
 
+		void Update(int vertexCount, void* vertexData);
+
 	private:
 		RenderDevice* m_renderDevice;
-		int m_vertexSize;
-		int m_vertexCount;
+		u32 m_vertexSize;
+		u32 m_vertexCount;
 		BufferUsage m_bufferUsage;
 
 		class Impl;
