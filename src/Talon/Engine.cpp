@@ -1,6 +1,7 @@
 
 #include "TalonPrefix.h"
 #include <Talon/Engine.h>
+#include <Talon/Platform/Platform.h>
 #include <Talon/Input/InputService.h>
 
 #include <Talon/Platform/Window.h>
@@ -39,6 +40,11 @@ namespace Talon
 		TalonLog(line);
 		FreeImage_Initialise();
 
+		sprintf(line, "Game launched from: %s\n", Platform::GetEnginePath().c_str());
+		TalonLog(line);
+
+		Platform::SetWorkingPath(Platform::GetEnginePath());
+
 		m_simulation = sim;
 		m_window = std::make_shared<Window>(m_simulation->GetTitle(), 1280, 720);
 		if (!m_window->GetRenderDevice())
@@ -49,6 +55,7 @@ namespace Talon
 
 		CreateServices();
 
+		sim->Device = m_window->GetRenderDevice().get();
 		m_simulation->Initialize();
 
 		m_window->Closed += [this] ()
@@ -56,7 +63,7 @@ namespace Talon
 			m_running = false;
 		};
 
-		sim->Device = m_window->GetRenderDevice().get();
+		
 
 		m_running = true;
 

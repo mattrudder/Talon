@@ -185,6 +185,12 @@ solution "Talon"
                 "src/Sandbox/Mac/**"
             }
 
+        configuration "Windows"
+            postbuildcommands
+            {
+                copy_cmd("src/Sandbox/test.png")
+            }
+
 	--
 	-- dependencies
 	--
