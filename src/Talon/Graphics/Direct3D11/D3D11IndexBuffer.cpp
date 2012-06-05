@@ -33,13 +33,15 @@ namespace Talon
 		CComPtr<ID3D11Buffer> indexBuffer;
     };
 
-    IndexBuffer::IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
+    IndexBuffer::IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
         : m_renderDevice(renderDevice)
         , m_format(format)
         , m_indexCount(indexCount)
         , m_bufferUsage(bufferUsage)
         , m_pImpl(make_unique<Impl>())
     {
+		TALON_ASSERT((initialData != nullptr || bufferUsage == BufferUsage::Dynamic) && "Initial data is required, unless the buffer is writable!");
+
 		size_t indexSize = format == BufferFormat::I16 ? sizeof(i16) : sizeof(i32);
 
 		D3D11_BUFFER_DESC bufferDesc = {0};
@@ -67,7 +69,7 @@ namespace Talon
 		bufferData.SysMemPitch = 0;
 		bufferData.SysMemSlicePitch = 0;
 
-		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, &bufferData, &m_pImpl->indexBuffer));
+		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, initialData == nullptr ? nullptr : &bufferData, &m_pImpl->indexBuffer));
 	}
 
 	IndexBuffer::~IndexBuffer()

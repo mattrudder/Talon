@@ -13,7 +13,7 @@ namespace Talon
 	class TalonApi IndexBuffer
 	{
 	public:
-		IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage);
+		IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData = nullptr);
 		virtual ~IndexBuffer();
 
 		BufferFormat GetFormat() const;

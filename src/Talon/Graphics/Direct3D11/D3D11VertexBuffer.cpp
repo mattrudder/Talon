@@ -33,13 +33,14 @@ namespace Talon
 		CComPtr<ID3D11Buffer> vertexBuffer;
     };
 
-    VertexBuffer::VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, void* initialData, BufferUsage bufferUsage)
+    VertexBuffer::VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
         : m_renderDevice(renderDevice)
         , m_vertexSize(vertexSize)
         , m_vertexCount(vertexCount)
         , m_bufferUsage(bufferUsage)
         , m_pImpl(make_unique<Impl>())
     {
+		TALON_ASSERT((initialData != nullptr || bufferUsage == BufferUsage::Dynamic) && "Initial data is required, unless the buffer is writable!");
 
 		D3D11_BUFFER_DESC bufferDesc = {0};
 		bufferDesc.ByteWidth = vertexSize * vertexCount;
@@ -66,7 +67,7 @@ namespace Talon
 		bufferData.SysMemPitch = 0;
 		bufferData.SysMemSlicePitch = 0;
 
-		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, &bufferData, &m_pImpl->vertexBuffer));
+		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, initialData == nullptr ? nullptr : &bufferData, &m_pImpl->vertexBuffer));
     }
 
 	void VertexBuffer::Update(int vertexCount, void* vertexData)

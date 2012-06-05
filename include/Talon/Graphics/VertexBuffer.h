@@ -12,7 +12,7 @@ namespace Talon
 	class TalonApi VertexBuffer
 	{
 	public:
-		VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, void* initialData, BufferUsage bufferUsage);
+		VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData = nullptr);
 		virtual ~VertexBuffer();
 
 		int GetVertexSize() const;
