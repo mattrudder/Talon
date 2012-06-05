@@ -19,7 +19,7 @@ function makedirs(t)
 end
 
 function copy_cmd(src, dest)
-	dest = dest or "bin/$(PlatformShortName)/$(Configuration)/"
+	dest = dest or get_absolute_from_solution("bin/$(PlatformShortName)/$(Configuration)/")
 	local srcAbsolute = path.translate(path.getabsolute(src))
 	local destAbsolute = path.translate(path.getabsolute(dest))
 	local cmd = ""
@@ -36,6 +36,11 @@ function copy_cmd(src, dest)
 	return cmd .. "\n"
 end
 
+function get_absolute_from_solution(p)
+	local sol = solution()
+   	return path.getabsolute(path.join(sol.basedir, p))
+end
+
 function apply_external(api, lib, specifics)
 	specifics=specifics or false
 	local vs_specifics = ""
@@ -45,9 +50,9 @@ function apply_external(api, lib, specifics)
 	end
 
 	configuration "vs*"
-		libdirs("externals/" .. api .. "/lib/vc/" .. vs_specifics .. "$(PlatformShortName)/")
+		libdirs(get_absolute_from_solution("externals/" .. api .. "/lib/vc/" .. vs_specifics .. "$(PlatformShortName)/"))
 		links(lib)
 	
 	configuration "*"
-		includedirs("externals/" .. api .. "/include/")
+		includedirs(get_absolute_from_solution("externals/" .. api .. "/include/"))
 end

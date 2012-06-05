@@ -74,7 +74,7 @@ void BufferTestSimulation::OnBeginFrame()
 
 	if (m_vertexBuffer == nullptr)
 	{
-		m_vertexBuffer = make_unique<VertexBuffer>(Device, sizeof(float) * 5, 3, verts, BufferUsage::Dynamic);		
+		m_vertexBuffer = make_unique<VertexBuffer>(Device, sizeof(float) * 5, 3, BufferUsage::Dynamic, verts);
 	}
 	else
 	{
@@ -86,7 +86,7 @@ void BufferTestSimulation::OnBeginFrame()
 	}
 
 	if (m_indexBuffer == nullptr)
-		m_indexBuffer = make_unique<IndexBuffer>(Device, 3, BufferFormat::I16, indicies, BufferUsage::Default);
+		m_indexBuffer = make_unique<IndexBuffer>(Device, 3, BufferFormat::I16, BufferUsage::Default, indicies);
 }
 
 void BufferTestSimulation::OnEndFrame()
