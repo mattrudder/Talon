@@ -1,4 +1,5 @@
 
+#define NOMINMAX
 #include <Talon/TalonPublic.h>
 
 // Precompiled header file for Talon Engine.
@@ -10,7 +11,6 @@ using namespace nowide;
 #elif TALON_WINDOWS
 #	define TalonLog(x) OutputDebugStringA(x)
 #	define WIN32_LEAN_AND_MEAN // TODO: Define additional NO_* defines to slim down windows.h
-#	define NOMINMAX
 #	define PATH_MAX MAX_PATH
 #	define NAME_MAX 255
 #	include <wincodec.h>	// Windows Imaging Component (WIC)
