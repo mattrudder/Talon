@@ -5,7 +5,6 @@
 dofile("scripts/utils.lua")
 
 local localHostName = os.getenv("COMPUTERNAME")
-local dxPath = os.getenv("DXSDK_DIR")
 local codeGenPath = path.getabsolute("bin/Debug/Talon.CodeGenerator.exe")
 
 if not _OPTIONS["to"] then

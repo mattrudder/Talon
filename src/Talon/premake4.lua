@@ -1,3 +1,5 @@
+
+local dxPath = os.getenv("DXSDK_DIR")
     
 -- 
 -- Talon Engine
