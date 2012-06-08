@@ -1,5 +1,7 @@
 
 #include "TalonPrefix.h"
+#include "D3D11Utility.h"
+
 #include <Talon/Graphics/IndexBuffer.h>
 #include <Talon/Graphics/RenderDevice.h>
 
@@ -28,6 +30,21 @@ namespace Talon
 			{
 				ctx->UpdateSubresource(indexBuffer, 0, nullptr, indexData, bufferSize, 0);
 			}
+		}
+
+		void Map(ID3D11DeviceContext* ctx, BufferMapType mapType, void** ppData)
+		{
+			TALON_ASSERT(ppData);
+
+			D3D11_MAPPED_SUBRESOURCE subresource;
+			ThrowIfFailed(ctx->Map(indexBuffer, 0, D3D11::ToMap(mapType), 0, &subresource));
+
+			*ppData = subresource.pData;
+		}
+
+		void Unmap(ID3D11DeviceContext* ctx)
+		{
+			ctx->Unmap(indexBuffer, 0);
 		}
 
 		CComPtr<ID3D11Buffer> indexBuffer;

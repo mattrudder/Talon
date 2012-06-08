@@ -4,6 +4,7 @@
 #include <Talon/TalonPublic.h>
 
 #include <Talon/Graphics/BufferUsage.h>
+#include <Talon/Graphics/BufferMapType.h>
 
 namespace Talon
 {
@@ -20,6 +21,8 @@ namespace Talon
 		BufferUsage GetBufferUsage() const;
 
 		void Update(int vertexCount, void* vertexData);
+		void Map(BufferMapType mapType, void** ppData);
+		void Unmap();
 
 	private:
 		RenderDevice* m_renderDevice;

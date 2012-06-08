@@ -1,5 +1,7 @@
 
 #include "TalonPrefix.h"
+#include "D3D11Utility.h"
+
 #include <Talon/Graphics/VertexBuffer.h>
 #include <Talon/Graphics/RenderDevice.h>
 
@@ -28,6 +30,21 @@ namespace Talon
 			{
 				ctx->UpdateSubresource(vertexBuffer, 0, nullptr, vertexData, bufferSize, 0);
 			}
+		}
+
+		void Map(ID3D11DeviceContext* ctx, BufferMapType mapType, void** ppData)
+		{
+			TALON_ASSERT(ppData);
+
+			D3D11_MAPPED_SUBRESOURCE subresource;
+			ThrowIfFailed(ctx->Map(vertexBuffer, 0, D3D11::ToMap(mapType), 0, &subresource));
+
+			*ppData = subresource.pData;
+		}
+
+		void Unmap(ID3D11DeviceContext* ctx)
+		{
+			ctx->Unmap(vertexBuffer, 0);
 		}
 
 		CComPtr<ID3D11Buffer> vertexBuffer;
@@ -75,6 +92,16 @@ namespace Talon
 		u32 bufferSize = vertexCount * m_vertexSize;
 		TALON_ASSERT(bufferSize <= m_vertexCount * m_vertexSize && "Data supplied is larger than the buffer!");
 		m_pImpl->Update(m_renderDevice->GetDeviceContext(), m_bufferUsage, bufferSize, vertexData);
+	}
+
+	void VertexBuffer::Map(BufferMapType mapType, void** ppData)
+	{
+		m_pImpl->Map(m_renderDevice->GetDeviceContext(), mapType, ppData);
+	}
+
+	void VertexBuffer::Unmap()
+	{
+		m_pImpl->Unmap(m_renderDevice->GetDeviceContext());
 	}
 
     VertexBuffer::~VertexBuffer()
