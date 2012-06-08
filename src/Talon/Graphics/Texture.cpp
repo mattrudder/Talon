@@ -22,8 +22,11 @@ namespace Talon
 		
 		TALON_ASSERT(FreeImage_GetWidth(bmp) == FreeImage_GetPitch(bmp) / bpp);
 
+		// FreeImage stores images upside down (why?)
+		FreeImage_FlipVertical(bmp); 
+
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(device);
-		if (!texture->LoadFromMemory(FreeImage_GetWidth(bmp), FreeImage_GetHeight(bmp), BufferFormat::R8G8B8A8U, FreeImage_GetBits(bmp)))
+		if (!texture->Load(FreeImage_GetWidth(bmp), FreeImage_GetHeight(bmp), BufferFormat::R8G8B8A8U, FreeImage_GetBits(bmp), fileName))
 			texture = nullptr;
 
 		FreeImage_Unload(bmp);

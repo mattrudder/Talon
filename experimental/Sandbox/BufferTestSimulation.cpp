@@ -12,6 +12,8 @@
 #include <Talon/Input/KeyboardInputDevice.h>
 #include <Talon/Input/MouseInputDevice.h>
 
+#include <Talon/Graphics/SpriteBatch.h>
+
 #include <windows.h>
 
 using namespace std;
@@ -24,6 +26,8 @@ BufferTestSimulation::BufferTestSimulation()
 	, m_gamepad(nullptr)
 	, m_keyboard(nullptr)
 	, m_mouse(nullptr)
+	, m_spriteBatch(nullptr)
+	, m_texture(nullptr)
 {
 }
 
@@ -60,6 +64,9 @@ void BufferTestSimulation::OnInitialized()
 		else if (type == InputDeviceType::Mouse && m_mouse != nullptr && m_mouse->GetId() == id)
 			m_mouse = nullptr;
 	};
+
+	m_texture = Texture::FromFile(Device, "test.png");
+	m_spriteBatch = std::make_unique<SpriteBatch>(Device);
 }
 
 void BufferTestSimulation::OnBeginFrame()
@@ -91,5 +98,35 @@ void BufferTestSimulation::OnBeginFrame()
 
 void BufferTestSimulation::OnEndFrame()
 {
+	m_spriteBatch->Begin();
 
+	static f32 x = 0, y = 0, xVel = 5, yVel = 3;
+	m_spriteBatch->Draw(m_texture, x, y);
+
+	x += xVel;
+	y += yVel;
+
+	if (x + 128 > 1280)
+	{
+		x = 1280 - 128;
+		xVel *= -1;
+	}
+	else if (x < 0)
+	{
+		x = 0;
+		xVel *= -1;
+	}
+
+	if (y + 128 > 720)
+	{
+		y = 720 - 128;
+		yVel *= -1;
+	}
+	else if (y < 0)
+	{
+		y = 0;
+		yVel *= -1;
+	}
+
+	m_spriteBatch->End();
 }

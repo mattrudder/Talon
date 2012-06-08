@@ -12,38 +12,9 @@ namespace Talon
     class RenderDevice::Impl
     {
 	public:
-		void CreateDevice(Window* window)
-		{
-			UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-			ThrowIfFailed(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, creationFlags, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &context));
+		void CreateDevice(Window* window);
 
-			ThrowIfFailed(device.QueryInterface(&dxgiDevice));
-			ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter1), (void **)&dxgiAdapter));
-			ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&dxgiFactory));
-
-			// #if TALON_WINRT
-			// TODO: Handle creation from Metro (Win 8).
-			// #else
-			DXGI_SWAP_CHAIN_DESC swapDesc;
-			ZeroMemory(&swapDesc, sizeof(swapDesc));
-			swapDesc.BufferCount = 1;
-			swapDesc.BufferDesc.Width = window->GetWidth();
-			swapDesc.BufferDesc.Height = window->GetHeight();
-			swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			swapDesc.BufferDesc.RefreshRate.Numerator = 60;
-			swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-			swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			swapDesc.OutputWindow = window->GetHandle();
-			swapDesc.SampleDesc.Count = 1;
-			swapDesc.SampleDesc.Quality = 0;
-			swapDesc.Windowed = TRUE;
-			ThrowIfFailed(dxgiFactory->CreateSwapChain(device, &swapDesc, &swapChain));
-			// #endif
-
-			CComPtr<ID3D11Texture2D> backBuffer;
-			ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer));
-			ThrowIfFailed(device->CreateRenderTargetView(backBuffer, nullptr, &backBufferRTV));
-		}
+		void DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation);
     public:
 		CComPtr<IDXGISwapChain> swapChain;
 		CComPtr<ID3D11RenderTargetView> backBufferRTV;
@@ -56,6 +27,44 @@ namespace Talon
 		DXGI_ADAPTER_DESC1 adapterDesc;
 		D3D_FEATURE_LEVEL featureLevel;
     };
+
+	void RenderDevice::Impl::CreateDevice(Window* window)
+	{
+		UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+		ThrowIfFailed(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, creationFlags, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &context));
+
+		ThrowIfFailed(device.QueryInterface(&dxgiDevice));
+		ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter1), (void **)&dxgiAdapter));
+		ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&dxgiFactory));
+
+		// #if TALON_WINRT
+		// TODO: Handle creation from Metro (Win 8).
+		// #else
+		DXGI_SWAP_CHAIN_DESC swapDesc;
+		ZeroMemory(&swapDesc, sizeof(swapDesc));
+		swapDesc.BufferCount = 1;
+		swapDesc.BufferDesc.Width = window->GetWidth();
+		swapDesc.BufferDesc.Height = window->GetHeight();
+		swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+		swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+		swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapDesc.OutputWindow = window->GetHandle();
+		swapDesc.SampleDesc.Count = 1;
+		swapDesc.SampleDesc.Quality = 0;
+		swapDesc.Windowed = TRUE;
+		ThrowIfFailed(dxgiFactory->CreateSwapChain(device, &swapDesc, &swapChain));
+		// #endif
+
+		CComPtr<ID3D11Texture2D> backBuffer;
+		ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer));
+		ThrowIfFailed(device->CreateRenderTargetView(backBuffer, nullptr, &backBufferRTV));
+	}
+
+	void RenderDevice::Impl::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
+	{
+		context->DrawIndexed(indexCount, startIndex, baseVertexLocation);
+	}
 
     RenderDevice::RenderDevice(Window* window)
         : m_window(window)
@@ -93,6 +102,11 @@ namespace Talon
 		ID3D11RenderTargetView* nullView = nullptr;
 		m_pImpl->context->OMSetRenderTargets(1, &nullView, nullptr);
     }
+
+	void RenderDevice::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
+	{
+		m_pImpl->DrawIndexed(indexCount, startIndex, baseVertexLocation);
+	}
 
 	D3D_FEATURE_LEVEL RenderDevice::GetFeatureLevel() const
 	{

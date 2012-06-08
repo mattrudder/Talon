@@ -25,6 +25,8 @@ namespace Talon
 		VertexBuffer* GetActiveVertexBuffer() const;
 		void SetActiveVertexBuffer(VertexBuffer* value);
 
+		void DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation);
+
 		void BeginFrame();
 		void EndFrame();
 

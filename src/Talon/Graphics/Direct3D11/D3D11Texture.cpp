@@ -10,9 +10,13 @@ namespace Talon
 	class Texture::Impl
 	{
 	public:
-		bool LoadFromMemory(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data);
+		bool Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName);
+
+		u32 width;
+		u32 height;
 
 		CComPtr<ID3D11Texture2D> texture;
+		CComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	};
 
 	Texture::Texture(const RenderDevice* device)
@@ -25,12 +29,17 @@ namespace Talon
 	{
 	}
 
-	bool Texture::LoadFromMemory(u32 width, u32 height, BufferFormat format, const void* data)
+	ID3D11ShaderResourceView* Texture::GetShaderResourceView() const
 	{
-		return m_pImpl->LoadFromMemory(GetParent()->GetDevice(), width, height, format, data);
+		return m_pImpl->shaderResourceView;
 	}
 
-	bool Texture::Impl::LoadFromMemory(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data)
+	bool Texture::Load(u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName)
+	{
+		return m_pImpl->Load(GetParent()->GetDevice(), width, height, format, data, debugName);
+	}
+
+	bool Texture::Impl::Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName)
 	{
 		D3D11_TEXTURE2D_DESC desc = { 0 };
 		 
@@ -48,6 +57,37 @@ namespace Talon
 		initialData.pSysMem = data;
 		initialData.SysMemPitch = width * Graphics::ToBytesPerPixel(format);
 
-		return SUCCEEDED(device->CreateTexture2D(&desc, &initialData, &texture));
+		if (FAILED(device->CreateTexture2D(&desc, &initialData, &texture)))
+			return false;
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		memset(&srvDesc, 0, sizeof(srvDesc));
+		srvDesc.Format = desc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = 1;
+
+		if (FAILED(device->CreateShaderResourceView(texture, &srvDesc, &shaderResourceView)))
+		{
+			texture.Release();
+			return false;
+		}
+		
+#if defined(DEBUG)
+		D3D11::SetDebugName(texture, debugName);
+#endif
+
+		this->width = width;
+		this->height = height;
+		return true;
+	}
+
+	u32 Texture::GetWidth() const
+	{
+		return m_pImpl->width;
+	}
+
+	u32 Texture::GetHeight() const
+	{
+		return m_pImpl->height;
 	}
 }

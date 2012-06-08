@@ -16,6 +16,7 @@ namespace Talon
 		{
 			TALON_ASSERT(bufferUsage != BufferUsage::Immutable && "Cannot update immutable buffers!");
 
+			// TODO: Separate Map/Unmap and Update.
 			if (bufferUsage == BufferUsage::Dynamic)
 			{
 				D3D11_MAPPED_SUBRESOURCE subresource;
@@ -45,6 +46,11 @@ namespace Talon
 		void Unmap(ID3D11DeviceContext* ctx)
 		{
 			ctx->Unmap(vertexBuffer, 0);
+		}
+
+		ID3D11Buffer* GetBuffer() const
+		{
+			return vertexBuffer;
 		}
 
 		CComPtr<ID3D11Buffer> vertexBuffer;
@@ -102,6 +108,11 @@ namespace Talon
 	void VertexBuffer::Unmap()
 	{
 		m_pImpl->Unmap(m_renderDevice->GetDeviceContext());
+	}
+
+	ID3D11Buffer* VertexBuffer::GetBuffer() const
+	{
+		return m_pImpl->GetBuffer();
 	}
 
     VertexBuffer::~VertexBuffer()

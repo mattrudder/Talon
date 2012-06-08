@@ -5,6 +5,7 @@
 
 #include <Talon/Graphics/BufferFormat.h>
 #include <Talon/Graphics/BufferUsage.h>
+#include <Talon/Graphics/BufferMapType.h>
 
 namespace Talon
 {
@@ -21,6 +22,12 @@ namespace Talon
 		BufferUsage GetBufferUsage() const;
 
 		void Update(u32 indexCount, void* indexData);
+		void Map(BufferMapType mapType, void** ppData);
+		void Unmap();
+
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+		ID3D11Buffer* GetBuffer() const;
+#endif
 
 	private:
 		RenderDevice* m_renderDevice;

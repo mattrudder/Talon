@@ -16,6 +16,7 @@ namespace Talon
 		{
 			TALON_ASSERT(bufferUsage != BufferUsage::Immutable && "Cannot update immutable buffers!");
 
+			// TODO: Separate Map/Unmap and Update.
 			if (bufferUsage == BufferUsage::Dynamic)
 			{
 				D3D11_MAPPED_SUBRESOURCE subresource;
@@ -45,6 +46,11 @@ namespace Talon
 		void Unmap(ID3D11DeviceContext* ctx)
 		{
 			ctx->Unmap(indexBuffer, 0);
+		}
+
+		ID3D11Buffer* GetBuffer() const
+		{
+			return indexBuffer;
 		}
 
 		CComPtr<ID3D11Buffer> indexBuffer;
@@ -99,5 +105,10 @@ namespace Talon
 		u32 bufferSize = indexCount * indexSize;
 		TALON_ASSERT(indexCount <= m_indexCount && "Data supplied is larger than the buffer!");
 		m_pImpl->Update(m_renderDevice->GetDeviceContext(), m_bufferUsage, bufferSize, indexData);
+	}
+
+	ID3D11Buffer* IndexBuffer::GetBuffer() const
+	{
+		return m_pImpl->GetBuffer();
 	}
 }

@@ -24,6 +24,10 @@ namespace Talon
 		void Map(BufferMapType mapType, void** ppData);
 		void Unmap();
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+		ID3D11Buffer* GetBuffer() const;
+#endif
+
 	private:
 		RenderDevice* m_renderDevice;
 		u32 m_vertexSize;

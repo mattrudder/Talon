@@ -85,6 +85,6 @@ project "Talon"
 
     configuration { _OPTIONS["gfx"] }
         files {
-            "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp"
+            "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp",
             "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.h"
         }
