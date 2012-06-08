@@ -1,36 +1,42 @@
 -- 
 -- Material parser
 --
-local bisonPath = "bison"
-local flexPath = "flex"
-local bisonSkelArgs = ""
-local touchCmd = "touch"
 
-local parserPath = path.getabsolute("src/generated/MaterialParser.cpp")
-local lexerPath = path.getabsolute("src/generated/MaterialLexer.cpp")
-local parserGrammarPath = path.getabsolute("MaterialParser.y")
-local tokensPath = path.getabsolute("MaterialLexer.l")
+local antlrPath = get_absolute_from_solution("tools/Antlr/antlr-3.4-complete-no-antlrv2.jar")
+local generatedPath = path.getabsolute("src/generated")
+local grammarPath = path.getabsolute("src/TalonMaterial.g")
+local antlrCommand = "java -cp " .. antlrPath .. " org.antlr.Tool -o " .. generatedPath .. " " .. grammarPath
 
-if os.is("windows") then
-	bisonPath = get_absolute_from_solution("tools/Win32/bison.exe")
-	flexPath = get_absolute_from_solution("tools/Win32/flex.exe")
-	touchCmd = "type nul >"
+if not os.isdir(generatedPath) then
+	os.mkdir(generatedPath)
 end
 
-os.outputof(bisonPath .. " -d -o " .. parserPath .. bisonSkelArgs .. " " .. parserGrammarPath)
-os.outputof(flexPath .. " -o" .. lexerPath .. " " .. tokensPath)
+os.outputof(antlrCommand)
 
 project "MaterialParser"
     uuid        "1F796E28-AF57-11E1-86F6-D9106188709B"
 	targetname  "MaterialParser"
 	language    "C++"
 	kind        "ConsoleApp"
-	flags       { "FatalWarnings" }
+	--flags       { "FatalWarnings" }
 
     includedirs {
         "./"
     }
 
 	files {
-		"**.cpp"
+		"**.cpp",
+		"**.c",
+		"**.h",
+		"**.mat"
 	}
+
+	prebuildcommands {
+		antlrCommand
+	}
+
+    postbuildcommands {
+        copy_cmd("src/test.mat")
+    }
+
+	apply_external("libantlr3c-3.4", "antlr3c", true)
