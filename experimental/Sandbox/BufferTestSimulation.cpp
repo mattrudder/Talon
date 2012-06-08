@@ -96,37 +96,83 @@ void BufferTestSimulation::OnBeginFrame()
 		m_indexBuffer = make_unique<IndexBuffer>(Device, 3, BufferFormat::I16, BufferUsage::Default, indicies);
 }
 
+struct Card
+{
+	f32 x;
+	f32 y;
+	f32 xVel;
+	f32 yVel;
+
+	Card(f32 x = 0, f32 y = 0, f32 xVelocity = 0, f32 yVelocity = 0)
+		: x(x)
+		, y(y)
+		, xVel(xVelocity)
+		, yVel(yVelocity)
+	{
+	}
+
+	void Update()
+	{
+		x += xVel;
+		y += yVel;
+
+		if (x + 128 > 1280)
+		{
+			x = 1280 - 128;
+			xVel *= -1;
+		}
+		else if (x < 0)
+		{
+			x = 0;
+			xVel *= -1;
+		}
+
+		if (y + 128 > 720)
+		{
+			y = 720 - 128;
+			yVel *= -1;
+		}
+		else if (y < 0)
+		{
+			y = 0;
+			yVel *= -1;
+		}
+	}
+};
+
+f32 randRange(int min, int max)
+{
+	return (f32)(min + (int)(rand() % ((max - min) + 1)));
+}
+
 void BufferTestSimulation::OnEndFrame()
 {
 	m_spriteBatch->Begin();
 
-	static f32 x = 0, y = 0, xVel = 5, yVel = 3;
-	m_spriteBatch->Draw(m_texture, x, y);
+	static const int count = 200;
+	static Card cards[count];
+	static bool first = true;
 
-	x += xVel;
-	y += yVel;
+	if (first)
+	{
+		srand(0);
+		for (int i = 0; i < count; ++i)
+		{
+			cards[i].x = randRange(128, 1280 - 128);
+			cards[i].y = randRange(128, 720 - 128);
+			cards[i].xVel = randRange(4, 8);
+			cards[i].yVel = randRange(3, 7);
+		}
+		first = false;
+	}
 
-	if (x + 128 > 1280)
+	for (int i = 0; i < count; ++i)
 	{
-		x = 1280 - 128;
-		xVel *= -1;
-	}
-	else if (x < 0)
-	{
-		x = 0;
-		xVel *= -1;
+		cards[i].Update();
+		m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y);
 	}
 
-	if (y + 128 > 720)
-	{
-		y = 720 - 128;
-		yVel *= -1;
-	}
-	else if (y < 0)
-	{
-		y = 0;
-		yVel *= -1;
-	}
+
 
 	m_spriteBatch->End();
 }

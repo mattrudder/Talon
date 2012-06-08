@@ -368,7 +368,7 @@ namespace Talon
 		ThrowIfFailed(device->CreateInputLayout(VertexPositionColorTexture::InputElements, VertexPositionColorTexture::InputElementCount, SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader), &inputLayout));
 
 		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
-		ThrowIfFailed(D3D11::CreateDepthStencilState(device, false, false, &depthStencilState));
+		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
 		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
 		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
 
