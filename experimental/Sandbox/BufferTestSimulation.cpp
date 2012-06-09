@@ -21,8 +21,6 @@ using namespace Talon;
 
 BufferTestSimulation::BufferTestSimulation()
 	: m_engine(Engine::Instance())
-	, m_vertexBuffer(nullptr)
-	, m_indexBuffer(nullptr)
 	, m_gamepad(nullptr)
 	, m_keyboard(nullptr)
 	, m_mouse(nullptr)
@@ -71,29 +69,6 @@ void BufferTestSimulation::OnInitialized()
 
 void BufferTestSimulation::OnBeginFrame()
 {
-	short indicies[] = { 0, 1, 2 };
-	float verts[] = 
-	{ 
-		0, 1, 0, 0.5, 1.0,
-		-1, -1, 0, 0.0, 0.0,
-		1, -1, 0, 1.0, 0.0
-	};
-
-	if (m_vertexBuffer == nullptr)
-	{
-		m_vertexBuffer = make_unique<VertexBuffer>(Device, sizeof(float) * 5, 3, BufferUsage::Dynamic, verts);
-	}
-	else
-	{
-		// Offset x component by 0.5 per frame.
-		for (u32 i = 0; i < 15; i += 5)
-			verts[i + 0] += 0.5;
-
-		m_vertexBuffer->Update(3, verts);
-	}
-
-	if (m_indexBuffer == nullptr)
-		m_indexBuffer = make_unique<IndexBuffer>(Device, 3, BufferFormat::I16, BufferUsage::Default, indicies);
 }
 
 struct Card
@@ -149,7 +124,7 @@ void BufferTestSimulation::OnEndFrame()
 {
 	m_spriteBatch->Begin();
 
-	static const int count = 200;
+	static const int count = 1000;
 	static Card cards[count];
 	static bool first = true;
 
@@ -171,8 +146,6 @@ void BufferTestSimulation::OnEndFrame()
 		cards[i].Update();
 		m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y);
 	}
-
-
 
 	m_spriteBatch->End();
 }

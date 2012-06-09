@@ -5,15 +5,14 @@
 namespace Talon
 {
 	class Engine;
-	class IndexBuffer;
-	class InputDevice;
-	class VertexBuffer;
+
+	class SpriteBatch;
 	class Texture;
 
+	class InputDevice;
 	class GamepadInputDevice;
 	class KeyboardInputDevice;
 	class MouseInputDevice;
-	class SpriteBatch;
 }
 
 class BufferTestSimulation : public Talon::Simulation
@@ -31,8 +30,6 @@ protected:
 	void OnEndFrame();
 
 private:
-	std::unique_ptr<Talon::VertexBuffer> m_vertexBuffer;
-	std::unique_ptr<Talon::IndexBuffer> m_indexBuffer;
 	std::unique_ptr<Talon::SpriteBatch> m_spriteBatch;
 	std::shared_ptr<Talon::Texture> m_texture;
 

@@ -14,7 +14,8 @@ project "Sandbox"
     }
 
 	files {
-		"./*.cpp"
+		"./*.cpp",
+        "./*.h"
 	}
 
     configuration "MacOSX"
