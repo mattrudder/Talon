@@ -1,4 +1,4 @@
-#include "BufferTestSimulation.h"
+#include "SandboxSimulation.h"
 
 #include <Talon/Engine.h>
 #include <Talon/Input/InputService.h>
@@ -19,7 +19,7 @@
 using namespace std;
 using namespace Talon;
 
-BufferTestSimulation::BufferTestSimulation()
+SandboxSimulation::SandboxSimulation()
 	: m_engine(Engine::Instance())
 	, m_gamepad(nullptr)
 	, m_keyboard(nullptr)
@@ -29,16 +29,16 @@ BufferTestSimulation::BufferTestSimulation()
 {
 }
 
-BufferTestSimulation::~BufferTestSimulation(void)
+SandboxSimulation::~SandboxSimulation(void)
 {
 }
 
-void BufferTestSimulation::Foo()
+void SandboxSimulation::Foo()
 {
 	OutputDebugStringA("Button pressed!");
 }
 
-void BufferTestSimulation::OnInitialized()
+void SandboxSimulation::OnInitialized()
 {
 	m_engine->GetInputService()->DeviceConnected += [this](InputDevice* device)
 	{
@@ -67,7 +67,7 @@ void BufferTestSimulation::OnInitialized()
 	m_spriteBatch = std::make_unique<SpriteBatch>(Device);
 }
 
-void BufferTestSimulation::OnBeginFrame()
+void SandboxSimulation::OnBeginFrame()
 {
 }
 
@@ -120,7 +120,7 @@ f32 randRange(int min, int max)
 	return (f32)(min + (int)(rand() % ((max - min) + 1)));
 }
 
-void BufferTestSimulation::OnEndFrame()
+void SandboxSimulation::OnEndFrame()
 {
 	m_spriteBatch->Begin();
 

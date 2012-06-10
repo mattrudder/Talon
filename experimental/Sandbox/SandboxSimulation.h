@@ -15,11 +15,11 @@ namespace Talon
 	class MouseInputDevice;
 }
 
-class BufferTestSimulation : public Talon::Simulation
+class SandboxSimulation : public Talon::Simulation
 {
 public:
-	BufferTestSimulation(void);
-	virtual ~BufferTestSimulation(void);
+	SandboxSimulation(void);
+	virtual ~SandboxSimulation(void);
 
 protected:
 
