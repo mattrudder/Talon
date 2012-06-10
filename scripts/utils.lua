@@ -10,6 +10,10 @@ function stringfromfile(file)
     return t
 end
 
+function trim(s)
+	return s:find'^%s*$' and '' or s:match'^%s*(.*%S)'
+end
+
 function makedirs(t)
 	for k,v in ipairs(t) do
 		if not os.isdir(v) then

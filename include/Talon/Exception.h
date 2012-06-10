@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <Talon/TalonPublic.h>
+#include <string>
 #include <exception>
 
 namespace Talon
@@ -10,8 +10,16 @@ namespace Talon
 	{
 	public:
 		Exception(const char* message)
-			: exception(message)
+			: m_message(message)
 		{
 		}
+
+        virtual const char* what() const throw()
+        {
+            return m_message.c_str();
+        }
+
+    private:
+        std::string m_message;
 	};
 }

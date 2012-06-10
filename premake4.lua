@@ -4,7 +4,7 @@
 
 dofile("scripts/utils.lua")
 
-local localHostName = os.getenv("COMPUTERNAME")
+local localHostName = trim(os.getenv("COMPUTERNAME") or os.outputof("hostname -s"))
 local codeGenPath = path.getabsolute("bin/Debug/Talon.CodeGenerator.exe")
 
 if not _OPTIONS["to"] then

@@ -36,10 +36,12 @@ namespace Talon
 #define TALON_UNUSED(x) do { (void) sizeof(x); } while(0)
 
 #ifdef TALON_ASSERTS_ENABLED
-#pragma warning(push)
-#pragma warning(disable : 4127)
+#	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
+#		pragma warning(push)
+#		pragma warning(disable : 4127)
+#	endif
 
-	#define TALON_ASSERT(cond) do \
+#	define TALON_ASSERT(cond) do \
 			{ \
 				if (!(cond)) \
 				{ \
@@ -48,7 +50,7 @@ namespace Talon
 				} \
 			} while(__LINE__ == -1)
 
-	#define TALON_ASSERT_MSG(cond, msg, ...) do \
+#	define TALON_ASSERT_MSG(cond, msg, ...) do \
 			{ \
 				if (!(cond)) \
 				{ \
@@ -57,22 +59,24 @@ namespace Talon
 				} \
 			} while(__LINE__ == -1)
 
-	#define TALON_ASSERT_FAIL(msg, ...) do \
+#	define TALON_ASSERT_FAIL(msg, ...) do \
 			{ \
 				if (talonReportFailure(0, __FILE__, __LINE__, msg, ##__VA_ARGS__) == afHalt) \
 					TALON_HALT(); \
 			} while(__LINE__ == -1)
 
 #if TALON_WINDOWS
-	#define TALON_BREAK() __debugbreak();
+#	define TALON_BREAK() __debugbreak();
 #elif TALON_MAC
-	#define TALON_BREAK() if(talonAmIBeingDebugged()) {__asm__("int $3\n" : : );}
+#	define TALON_BREAK() if(talonAmIBeingDebugged()) {__asm__("int $3\n" : : );}
 
 #endif
 
-	#define TALON_VERIFY(cond) TALON_ASSERT(cond)
-	#define TALON_VERIFY_MSG(cond, msg, ...) TALON_ASSERT_MSG(cond, msg, ##__VA_ARGS__)
-#pragma warning(pop)
+#	define TALON_VERIFY(cond) TALON_ASSERT(cond)
+#	define TALON_VERIFY_MSG(cond, msg, ...) TALON_ASSERT_MSG(cond, msg, ##__VA_ARGS__)
+#	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
+#		pragma warning(pop)
+#	endif
 #else
 	#define TALON_ASSERT(condition) \
 		do { TALON_UNUSED(condition); } while(0)
