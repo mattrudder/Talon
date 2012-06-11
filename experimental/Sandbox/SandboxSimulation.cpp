@@ -73,12 +73,12 @@ void SandboxSimulation::OnBeginFrame()
 
 struct Card
 {
-	f32 x;
-	f32 y;
-	f32 xVel;
-	f32 yVel;
+	float x;
+	float y;
+	float xVel;
+	float yVel;
 
-	Card(f32 x = 0, f32 y = 0, f32 xVelocity = 0, f32 yVelocity = 0)
+	Card(float x = 0, float y = 0, float xVelocity = 0, float yVelocity = 0)
 		: x(x)
 		, y(y)
 		, xVel(xVelocity)
@@ -115,9 +115,9 @@ struct Card
 	}
 };
 
-f32 randRange(int min, int max)
+float randRange(int min, int max)
 {
-	return (f32)(min + (int)(rand() % ((max - min) + 1)));
+	return (float)(min + (int)(rand() % ((max - min) + 1)));
 }
 
 void SandboxSimulation::OnEndFrame()

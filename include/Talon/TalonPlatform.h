@@ -28,11 +28,24 @@
 
 #define TALON_MATH_FPU 1
 #define TALON_MATH_SSE2 2
-#define TALON_MATH_EIGEN 3
 
-#define TALON_MATH TALON_MATH_EIGEN
+#define TALON_ARCH_X32 1
+#define TALON_ARCH_X64 2
+#define TALON_ARCH_ARM 3
+
+#define TALON_MATH TALON_MATH_SSE2
 
 #define TALON_DEBUG 0
+
+#if defined(_M_IX86)
+#	define TALON_ARCH TALON_ARCH_X32
+#elif defined(_M_AMD64) || defined(_M_X64)
+#	define TALON_ARCH TALON_ARCH_X64
+#elif defined(_M_ARM)
+#	define TALON_ARCH TALON_ARCH_ARM
+#else
+#	error "This architecture is not recognized!"
+#endif
 
 #if defined(_MSC_VER)
 #	define TALON_PLATFORM TALON_PLATFORM_WINDOWS
@@ -58,8 +71,8 @@
 // Talon Math library support detection
 // TODO: Add support for alternative vector processing implementations.
 #	if _M_IX86_FP == 2
-//#		undef TALON_MATH
-//#		define TALON_MATH TALON_MATH_SSE2
+#		undef TALON_MATH
+#		define TALON_MATH TALON_MATH_SSE2
 #	endif
 #elif defined(__MACH__)
 #	define TALON_COMPILER_VERSION __GNUC__
@@ -82,8 +95,8 @@
 #	endif
 // Talon Math library support detection
 #	if __SSE2__
-//#		undef TALON_MATH
-//#		define TALON_MATH TALON_MATH_SSE2
+#		undef TALON_MATH
+#		define TALON_MATH TALON_MATH_SSE2
 #	endif
 #else
 #	error Platform not officially supported.
@@ -123,9 +136,9 @@
 #endif // TALON_DLL
 
 #if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
-#	define TALON_ALIGN(a, decl) _declspec(align(a)) decl 
+#	define TALON_ALIGN(size, decl) _declspec(align(size)) decl 
 #elif TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_GCC
-#	define TALON_ALIGN(a, decl) decl __attribute__((aligned(a)))
+#	define TALON_ALIGN(size, decl) decl __attribute__((aligned(size)))
 #endif // TALON_COMPILER_VENDOR
 
 #if TALON_WINDOWS

@@ -12,6 +12,8 @@
 
 #include <algorithm>
 
+#include <Talon/TalonMath.h>
+
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 #include "Direct3D11/D3D11Utility.h"
 #include <DirectXMath.h>
@@ -254,15 +256,15 @@ namespace Talon
 		VertexPositionColorTexture()
 		{ }
 
-		VertexPositionColorTexture(Vector3 const& position, Vector4 const& color, Vector2 const& textureCoordinate)
+		VertexPositionColorTexture(float3 const& position, float4 const& color, float2 const& textureCoordinate)
 			: position(position),
 			color(color),
 			textureCoordinate(textureCoordinate)
 		{ }
 
-		Vector3 position;
-		Vector4 color;
-		Vector2 textureCoordinate;
+		float3 position;
+		float4 color;
+		float2 textureCoordinate;
 
 		static const int InputElementCount = 3;
 		static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -284,16 +286,16 @@ namespace Talon
 		void Begin();
 		void End();
 
-		void Draw(std::shared_ptr<Texture> texture, Vector4 destination, Rect const* source, Vector4 color, u32 flags);
+		void Draw(std::shared_ptr<Texture> texture, float4 destination, Rect const* source, float4 color, u32 flags);
 
 		struct SpriteInfo
 		{
-			Vector4 source;
-			Vector4 destination;
-			Vector4 color;
-			Vector2 origin;
-			f32 rotation;
-			f32 depth;
+			float4 source;
+			float4 destination;
+			float4 color;
+			float2 origin;
+			float rotation;
+			float depth;
 
 			std::shared_ptr<Texture> texture;
 			u32 flags;
@@ -317,7 +319,7 @@ namespace Talon
 
 		void RenderBatch(std::shared_ptr<Texture> texture, SpriteInfo const* const* sprites, size_t count);
 		
-		static void RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, Vector2 textureSize, Vector2 inverseTextureSize);
+		static void RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, float2 textureSize, float2 inverseTextureSize);
 
 		// Constants
 		static const size_t MaxBatchSize = 2048;
@@ -427,9 +429,9 @@ namespace Talon
 			);
 	}
 
-	void SpriteBatch::Impl::Draw(std::shared_ptr<Texture> texture, Vector4 destination, Rect const* sourceRect, Vector4 color, u32 flags)
+	void SpriteBatch::Impl::Draw(std::shared_ptr<Texture> texture, float4 destination, Rect const* sourceRect, float4 color, u32 flags)
 	{
-		static const size_t vectorSize = sizeof(Vector4);
+		static const size_t vectorSize = sizeof(float4);
 #define LoadVector(dest, src) memcpy(dest, src, vectorSize)
 
 		if (!texture)
@@ -441,7 +443,7 @@ namespace Talon
 		if (m_queueCount >= m_queueSize)
 			GrowSpriteQueue();
 
-		Vector4 dest = destination;
+		float4 dest = destination;
 		SpriteInfo* sprite = &m_spriteQueue[m_queueCount];
 
 		if (sourceRect)
@@ -450,7 +452,7 @@ namespace Talon
 		}
 		else
 		{
-			static const Vector4 wholeTexture(0, 0, 1, 1);
+			static const float4 wholeTexture(0, 0, 1, 1);
 			LoadVector(&sprite->source, &wholeTexture);
 		}
 
@@ -618,8 +620,8 @@ namespace Talon
 
 			for (size_t i = 0; i < batchSize; ++i)
 			{
-				Vector2 textureSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
-				Vector2 inverseTextureSize(1.0f / textureSize.x, 1.0f / textureSize.y);
+				float2 textureSize((float)texture->GetWidth(), (float)texture->GetHeight());
+				float2 inverseTextureSize(1.0f / textureSize.x, 1.0f / textureSize.y);
 				RenderSprite(sprites[i], vertices, textureSize, inverseTextureSize);
 
 				vertices += VerticesPerSprite;
@@ -641,29 +643,31 @@ namespace Talon
 		}
 	}
 
-	void SpriteBatch::Impl::RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, Vector2 /*textureSize*/, Vector2 inverseTextureSize)
+	void SpriteBatch::Impl::RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, float2 /*textureSize*/, float2 inverseTextureSize)
 	{
 		// Load sprite parameters into SIMD registers.
-		Vector4 source = sprite->source;
-		Vector4 destination = sprite->destination;
-		Vector4 color = sprite->color;
-		Vector2 origin = sprite->origin;
+		//Vector source = Vector4Load(sprite->source);
+		//Vector destination = Vector4Load(sprite->destination);
+		Vector origin = Vector2Load(sprite->origin);
+		Vector invTexSize = Vector2Load(inverseTextureSize);
+
+		//float4 color = sprite->color;
 		//f32 rotation = sprite->rotation;
 		//f32 depth = sprite->depth;
 		u32 flags = sprite->flags;
 
-		origin = origin * inverseTextureSize;
+		origin = origin * invTexSize;
 
-		Vector2 destinationOrigin(destination.x, destination.y);
-		Vector2 sourceSize(source.z, source.w);
-		Vector2 destinationSize(destination.z, destination.w);
+		Vector destinationOrigin = Vector2Load(sprite->destination.x, sprite->destination.y);
+		Vector sourceSize = Vector2Load(sprite->source.z, sprite->source.w);
+		Vector destinationSize = Vector2Load(sprite->destination.z, sprite->destination.w);
 
-		static Vector2 cornerOffsets[VerticesPerSprite] =
+		static Vector cornerOffsets[VerticesPerSprite] =
 		{
-			Vector2(0, 0),
-			Vector2(1, 0),
-			Vector2(0, 1),
-			Vector2(1, 1),
+			Vector2Load(0, 0),
+			Vector2Load(1, 0),
+			Vector2Load(0, 1),
+			Vector2Load(1, 1),
 		};
 
 		static_assert((int)SpriteEffects::FlipHorizontally == 1 &&
@@ -674,16 +678,16 @@ namespace Talon
 		for (int i = 0; i < VerticesPerSprite; ++i)
 		{
 			// Calculate position.
-			Vector2 cornerOffset = (cornerOffsets[i] - origin) * destinationSize;
-			Vector2 position = cornerOffset + destinationOrigin;
+			Vector cornerOffset = (cornerOffsets[i] - origin) * destinationSize;
+			Vector position = cornerOffset + destinationOrigin;
 
-			vertices[i].position.x = position.x;
-			vertices[i].position.y = position.y;
+			StoreFloat3(&vertices[i].position, position);
 
-			vertices[i].color = color;
+			vertices[i].color = sprite->color;
 
-			Vector2 sourceOrigin(source.x, source.y);
-			vertices[i].textureCoordinate = (cornerOffsets[i ^ mirrorBits] * sourceSize) + sourceOrigin;
+			Vector sourceOrigin = Vector2Load(sprite->source.x, sprite->source.y);
+			Vector uv = (cornerOffsets[i ^ mirrorBits] * sourceSize) + sourceOrigin;
+			StoreFloat2(&vertices[i].textureCoordinate, uv);
 		}
 	}
 
@@ -706,10 +710,10 @@ namespace Talon
 		m_pImpl->End();
 	}
 
-	void SpriteBatch::Draw(std::shared_ptr<Texture> texture, f32 x, f32 y)
+	void SpriteBatch::Draw(std::shared_ptr<Texture> texture, float x, float y)
 	{
-		Vector4 dest(x, y, (f32)texture->GetWidth(), (f32)texture->GetHeight());
-		Vector4 color(1, 1, 1, 1);
+		float4 dest(x, y, (float)texture->GetWidth(), (float)texture->GetHeight());
+		float4 color(1, 1, 1, 1);
 		m_pImpl->Draw(texture, dest, nullptr, color, 0);
 	}
 }

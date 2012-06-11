@@ -27,11 +27,11 @@ namespace Talon
         InputDeviceDataType dataType;
         union
         {
-            f32 floatValue;
+            float floatValue;
             bool boolValue;
         };
 
-		InputDeviceEvent(InputDeviceType type, InputDeviceAxis channel, f32 value)
+		InputDeviceEvent(InputDeviceType type, InputDeviceAxis channel, float value)
 			: deviceId(0)
 			, deviceType(type)
 			, channelType(InputDeviceChannel::Axis)
@@ -51,7 +51,7 @@ namespace Talon
 		{
 		}
 
-		InputDeviceEvent(InputDeviceType type, InputDeviceButton channel, f32 value)
+		InputDeviceEvent(InputDeviceType type, InputDeviceButton channel, float value)
 			: deviceId(0)
 			, deviceType(type)
 			, channelType(InputDeviceChannel::Button)

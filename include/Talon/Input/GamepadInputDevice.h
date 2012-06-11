@@ -14,7 +14,7 @@ namespace Talon
 	public:
 		virtual ~GamepadInputDevice();
 
-		virtual f32 GetAxis(InputDeviceAxis axis) const = 0;
+		virtual float GetAxis(InputDeviceAxis axis) const = 0;
 		virtual bool GetButton(InputDeviceButton button) const = 0;
 
 		delegate<GamepadInputDevice, void (InputDeviceButton)> Pressed;

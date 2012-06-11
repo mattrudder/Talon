@@ -1,6 +1,7 @@
 
 #pragma once
 
-#include "TalonPlatform.h"
+#include "Math/Vector.h"
 
-//#error "FPU Math Library not implemented."
+#include "Math/Constants.h"
+#include "Math/Conversions.h"

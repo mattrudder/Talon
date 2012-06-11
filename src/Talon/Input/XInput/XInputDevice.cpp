@@ -58,10 +58,10 @@ namespace Talon
 		return devices;
 	}
 
-	f32 XInputDevice::GetAxis(InputDeviceAxis axis) const
+	float XInputDevice::GetAxis(InputDeviceAxis axis) const
 	{
-		f32 value = 0;
-		f32 max = 1;
+		float value = 0;
+		float max = 1;
 
 		switch (axis)
 		{

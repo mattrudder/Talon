@@ -12,7 +12,7 @@ namespace Talon
 
 		static std::vector<std::shared_ptr<InputDevice>> Enumerate();
 
-		virtual f32 GetAxis(InputDeviceAxis axis) const;
+		virtual float GetAxis(InputDeviceAxis axis) const;
 		virtual bool GetButton(InputDeviceButton button) const;
 
 		virtual void PollForUpdates();

@@ -20,6 +20,7 @@ project "Talon"
 		"../../include/Talon/*.h",
 		"../../include/Talon/Graphics/*.h",
 		"../../include/Talon/Input/*.h",
+        "../../include/Talon/Math/*.h",
 		"../../include/Talon/Platform/*.h",
 
 		"TalonPrefix.h",
@@ -50,6 +51,7 @@ project "Talon"
     	defines { "_CRT_SECURE_NO_WARNINGS" }
         files {
             "../../include/Talon/Platform/Win32/**.h",
+            "../../include/Talon/Math/SSE/*.h",
 			"Input/RawInput/**.h",
         	"Input/RawInput/**.cpp",
 			"Input/XInput/**.h",
