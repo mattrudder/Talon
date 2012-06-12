@@ -5,42 +5,42 @@ namespace Talon
 {
 	inline Vector VectorNegate(VectorArgL1 v)
 	{
-
+		return v;
 	}
 
-	inline Vector VectorAdd(VectorArgL1 v1, VectorArgL1 v2)
+	inline Vector VectorAdd(VectorArgL1 v1, VectorArgL1 /*v2*/)
 	{
-
+		return v1;
 	}
 
-	inline Vector VectorSubtract(VectorArgL1 v1, VectorArgL1 v2)
+	inline Vector VectorSubtract(VectorArgL1 v1, VectorArgL1 /*v2*/)
 	{
-
+		return v1;
 	}
 
-	inline Vector VectorMultiply(VectorArgL1 v1, VectorArgL1 v2)
+	inline Vector VectorMultiply(VectorArgL1 v1, VectorArgL1 /*v2*/)
 	{
-
+		return v1;
 	}
 
-	inline Vector VectorDivide(VectorArgL1 v1, VectorArgL1 v2)
+	inline Vector VectorDivide(VectorArgL1 v1, VectorArgL1 /*v2*/)
 	{
-
+		return v1;
 	}
 
-	inline Vector VectorScale(VectorArgL1 v, float scale)
+	inline Vector VectorScale(VectorArgL1 v, float /*scale*/)
 	{
-
+		return v;
 	}
 
 	inline Vector operator+ (VectorArgL1 v)
 	{
-		return V;
+		return v;
 	}
 
 	inline Vector operator- (VectorArgL1 v)
 	{
-		return VectorNegate(V);
+		return VectorNegate(v);
 	}
 
 	inline Vector& operator+= (Vector& v1, VectorArgL1 v2)
