@@ -21,6 +21,7 @@ project "Talon"
 		"../../include/Talon/Graphics/*.h",
 		"../../include/Talon/Input/*.h",
         "../../include/Talon/Math/*.h",
+        "../../include/Talon/Math/*.inl",
 		"../../include/Talon/Platform/*.h",
 
 		"TalonPrefix.h",

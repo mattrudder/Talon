@@ -5,32 +5,46 @@ namespace Talon
 {
 	inline Vector VectorNegate(VectorArgL1 v)
 	{
-		return v;
+#if TALON_MATH == TALON_MATH_SSE2
+		Vector zero = _mm_setzero_ps();
+		return _mm_sub_ps(zero, v);
+#endif
 	}
 
-	inline Vector VectorAdd(VectorArgL1 v1, VectorArgL1 /*v2*/)
+	inline Vector VectorAdd(VectorArgL1 v1, VectorArgL1 v2)
 	{
-		return v1;
+#if TALON_MATH == TALON_MATH_SSE2
+		return _mm_add_ps(v1, v2);
+#endif
 	}
 
-	inline Vector VectorSubtract(VectorArgL1 v1, VectorArgL1 /*v2*/)
+	inline Vector VectorSubtract(VectorArgL1 v1, VectorArgL1 v2)
 	{
-		return v1;
+#if TALON_MATH == TALON_MATH_SSE2
+		return _mm_sub_ps(v1, v2);
+#endif
 	}
 
-	inline Vector VectorMultiply(VectorArgL1 v1, VectorArgL1 /*v2*/)
+	inline Vector VectorMultiply(VectorArgL1 v1, VectorArgL1 v2)
 	{
-		return v1;
+#if TALON_MATH == TALON_MATH_SSE2
+		return _mm_mul_ps(v1, v2);
+#endif
 	}
 
-	inline Vector VectorDivide(VectorArgL1 v1, VectorArgL1 /*v2*/)
+	inline Vector VectorDivide(VectorArgL1 v1, VectorArgL1 v2)
 	{
-		return v1;
+#if TALON_MATH == TALON_MATH_SSE2
+		return _mm_div_ps(v1, v2);
+#endif
 	}
 
-	inline Vector VectorScale(VectorArgL1 v, float /*scale*/)
+	inline Vector VectorScale(VectorArgL1 v, float scale)
 	{
-		return v;
+#if TALON_MATH == TALON_MATH_SSE2
+		Vector s = _mm_set_ps1(scale);
+		return _mm_mul_ps(s, v);
+#endif
 	}
 
 	inline Vector operator+ (VectorArgL1 v)

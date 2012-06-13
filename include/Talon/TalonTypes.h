@@ -26,7 +26,7 @@ struct float2
 	float x;
 	float y;
 
-	float2() {}
+	float2() : x(0), y(0) {}
 	float2(float _x, float _y) : x(_x), y(_y) {}
 	explicit float2(const float *pVector) : x(pVector[0]), y(pVector[1]) {}
 
@@ -48,7 +48,7 @@ struct float3
 	float y;
 	float z;
 
-	float3() {}
+	float3() : x(0), y(0), z(0) {}
 	float3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 	explicit float3(const float *pVector) : x(pVector[0]), y(pVector[1]), z(pVector[2]) {}
 
@@ -71,7 +71,7 @@ struct float4
 	float z;
 	float w;
 
-	float4() {}
+	float4() : x(0), y(0), z(0), w(0) {}
 	float4(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
 	explicit float4(const float *pVector) : x(pVector[0]), y(pVector[1]), z(pVector[2]), w(pVector[3]) {}
 
