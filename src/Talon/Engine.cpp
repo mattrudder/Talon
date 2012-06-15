@@ -1,6 +1,7 @@
 
 #include "TalonPrefix.h"
 #include <Talon/Engine.h>
+#include <Talon/ComponentRegistry.h>
 #include <Talon/Platform/Platform.h>
 #include <Talon/Input/InputService.h>
 
@@ -62,8 +63,6 @@ namespace Talon
 		{
 			m_running = false;
 		};
-
-		
 
 		m_running = true;
 
