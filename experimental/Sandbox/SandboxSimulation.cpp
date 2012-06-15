@@ -1,6 +1,7 @@
 #include "SandboxSimulation.h"
 
 #include <Talon/Engine.h>
+#include <Talon/ComponentService.h>
 #include <Talon/Input/InputService.h>
 #include <Talon/Input/InputDevice.h>
 #include <Talon/Graphics/BufferUsage.h>
@@ -13,6 +14,9 @@
 #include <Talon/Input/MouseInputDevice.h>
 
 #include <Talon/Graphics/SpriteBatch.h>
+
+#include <Talon/GameObject.h>
+#include <Talon/Graphics/SpriteComponent.h>
 
 #include <windows.h>
 
@@ -77,6 +81,7 @@ struct Card
 	float y;
 	float xVel;
 	float yVel;
+	GameObject go;
 
 	Card(float x = 0, float y = 0, float xVelocity = 0, float yVelocity = 0)
 		: x(x)
@@ -137,9 +142,23 @@ void SandboxSimulation::OnEndFrame()
 			cards[i].y = randRange(128, 720 - 128);
 			cards[i].xVel = randRange(4, 8);
 			cards[i].yVel = randRange(3, 7);
+
+			//SpriteComponent* sprite = (SpriteComponent*) cards[i].go.AddComponent(SpriteComponent::GetType());
+			//if (sprite)
+			//{
+			//	sprite->SetOrigin(float2(randRange(128, 1280 - 128), randRange(128, 720 - 128)));
+			//	sprite->SetSourceBounds(float4(randRange(4, 8), randRange(3, 7), 0, 0));
+			//	sprite->SetTexture(m_texture);
+			//}
 		}
 		first = false;
 	}
+
+	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this](Component* component)
+	{
+		SpriteComponent* sprite = (SpriteComponent*) component;
+		m_spriteBatch->Draw(sprite->GetTexture(), sprite->GetOrigin().x, sprite->GetOrigin().y);
+	});
 
 	for (int i = 0; i < count; ++i)
 	{

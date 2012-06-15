@@ -1,7 +1,7 @@
 
 #include "TalonPrefix.h"
 #include <Talon/Engine.h>
-#include <Talon/ComponentRegistry.h>
+#include <Talon/ComponentService.h>
 #include <Talon/Platform/Platform.h>
 #include <Talon/Input/InputService.h>
 
@@ -104,6 +104,8 @@ namespace Talon
 		m_inputService = std::make_shared<InputService>(m_window.get());
 		m_inputService->Initialize();
 
+		m_componentService = std::make_shared<ComponentService>();
+
 		// Setup managers for automatic throttled updates.
 		m_serviceUpdates.push_back(TimedUpdate(33, std::bind(&InputService::Update, m_inputService)));
 	}
@@ -119,6 +121,7 @@ namespace Talon
 
 	void Engine::DestroyServices()
 	{
+		m_componentService = nullptr;
 		m_inputService = nullptr;
 	}
 

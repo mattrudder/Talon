@@ -3,6 +3,7 @@
 
 namespace Talon
 {
+	class ComponentService;
 	class InputService;
 	class Simulation;
 	class Window;
@@ -17,6 +18,7 @@ namespace Talon
 		void RunFrame();
 
 		inline std::shared_ptr<InputService> GetInputService() const { return m_inputService; }
+		inline std::shared_ptr<ComponentService> GetComponentService() const { return m_componentService; }
 
 		inline bool IsRunning() const { return m_running; }
 
@@ -34,6 +36,7 @@ namespace Talon
 		bool m_running;
 
 		std::shared_ptr<InputService> m_inputService;
+		std::shared_ptr<ComponentService> m_componentService;
 
 		std::shared_ptr<Simulation> m_simulation;
 		std::shared_ptr<Window> m_window;

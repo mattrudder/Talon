@@ -1,7 +1,7 @@
 #include "TalonPrefix.h"
 #include <Talon/TalonAssert.h>
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdarg.h>
 #if TALON_MAC
 #include <assert.h>

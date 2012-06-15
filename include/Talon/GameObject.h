@@ -3,6 +3,7 @@
 
 #include <Talon/TalonPublic.h>
 #include <Talon/Component.h>
+
 #include <unordered_map>
 
 
@@ -13,10 +14,10 @@ namespace Talon
 	public:
 		GameObject();
 
-		Component* CreateComponent(ComponentType& type);
-		void DestroyComponent(ComponentType& type, );
+		Component* AddComponent(ComponentType& type);
+		void RemoveComponent(ComponentType& type, ComponentHandle handle);
 
 	private:
-		std::unordered_map<ComponentTypeId, std::vector<Component*>> m_componentChain;
+		ComponentChain m_componentChain;
 	};
 }

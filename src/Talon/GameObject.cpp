@@ -3,6 +3,8 @@
 #include "TalonPrefix.h"
 #include <Talon/GameObject.h>
 #include <Talon/Component.h>
+#include <Talon/ComponentService.h>
+#include <Talon/Engine.h>
 
 namespace Talon
 {
@@ -11,11 +13,13 @@ namespace Talon
 
 	}
 
-	Component* GameObject::CreateComponent(ComponentType& type)
+	Component* GameObject::AddComponent(ComponentType& type)
 	{
-		Component* component = type.Creator();
-		m_componentChain.insert(std::make_pair(type.Id, component));
+		return Engine::Instance()->GetComponentService()->CreateComponent(type, &m_componentChain);
+	}
 
-		return component;
+	void GameObject::RemoveComponent(ComponentType& type, ComponentHandle handle)
+	{
+		Engine::Instance()->GetComponentService()->ReleaseComponent(type, &m_componentChain, handle);
 	}
 }

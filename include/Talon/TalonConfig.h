@@ -15,3 +15,6 @@
 
 /** Defines a logger interface for outputting log info to the console. */
 #define TALON_CONSOLE_LOGGING
+
+/** With this flag required, malloc and global new are disabled. Requires all systems to use engine based memory management. */
+//#define TALON_ALLOCATORS_ONLY

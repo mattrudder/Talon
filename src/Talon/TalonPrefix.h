@@ -2,6 +2,17 @@
 #define NOMINMAX
 #include <Talon/TalonPublic.h>
 
+#ifdef TALON_ALLOCATORS_ONLY
+#define malloc(x) \
+	nullptr; \
+	std::static_assert(false, "Invalid memory allocation method! Use Talon allocators only!"); \
+	TALON_ASSERT(false && "Invalid memory allocation method! Use Talon allocators only!");
+
+namespace {
+	void* operator new(size_t size);
+}
+#endif
+
 // Precompiled header file for Talon Engine.
 #include <nowide/convert.h>
 using namespace nowide;
