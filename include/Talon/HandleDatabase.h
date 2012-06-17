@@ -5,7 +5,7 @@
 
 namespace Talon
 {
-	template <typename Data, typename HandleType>
+	template <typename Data, typename HandleType, typename IndexType = u32>
 	class HandleDatabase
 	{
 	public:
@@ -33,8 +33,6 @@ namespace Talon
 	private:
 		Data* GetDataCore(HandleType handle);
 
-		typedef typename HandleType::IndexType IndexType;
-
 		typedef std::vector<Data> UserContainer;
 		typedef std::vector<IndexType> MagicContainer;
 		typedef std::vector<IndexType> FreeContainer;
@@ -44,8 +42,8 @@ namespace Talon
 		FreeContainer m_freeList;
 	};
 
-	template <typename Data, typename HandleType>
-	Data* HandleDatabase<Data, HandleType>::OpenHandle(HandleType& handle, std::function<Data()> creator)
+	template <typename Data, typename HandleType, typename IndexType>
+	Data* HandleDatabase<Data, HandleType, IndexType>::OpenHandle(HandleType& handle, std::function<Data()> creator)
 	{
 		IndexType index;
 		if (m_freeList.empty())
@@ -68,8 +66,8 @@ namespace Talon
 		return &(*location);
 	}
 
-	template <typename Data, typename HandleType>
-	void HandleDatabase<Data, HandleType>::CloseHandle(HandleType handle)
+	template <typename Data, typename HandleType, typename IndexType>
+	void HandleDatabase<Data, HandleType, IndexType>::CloseHandle(HandleType handle)
 	{
 		IndexType index = handle.GetIndex();
 
@@ -80,8 +78,8 @@ namespace Talon
 		m_freeList.push_back(index);
 	}
 
-	template <typename Data, typename HandleType>
-	Data* HandleDatabase<Data, HandleType>::GetData(HandleType handle)
+	template <typename Data, typename HandleType, typename IndexType>
+	Data* HandleDatabase<Data, HandleType, IndexType>::GetData(HandleType handle)
 	{
 		if (handle.IsNull())
 			return nullptr;
@@ -98,15 +96,15 @@ namespace Talon
 		return &(*location);
 	}
 
-	template <typename Data, typename HandleType>
-	const Data* HandleDatabase<Data, HandleType>::GetData(HandleType handle) const
+	template <typename Data, typename HandleType, typename IndexType>
+	const Data* HandleDatabase<Data, HandleType, IndexType>::GetData(HandleType handle) const
 	{
 		typedef HandleDatabase<Data, HandleType> ThisType;
 		return const_cast<ThisType*>(this)->GetData(handle);
 	}
 
-	template <typename Data, typename HandleType>
-	void HandleDatabase<Data, HandleType>::ForEach(std::function<void(Data*)> iterator)
+	template <typename Data, typename HandleType, typename IndexType>
+	void HandleDatabase<Data, HandleType, IndexType>::ForEach(std::function<void(Data*)> iterator)
 	{
 		UserContainer::iterator location = begin(m_userData);
 		for (u32 i = 0; i < m_magicNumbers.size(); ++i)

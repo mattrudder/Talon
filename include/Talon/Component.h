@@ -2,13 +2,20 @@
 #pragma once
 
 #include <Talon/TalonPublic.h>
+#include <Talon/Handle.h>
+#include <unordered_map>
 
 namespace Talon
 {
 	class Component;
 
+	struct tagComponent { };
+	typedef Handle<tagComponent> ComponentHandle;
+
 	typedef u16 ComponentTypeId;
-	typedef std::vector<Component*>::iterator::distance_type ComponentHandle;
+	
+	typedef std::vector<ComponentHandle> ComponentList;
+	typedef std::unordered_map<ComponentTypeId, ComponentList> ComponentChain;
 
 	struct ComponentType
 	{
@@ -27,7 +34,7 @@ namespace Talon
 			{
 				"Component",
 				__s_typeId,
-				[]{ TALON_ASSERT(false && "Cannot create abstract component class."); },
+				nullptr,
 				nullptr
 			};
 
