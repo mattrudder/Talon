@@ -53,6 +53,7 @@ project "Talon"
         files {
             "../../include/Talon/Platform/Win32/**.h",
             "../../include/Talon/Math/SSE/*.h",
+            "../../include/Talon/Math/SSE/*.inl",
 			"Input/RawInput/**.h",
         	"Input/RawInput/**.cpp",
 			"Input/XInput/**.h",
