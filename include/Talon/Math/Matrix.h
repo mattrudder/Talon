@@ -20,6 +20,10 @@ namespace Talon
 
 #include "Matrix.inl"
 
-#if TALON_MATH == TALON_MATH_SSE2
+#if TALON_MATH == TALON_MATH_FPU
+#include <Talon/Math/x87/Matrix.inl>
+#elif TALON_MATH == TALON_MATH_SSE2
 #include <Talon/Math/SSE/Matrix.inl>
+#else
+#error "Matrix not defined for this platform!"
 #endif

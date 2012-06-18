@@ -20,6 +20,10 @@ namespace Talon
 	inline void StoreFloat2(float2* pDest, VectorArgL1 V);
 }
 
-#if TALON_MATH == TALON_MATH_SSE2
+#if TALON_MATH == TALON_MATH_FPU
+#include <Talon/Math/x87/Conversions.inl>
+#elif TALON_MATH == TALON_MATH_SSE2
 #include <Talon/Math/SSE/Conversions.inl>
+#else
+#error "Math Conversions not defined for this platform!"
 #endif
