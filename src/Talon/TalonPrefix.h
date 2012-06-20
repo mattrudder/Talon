@@ -15,10 +15,12 @@ namespace {
 
 // Precompiled header file for Talon Engine.
 #include <nowide/convert.h>
-using namespace nowide;
+//using namespace nowide;
 
 #if TALON_IOS
+#   define TalonLog(x) printf("%s", x)
 #elif TALON_MAC
+#   define TalonLog(x) printf("%s", x)
 #elif TALON_WINDOWS
 #	define TalonLog(x) OutputDebugStringA(x)
 #	define WIN32_LEAN_AND_MEAN // TODO: Define additional NO_* defines to slim down windows.h

@@ -6,27 +6,30 @@ namespace Talon
 {
 	std::ostream& operator<<(std::ostream& os, const InputDeviceAxis& e)
 	{
+        const char* label = nullptr;
 		switch(e)
 		{
 		case InputDeviceAxis::LeftX:
-			os << "LeftX";
+			label = "LeftX";
 			break;
 		case InputDeviceAxis::LeftY:
-			os << "LeftY";
+			label = "LeftY";
 			break;
 		case InputDeviceAxis::LeftZ:
-			os << "LeftZ";
+			label = "LeftZ";
 			break;
 		case InputDeviceAxis::RightX:
-			os << "RightX";
+			label = "RightX";
 			break;
 		case InputDeviceAxis::RightY:
-			os << "RightY";
+			label = "RightY";
 			break;
 		case InputDeviceAxis::RightZ:
-			os << "RightZ";
+			label = "RightZ";
 			break;
 		}
+        
+        os << std::string(label);
 
 		return os;
 	}

@@ -15,14 +15,10 @@ namespace Talon
 	});
 }
 #elif TALON_MATH==TALON_MATH_SSE2
-#	if TALON_WINDOWS
-#		include <xmmintrin.h>
-#	endif
+#	include <xmmintrin.h>
 namespace Talon
 {
-#	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 	typedef __m128 Vector;
-#	endif
 }
 #endif
 
@@ -39,6 +35,8 @@ namespace Talon
 	Vector VectorDivide(VectorArgL1 v1, VectorArgL1 v2);
 	Vector VectorScale(VectorArgL1 v, float scale);
 
+    // GCC/Clang already implement these.
+#if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 	Vector operator+ (VectorArgL1 V);
 	Vector operator- (VectorArgL1 V);
 	Vector& operator+= (Vector& V1, VectorArgL1 V2);
@@ -54,6 +52,7 @@ namespace Talon
 	Vector operator* (VectorArgL1 V, float S);
 	Vector operator* (float S, VectorArgL1 V);
 	Vector operator/ (VectorArgL1 V, float S);
+#endif
 }
 
 #include "Vector.inl"

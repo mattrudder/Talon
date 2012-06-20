@@ -22,7 +22,7 @@ using namespace DirectX;
 
 namespace Talon
 {
-	const BYTE SpriteEffect_SpritePixelShader[] =
+	const u8 SpriteEffect_SpritePixelShader[] =
 	{
 		68,  88,  66,  67,  62, 231, 
 		156,  88, 145, 159, 172,  51, 
@@ -108,7 +108,7 @@ namespace Talon
 		171, 171
 	};
 
-	const BYTE SpriteEffect_SpriteVertexShader[] =
+	const u8 SpriteEffect_SpriteVertexShader[] =
 	{
 		68,  88,  66,  67,  53,  15, 
 		108,  68,  10,  30,  79, 231, 

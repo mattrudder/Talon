@@ -52,7 +52,7 @@ namespace Talon
 		TALON_ASSERT(index <= MaxIndex);
 		TALON_ASSERT(mib && mmb && mi && mm);
 
-		static std::atomic<IndexType> sAutoMagic = 0;
+		static std::atomic<IndexType> sAutoMagic;
 		
 		if (++sAutoMagic > MaxMagic)
 			sAutoMagic = 1;

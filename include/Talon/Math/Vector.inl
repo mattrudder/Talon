@@ -3,6 +3,8 @@
 
 namespace Talon
 {
+// GCC/Clang already implement these
+#if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 	inline Vector operator+ (VectorArgL1 v)
 	{
 		return v;
@@ -85,4 +87,5 @@ namespace Talon
 		TALON_ASSERT(s != 0);
 		return VectorScale(v, s);
 	}
+#endif
 }

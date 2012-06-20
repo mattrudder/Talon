@@ -6,22 +6,24 @@ namespace Talon
 {
 	std::ostream& operator<<(std::ostream& os, const InputDeviceChannel& e)
 	{
+        const char* label = nullptr;
 		switch(e)
 		{
 		case InputDeviceChannel::None:
-			os << "None";
+			label = "None";
 			break;
 		case InputDeviceChannel::Axis:
-			os << "Axis";
+			label = "Axis";
 			break;
 		case InputDeviceChannel::Button:
-			os << "Button";
+			label = "Button";
 			break;
 		case InputDeviceChannel::Key:
-			os << "Key";
+			label = "Key";
 			break;
 		}
-
+        
+        os << std::string(label);
 		return os;
 	}
 }

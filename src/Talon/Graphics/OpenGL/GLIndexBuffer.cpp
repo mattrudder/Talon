@@ -11,12 +11,12 @@ namespace Talon
 		GLuint elementArrayBuffer;
 	};
 
-	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, int indexCount, BufferFormat format, void* initialData, BufferUsage bufferUsage)
+	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
 		: m_renderDevice(renderDevice)
 		, m_format(format)
 		, m_indexCount(indexCount)
 		, m_bufferUsage(bufferUsage)
-		, m_pImpl(make_unique<Impl>())
+        , m_pImpl(std::make_unique<Impl>())
 	{
 		TALON_ASSERT(bufferUsage == BufferUsage::Dynamic || bufferUsage == BufferUsage::Default);
 

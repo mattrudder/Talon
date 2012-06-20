@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Talon/TalonMath.h>
+#include <Talon/Math/Constants.h>
 #include <Talon/Math/Vector.h>
 
 namespace Talon

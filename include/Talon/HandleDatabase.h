@@ -106,7 +106,7 @@ namespace Talon
 	template <typename Data, typename HandleType, typename IndexType>
 	void HandleDatabase<Data, HandleType, IndexType>::ForEach(std::function<void(Data*)> iterator)
 	{
-		UserContainer::iterator location = begin(m_userData);
+		typename UserContainer::iterator location = begin(m_userData);
 		for (u32 i = 0; i < m_magicNumbers.size(); ++i)
 		{
 			if (m_magicNumbers[i] != 0)

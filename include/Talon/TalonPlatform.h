@@ -44,7 +44,8 @@
 #elif defined(_M_ARM)
 #	define TALON_ARCH TALON_ARCH_ARM
 #else
-#	error "This architecture is not recognized!"
+#define TALON_ARCH TALON_ARCH_X32
+//#	error "This architecture is not recognized!"
 #endif
 
 #if defined(_MSC_VER)

@@ -24,7 +24,7 @@ namespace Talon
 
 	bool Engine::Initialize(std::shared_ptr<Simulation> sim)
 	{
-		char line[MAX_PATH];
+		char line[255];
 		sprintf(line, "Talon version: %s\n", TALON_VERSION_STRING);
 		TalonLog(line);
 

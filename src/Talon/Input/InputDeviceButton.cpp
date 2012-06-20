@@ -6,58 +6,60 @@ namespace Talon
 {
 	std::ostream& operator<<(std::ostream& os, const InputDeviceButton& e)
 	{
+        const char* label = nullptr;
 		switch(e)
 		{
 		case InputDeviceButton::None:
-			os << "None";
+			label = "None";
 			break;
 		case InputDeviceButton::Up:
-			os << "Up";
+			label = "Up";
 			break;
 		case InputDeviceButton::Down:
-			os << "Down";
+			label = "Down";
 			break;
 		case InputDeviceButton::Left:
-			os << "Left";
+			label = "Left";
 			break;
 		case InputDeviceButton::Right:
-			os << "Right";
+			label = "Right";
 			break;
 		case InputDeviceButton::Start:
-			os << "Start";
+			label = "Start";
 			break;
 		case InputDeviceButton::Back:
-			os << "Back";
+			label = "Back";
 			break;
 		case InputDeviceButton::LeftThumb:
-			os << "LeftThumb";
+			label = "LeftThumb";
 			break;
 		case InputDeviceButton::RightThumb:
-			os << "RightThumb";
+			label = "RightThumb";
 			break;
 		case InputDeviceButton::LeftShoulder:
-			os << "LeftShoulder";
+			label = "LeftShoulder";
 			break;
 		case InputDeviceButton::RightShoulder:
-			os << "RightShoulder";
+			label = "RightShoulder";
 			break;
 		case InputDeviceButton::Button0:
-			os << "Button0";
+			label = "Button0";
 			break;
 		case InputDeviceButton::Button1:
-			os << "Button1";
+			label = "Button1";
 			break;
 		case InputDeviceButton::Button2:
-			os << "Button2";
+			label = "Button2";
 			break;
 		case InputDeviceButton::Button3:
-			os << "Button3";
+			label = "Button3";
 			break;
 		case InputDeviceButton::Button4:
-			os << "Button4";
+			label = "Button4";
 			break;
 		}
 
+        os << std::string(label);
 		return os;
 	}
 }

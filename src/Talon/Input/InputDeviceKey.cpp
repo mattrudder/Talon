@@ -6,7 +6,7 @@ namespace Talon
 {
 	std::ostream& operator<<(std::ostream& os, const InputDeviceKey&)
 	{
-		os << "(Unknown)";
+		os << std::string("(Unknown)");
 
 		return os;
 	}

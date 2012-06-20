@@ -13,8 +13,8 @@ project "Talon"
 	flags       { "FatalWarnings" }
 	links		{ "nowide" }
 
-	pchheader	"TalonPrefix.h"
-	pchsource	"TalonPrefix.cpp"
+	--pchheader	"TalonPrefix.h"
+	--pchsource	"TalonPrefix.cpp"
 
 	files {
 		"../../include/Talon/*.h",

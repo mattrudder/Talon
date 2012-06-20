@@ -11,12 +11,12 @@ namespace Talon
 		GLuint arrayBuffer;
 	};
 
-	VertexBuffer::VertexBuffer(RenderDevice* renderDevice, int vertexSize, int vertexCount, void* initialData, BufferUsage bufferUsage)
+	VertexBuffer::VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
 		: m_renderDevice(renderDevice)
 		, m_vertexSize(vertexSize)
 		, m_vertexCount(vertexCount)
 		, m_bufferUsage(bufferUsage)
-		, m_pImpl(make_unique<Impl>())
+        , m_pImpl(std::make_unique<Impl>())
 	{
 		glGenBuffers(1, &m_pImpl->arrayBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);

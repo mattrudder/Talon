@@ -1,10 +1,6 @@
 
 #pragma once
 
-#if TALON_WINDOWS
-#include <xmmintrin.h>
-#endif
-
 namespace Talon
 {
 	inline Vector Vector4Load(const float4* v)

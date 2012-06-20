@@ -5,12 +5,12 @@
 
 namespace Talon
 {
-	std::atomic<u32> InputDevice::s_deviceIdGenerator = 0;
+	std::atomic<u32> InputDevice::s_deviceIdGenerator;
 
 	InputDevice::InputDevice(InputDeviceType type)
 		: m_id(s_deviceIdGenerator++)
-		, m_type(type)
 		, m_isConnected(false)
+		, m_type(type)
 	{
 	}
 
@@ -51,6 +51,9 @@ namespace Talon
 		case InputDeviceChannel::Key:
 			ss << e.keyValue;
 			break;
+        default:
+            ss << "None";
+            break;
 		}
 
 		ss << " = ";
@@ -62,6 +65,9 @@ namespace Talon
 		case InputDeviceDataType::Boolean:
 			ss << e.boolValue;
 			break;
+        default:
+            ss << "null";
+            break;
 		}
 		ss << std::endl;
 
