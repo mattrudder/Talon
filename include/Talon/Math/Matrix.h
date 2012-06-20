@@ -6,9 +6,7 @@
 #include <Talon/Math/Conversions.h>
 
 #if TALON_MATH==TALON_MATH_SSE2
-#	if TALON_WINDOWS
-#		include <xmmintrin.h>
-#	endif
+#	include <xmmintrin.h>
 #endif
 
 namespace Talon

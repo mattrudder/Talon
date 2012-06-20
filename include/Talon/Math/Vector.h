@@ -24,8 +24,9 @@ namespace Talon
 
 namespace Talon
 {
+	// TODO: support differences between
 	typedef const Vector VectorArgL1;
-	typedef const Vector VectorArgL2;
+	typedef const Vector& VectorArgL2;
 	typedef const Vector& VectorArgLX;
 
 	Vector VectorNegate(VectorArgL1 v);
