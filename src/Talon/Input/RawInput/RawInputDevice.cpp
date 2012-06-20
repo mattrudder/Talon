@@ -17,25 +17,25 @@ namespace Talon
 	regex RawInputDevice::s_rgRdpDevices("\\\\{2}\\?\\\\Root#RDP_(.+)");
 	vector<RAWINPUT> RawInputDevice::s_polledInputs;
 
-    InputDevice::Kind RawInputDevice::Kind =
+	InputDevice::Kind RawInputDevice::Kind =
 	{
 		"RawInput",
 		RawInputDevice::Enumerate,
 	};
 
-    vector<shared_ptr<InputDevice>> RawInputDevice::Enumerate()
-    {
-        vector<shared_ptr<InputDevice>> devices;
+	vector<shared_ptr<InputDevice>> RawInputDevice::Enumerate()
+	{
+		vector<shared_ptr<InputDevice>> devices;
 
-        u32 deviceCount;
-        PRAWINPUTDEVICELIST deviceList;
-        if (GetRawInputDeviceList(nullptr, &deviceCount, sizeof(RAWINPUTDEVICELIST)) == 0)
-        {
-            deviceList = (PRAWINPUTDEVICELIST) malloc(sizeof(RAWINPUTDEVICELIST) * deviceCount);
-            GetRawInputDeviceList(deviceList, &deviceCount, sizeof(RAWINPUTDEVICELIST));
+		u32 deviceCount;
+		PRAWINPUTDEVICELIST deviceList;
+		if (GetRawInputDeviceList(nullptr, &deviceCount, sizeof(RAWINPUTDEVICELIST)) == 0)
+		{
+			deviceList = (PRAWINPUTDEVICELIST) malloc(sizeof(RAWINPUTDEVICELIST) * deviceCount);
+			GetRawInputDeviceList(deviceList, &deviceCount, sizeof(RAWINPUTDEVICELIST));
 
-            for (u32 i = 0; i < deviceCount; ++i)
-            {
+			for (u32 i = 0; i < deviceCount; ++i)
+			{
 				if (deviceList[i].dwType == RIM_TYPEHID)
 					continue;
 
@@ -88,21 +88,21 @@ namespace Talon
 						};
 					}
 				}
-            }
+			}
 
-            free(deviceList);
-        }
+			free(deviceList);
+		}
 
-        return devices;
-    }
+		return devices;
+	}
 
-    RawInputDevice::~RawInputDevice()
-    {
-    }
+	RawInputDevice::~RawInputDevice()
+	{
+	}
 
-    RawInputDevice::RawInputDevice(HANDLE hDevice)
-        : m_deviceHandle(hDevice)
-    {
+	RawInputDevice::RawInputDevice(HANDLE hDevice)
+		: m_deviceHandle(hDevice)
+	{
 		u32 deviceInfoSize;
 		
 		if (GetRawInputDeviceInfoW(hDevice, RIDI_DEVICENAME, nullptr, &deviceInfoSize) == 0)
@@ -133,5 +133,5 @@ namespace Talon
 				RegisterRawInputDevices(&device, 1, sizeof(RAWINPUTDEVICE));
 			}
 		}
-    }
+	}
 }

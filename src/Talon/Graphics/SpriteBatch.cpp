@@ -648,8 +648,8 @@ namespace Talon
 		// Load sprite parameters into SIMD registers.
 		//Vector source = Vector4Load(sprite->source);
 		//Vector destination = Vector4Load(sprite->destination);
-		Vector origin = Vector2Load(sprite->origin);
-		Vector invTexSize = Vector2Load(inverseTextureSize);
+		Vector origin = Vector2Load(&sprite->origin);
+		Vector invTexSize = Vector2Load(&inverseTextureSize);
 
 		//float4 color = sprite->color;
 		//f32 rotation = sprite->rotation;

@@ -3,6 +3,7 @@
 
 #include <Talon/TalonPublic.h>
 #include <Talon/Math/Vector.h>
+#include <Talon/Math/Conversions.h>
 
 #if TALON_MATH==TALON_MATH_SSE2
 #	if TALON_WINDOWS
@@ -19,7 +20,15 @@ namespace Talon
 
 	TALON_ALIGN(16, struct Matrix
 	{
-		Vector Rows[4];
+		Vector r[4];
+
+		Matrix() {}
+		Matrix(VectorArgL1 r0, VectorArgL1 r1, VectorArgL1 r2, VectorArgL2 r3) { r[0] = r0; r[1] = r1; r[2] = r2; r[3] = r3; }
+		Matrix(float m00, float m01, float m02, float m03,
+			float m10, float m11, float m12, float m13,
+			float m20, float m21, float m22, float m23,
+			float m30, float m31, float m32, float m33);
+		explicit Matrix(const float *pArray);
 
 		Matrix& operator= (const Matrix& m) { r[0] = m.r[0]; r[1] = m.r[1]; r[2] = m.r[2]; r[3] = m.r[3]; return *this; }
 			    
@@ -42,6 +51,7 @@ namespace Talon
 	});
 
 	// TODO: Matrix free functions
+	Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs);
 }
 
 #include "Matrix.inl"

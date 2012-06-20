@@ -7,9 +7,9 @@
 
 namespace Talon
 {
-	inline Vector Vector4Load(const float4& v)
+	inline Vector Vector4Load(const float4* v)
 	{
-		return _mm_load_ps(&v.x);
+		return _mm_load_ps(&v->x);
 	}
 	
 	inline Vector Vector4Load(float x, float y, float z, float w)
@@ -17,10 +17,10 @@ namespace Talon
 		return _mm_set_ps(x, y, z, w);
 	}
 
-	inline Vector Vector2Load(const float2& v)
+	inline Vector Vector2Load(const float2* v)
 	{
-		__m128 x = _mm_load_ss(&v.x);
-		__m128 y = _mm_load_ss(&v.y);
+		__m128 x = _mm_load_ss(&v->x);
+		__m128 y = _mm_load_ss(&v->y);
 		return _mm_unpacklo_ps(x, y);
 	}
 	
