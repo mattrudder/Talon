@@ -267,9 +267,12 @@ namespace Talon
 		float2 textureCoordinate;
 
 		static const int InputElementCount = 3;
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
+#endif
 	};
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 	// Vertex struct holding position, color, and texture mapping information.
 	const D3D11_INPUT_ELEMENT_DESC VertexPositionColorTexture::InputElements[] =
 	{
@@ -277,6 +280,7 @@ namespace Talon
 		{ "COLOR",       0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
+#endif
 
 	class SpriteBatch::Impl
 	{
@@ -342,6 +346,7 @@ namespace Talon
 
 		size_t m_vertexBufferOffset;
 
+                // TODO: Make Talon compliant
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		CComPtr<ID3D11PixelShader> pixelShader;
 		CComPtr<ID3D11VertexShader> vertexShader;
@@ -353,17 +358,19 @@ namespace Talon
 		CComPtr<ID3D11RasterizerState> rasterizerState;
 		CComPtr<ID3D11SamplerState> samplerState;
 #else
-#error "SpriteBatch contains platform-specific code and needs to be ported!"
+//#warning "SpriteBatch contains platform-specific code and needs to be ported!"
 #endif
 	};
-
+    
 	SpriteBatch::Impl::Impl(RenderDevice* renderDevice)
-		: device(renderDevice)
-		, m_queueCount(0)
-		, m_queueSize(0)
+		: m_insideBeginEnd(false)
+        , m_queueCount(0)
+        , m_queueSize(0)
+        , device(renderDevice)
 		, m_vertexBufferOffset(0)
-		, m_insideBeginEnd(false)
 	{
+        // TODO: Make Talon compliant
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto device = renderDevice->GetDevice();
 		ThrowIfFailed(device->CreateVertexShader(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader), nullptr, &vertexShader));
 		ThrowIfFailed(device->CreatePixelShader(SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader), nullptr, &pixelShader));
@@ -380,6 +387,7 @@ namespace Talon
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		ThrowIfFailed(device->CreateBuffer(&desc, nullptr, &constantBuffer));
+#endif
 
 		auto indexValues = CreateIndexValues();
 		indexBuffer = std::make_unique<IndexBuffer>(renderDevice, MaxBatchSize * IndicesPerSprite, BufferFormat::I16, BufferUsage::Default, &indexValues.front());
@@ -389,7 +397,7 @@ namespace Talon
 	void SpriteBatch::Impl::Begin()
 	{
 		if (m_insideBeginEnd)
-			throw std::exception("Cannot nest Begin calls on a single SpriteBatch");
+			throw Exception("Cannot nest Begin calls on a single SpriteBatch");
 
 		m_insideBeginEnd = true;
 	}
@@ -397,7 +405,7 @@ namespace Talon
 	void SpriteBatch::Impl::End()
 	{
 		if (!m_insideBeginEnd)
-			throw std::exception("Begin must be called before End");
+			throw Exception("Begin must be called before End");
 
 		PrepareForRendering();
 		FlushBatch();
@@ -405,6 +413,7 @@ namespace Talon
 		m_insideBeginEnd = false;
 	}
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 	XMMATRIX GetViewportTransform(ID3D11DeviceContext* deviceContext)
 	{
 		// Look up the current viewport.
@@ -428,6 +437,7 @@ namespace Talon
 			-1,       1,       0,  1
 			);
 	}
+#endif
 
 	void SpriteBatch::Impl::Draw(std::shared_ptr<Texture> texture, float4 destination, Rect const* sourceRect, float4 color, u32 flags)
 	{
@@ -435,10 +445,10 @@ namespace Talon
 #define LoadVector(dest, src) memcpy(dest, src, vectorSize)
 
 		if (!texture)
-			throw std::exception("Texture cannot be null");
+			throw Exception("Texture cannot be null");
 
 		if (!m_insideBeginEnd)
-			throw std::exception("Being must be called before Draw");
+			throw Exception("Being must be called before Draw");
 
 		if (m_queueCount >= m_queueSize)
 			GrowSpriteQueue();
@@ -484,6 +494,7 @@ namespace Talon
 
 	void SpriteBatch::Impl::PrepareForRendering()
 	{
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto deviceContext = device->GetDeviceContext();
 
 		// TODO: Setup state
@@ -515,6 +526,7 @@ namespace Talon
 		*(XMMATRIX*)mappedResource.pData = transformMatrix;
 		deviceContext->Unmap(pConstBuffer, 0);
 		deviceContext->VSSetConstantBuffers(0, 1, &pConstBuffer);
+#endif
 	}
 
 	std::vector<u16> SpriteBatch::Impl::CreateIndexValues()
@@ -592,9 +604,11 @@ namespace Talon
 	void SpriteBatch::Impl::RenderBatch(std::shared_ptr<Texture> texture, SpriteInfo const* const* sprites, size_t count)
 	{
 		// TODO: Activate texture;
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto d3dTexture = texture->GetShaderResourceView();
 		auto ctx = device->GetDeviceContext();
 		ctx->PSSetShaderResources(0, 1, &d3dTexture);
+#endif
 
 		while (count > 0)
 		{

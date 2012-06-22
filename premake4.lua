@@ -74,6 +74,7 @@ solution "Talon"
 include "src"
 include "experimental"
 include "externals"
+include "tests"
 
 if _ACTION == "clean" then
 	os.rmdir("bin")

@@ -1,5 +1,5 @@
 --
--- Glew (dependency)
+-- Jansson (dependency)
 --
 project "jansson"
     uuid "53B9A936-AF58-11E1-8974-BA116188709B"

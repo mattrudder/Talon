@@ -25,7 +25,7 @@ namespace Talon
 		InputDevice::Kind* kind = s_inputDeviceKinds;
 		while (kind->Name != nullptr)
 		{
-			char line[MAX_PATH];
+			char line[255];
 			sprintf(line, "\t%s\n", kind->Name);
 			TalonLog(line);
 

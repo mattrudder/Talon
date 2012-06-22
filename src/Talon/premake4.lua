@@ -11,7 +11,6 @@ project "Talon"
 	kind        "SharedLib"
 	defines     { "ZLIB_DLL", "ZLIB_WINAPI","TALON_DLL", "BUILDING_TALON"  }
 	flags       { "FatalWarnings" }
-	links		{ "nowide" }
 
 	--pchheader	"TalonPrefix.h"
 	--pchsource	"TalonPrefix.cpp"
@@ -49,6 +48,7 @@ project "Talon"
 
     -- Generic platform includes
     configuration "Windows"
+        links { "nowide" }
     	defines { "_CRT_SECURE_NO_WARNINGS" }
         files {
             "../../include/Talon/Platform/Win32/**.h",

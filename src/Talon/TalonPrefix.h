@@ -15,7 +15,9 @@ namespace {
 
 // Precompiled header file for Talon Engine.
 #include <nowide/convert.h>
+#ifdef NOWIDE_WIN_NATIVE
 using namespace nowide;
+#endif
 
 #if TALON_IOS
 #   define TalonLog(x) printf("%s", x)

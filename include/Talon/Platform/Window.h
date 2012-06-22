@@ -38,8 +38,11 @@ namespace Talon
 		delegate<Window, void(RawInputEventArgs&)> RawInput;
 
 		HWND GetHandle() const;
+#elif TALON_MAC
+        void* GetWindow() const;
 #endif
 
+        class Impl;
 	protected:
 		void OnResized(int width, int height);
 		void OnClosed();
@@ -57,10 +60,10 @@ namespace Talon
 	private:
 		int m_width;
 		int m_height;
+        
 		std::string m_title;
 		std::shared_ptr<RenderDevice> m_renderDevice;
-
-		class Impl;
+        
 		std::unique_ptr<Impl> m_pImpl;
 	};
 }

@@ -77,7 +77,7 @@ namespace Talon
 
 	RenderDevice::RenderDevice(Window* window)
 		: m_window(window)
-		, m_pImpl(make_unique<Impl>())
+		, m_pImpl(std::make_unique<Impl>())
 	{
 #if TALON_WINDOWS
 		HWND hWnd = window->GetHandle();

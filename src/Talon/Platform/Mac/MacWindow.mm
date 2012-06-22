@@ -1,5 +1,5 @@
 
-#include <Talon/Platform/Mac/MacWindow.h>
+#include <Talon/Platform/Window.h>
 #include <string>
 
 #import <Cocoa/Cocoa.h>
@@ -7,12 +7,13 @@
 @interface MacWindowDelegate : NSObject<NSWindowDelegate>
 {
 @public
-	Talon::MacWindow::Impl* impl;
+	Talon::Window::Impl* impl;
 }
 
-struct Talon::MacWindow::Impl
+class Talon::Window::Impl
 {
-	MacWindow* instance;
+public:
+	Window* instance;
 	NSWindow* window;
 	MacWindowDelegate* delegate;
 	
@@ -44,11 +45,14 @@ struct Talon::MacWindow::Impl
 @end
 
 namespace Talon
-{	
-	MacWindow::MacWindow(std::wstring title, int width, int height)
-		: WindowBase(title, width, height)
-		, m_impl(make_unique<Impl>())
-	{	
+{
+    Window::Window(const std::string title, int width, int height)
+        : m_width(width)
+        , m_height(height)
+        , m_title(title)
+        , m_renderDevice(nullptr)
+        , m_pImpl(std::make_unique<Impl>())
+	{
 		NSWindow* window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, width, height)
 													   styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
 														 backing:NSBackingStoreBuffered
@@ -56,15 +60,15 @@ namespace Talon
 														  screen:[NSScreen mainScreen]];
 
 
-		m_impl->instance = this;
-		m_impl->window = window;
-		m_impl->delegate = [[MacWindowDelegate alloc] init];
+		m_pImpl->instance = this;
+		m_pImpl->window = window;
+		m_pImpl->delegate = [[MacWindowDelegate alloc] init];
 		
 		window.title = @"Talon";
 		window.backgroundColor = [NSColor blackColor];
 		
-		m_impl->delegate->impl = m_impl.get();
-		window.delegate = m_impl->delegate;
+		m_pImpl->delegate->impl = m_pImpl.get();
+		window.delegate = m_pImpl->delegate;
 		
 		[window makeKeyAndOrderFront:[NSApplication sharedApplication]];
 		[window setReleasedWhenClosed:NO];
@@ -72,17 +76,16 @@ namespace Talon
 		OnCreated();
 	}
 
-	MacWindow::~MacWindow()
+	Window::~Window()
 	{
-		OnDestroyed();
 	}
 
-	void MacWindow::DoEvents()
+	void Window::DoEvents()
 	{
 	}
 	
-	void* MacWindow::GetWindow() const
+	void* Window::GetWindow() const
 	{
-		return (__bridge void*)m_impl->window;
+		return (__bridge void*)m_pImpl->window;
 	}
 }
