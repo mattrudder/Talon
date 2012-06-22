@@ -18,6 +18,8 @@ project "Talon"
 	files {
 		"../../include/Talon/*.h",
 		"../../include/Talon/Graphics/*.h",
+        "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp",
+        "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.h",
 		"../../include/Talon/Input/*.h",
         "../../include/Talon/Math/*.h",
         "../../include/Talon/Math/*.inl",
@@ -76,6 +78,7 @@ project "Talon"
             "Platform/Mac/**.m",
             "Platform/Mac/**.mm"
         }
+        buildoptions { "-x objective-c++", "-fobjc-arc", "-std=c++11", "-stdlib=libc++"}
 
     configuration "OpenGL"
         defines { "GLEW_STATIC", "TALON_OPENGL" }
@@ -86,9 +89,3 @@ project "Talon"
     	--includedirs { path.translate(path.join(dxPath, "Include")) }
     	libdirs 	{ path.translate(path.join(dxPath, "Lib/$(PlatformShortName)")) }
     	links		{ "dxguid", "dxgi", "d3d11", "d3dcompiler" }
-
-    configuration { _OPTIONS["gfx"] }
-        files {
-            "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.cpp",
-            "../../src/Talon/Graphics/" .. _OPTIONS["gfx"] .. "/**.h"
-        }
