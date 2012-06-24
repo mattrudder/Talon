@@ -326,11 +326,11 @@ namespace Talon
 		static void RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, float2 textureSize, float2 inverseTextureSize);
 
 		// Constants
-		static const size_t MaxBatchSize = 2048;
-		static const size_t MinBatchSize = 128;
-		static const size_t InitialQueueSize = 64;
-		static const size_t VerticesPerSprite = 4;
-		static const size_t IndicesPerSprite = 6;
+		static const size_t MaxBatchSize;
+		static const size_t MinBatchSize;
+		static const size_t InitialQueueSize;
+		static const size_t VerticesPerSprite;
+		static const size_t IndicesPerSprite;
 
 		std::unique_ptr<SpriteInfo[]> m_spriteQueue;
 
@@ -361,6 +361,12 @@ namespace Talon
 //#warning "SpriteBatch contains platform-specific code and needs to be ported!"
 #endif
 	};
+    
+    const size_t SpriteBatch::Impl::MaxBatchSize = 2048;
+    const size_t SpriteBatch::Impl::MinBatchSize = 128;
+    const size_t SpriteBatch::Impl::InitialQueueSize = 64;
+    const size_t SpriteBatch::Impl::VerticesPerSprite = 4;
+    const size_t SpriteBatch::Impl::IndicesPerSprite = 6;
     
 	SpriteBatch::Impl::Impl(RenderDevice* renderDevice)
 		: m_insideBeginEnd(false)

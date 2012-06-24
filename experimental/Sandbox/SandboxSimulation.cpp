@@ -18,18 +18,16 @@
 #include <Talon/GameObject.h>
 #include <Talon/Graphics/SpriteComponent.h>
 
-#include <windows.h>
-
 using namespace std;
 using namespace Talon;
 
 SandboxSimulation::SandboxSimulation()
-	: m_engine(Engine::Instance())
+    : m_spriteBatch(nullptr)
+    , m_texture(nullptr)
+    , m_engine(Engine::Instance())
 	, m_gamepad(nullptr)
 	, m_keyboard(nullptr)
 	, m_mouse(nullptr)
-	, m_spriteBatch(nullptr)
-	, m_texture(nullptr)
 {
 }
 
@@ -39,7 +37,7 @@ SandboxSimulation::~SandboxSimulation(void)
 
 void SandboxSimulation::Foo()
 {
-	OutputDebugStringA("Button pressed!");
+//	OutputDebugStringA("Button pressed!");
 }
 
 void SandboxSimulation::OnInitialized()

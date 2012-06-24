@@ -101,7 +101,7 @@ Desktop.ini
 *.swp
 *~.nib
 
-build/
+build/generated/
 
 *.pbxuser
 *.perspective

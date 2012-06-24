@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+	version = "1.0">
+	<FileRef
+		location = "group:../generated/xcode4/Talon.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:Sandbox.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:../generated/xcode4/MaterialParser.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:../generated/xcode4/glew.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:../generated/xcode4/jansson.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:../generated/xcode4/UnitTest++.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:../generated/xcode4/MathTests.xcodeproj">
+	</FileRef>
+</Workspace>

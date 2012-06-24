@@ -9,9 +9,9 @@
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Simulation.h>
 
-#include <zlib.h>
-#include <png.h>
-#include <cairo.h>
+//#include <zlib.h>
+//#include <png.h>
+//#include <cairo.h>
 #include <FreeImage.h>
 
 namespace Talon
@@ -28,14 +28,14 @@ namespace Talon
 		sprintf(line, "Talon version: %s\n", TALON_VERSION_STRING);
 		TalonLog(line);
 
-		sprintf(line, "zlib version: %s\n", zlibVersion());
-		TalonLog(line);
+//		sprintf(line, "zlib version: %s\n", zlibVersion());
+//		TalonLog(line);
 
-		sprintf(line, "libpng version: %s\n", png_get_header_ver(nullptr));
-		TalonLog(line);
+//		sprintf(line, "libpng version: %s\n", png_get_header_ver(nullptr));
+//		TalonLog(line);
 
-		sprintf(line, "Cairo version: %s\n", cairo_version_string());
-		TalonLog(line);
+//		sprintf(line, "Cairo version: %s\n", cairo_version_string());
+//		TalonLog(line);
 
 		sprintf(line, "FreeImage version: %s\n", FreeImage_GetVersion());
 		TalonLog(line);

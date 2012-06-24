@@ -55,8 +55,11 @@ function apply_external(api, lib, specifics)
 
 	configuration "vs*"
 		libdirs(get_absolute_from_solution("externals/" .. api .. "/lib/vc/" .. vs_specifics .. "$(PlatformShortName)/"))
-		links(lib)
+
+	configuration "MacOSX"
+		libdirs(get_absolute_from_solution("externals/" .. api .. "/lib/Mac/"))
 	
 	configuration "*"
+		links(lib)
 		includedirs(get_absolute_from_solution("externals/" .. api .. "/include/"))
 end

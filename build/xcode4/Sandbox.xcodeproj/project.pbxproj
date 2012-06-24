@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02BB7B9C43423F5566895627 /* SandboxSimulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3FA720E268946A0E63C95351 /* SandboxSimulation.cpp */; };
+		258950D57CD52BA0505F4CDF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 311252B92ED87EC53DCB1B9C /* MainMenu.xib */; };
+		5421564D10216F561B2B2A68 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46F702561D9827A901963105 /* AppDelegate.mm */; };
+		5E974BE3246D088D07921D54 /* libTalon.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43354F6F25BD47D51554725F /* libTalon.dylib */; };
+		5EF14AAD3589392E372D1F98 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D843BA562D60FD4496B4AAB /* InfoPlist.strings */; };
+		73FC37EB4DA04EC725394FCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE0251341825CFF009634E8 /* main.m */; };
+		C9DF56B41596E2B40033F40D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DF56B31596E2B40033F40D /* CoreVideo.framework */; };
+		C9DF56B61596E2BD0033F40D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DF56B51596E2BD0033F40D /* Cocoa.framework */; };
+		C9DF56B81596E2C30033F40D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DF56B71596E2C30033F40D /* OpenGL.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1BC151CE32063514719C6B75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32EF120A65B558B30CC63B08 /* Talon.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 312713D26E9B0A287D1A5B0D;
+			remoteInfo = libTalon.dylib;
+		};
+		539624583B9538C879A2298F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32EF120A65B558B30CC63B08 /* Talon.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 51D1064F3A593A58771469AB;
+			remoteInfo = libTalon.dylib;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		22C8286516CE4B8C036F0750 /* Sandbox-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Sandbox-Info.plist"; path = "../../experimental/Sandbox/Mac/Sandbox-Info.plist"; sourceTree = "<group>"; };
+		32EF120A65B558B30CC63B08 /* Talon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Talon.xcodeproj; sourceTree = SOURCE_ROOT; };
+		3CE0251341825CFF009634E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../experimental/Sandbox/Mac/main.m; sourceTree = "<group>"; };
+		3FA720E268946A0E63C95351 /* SandboxSimulation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SandboxSimulation.cpp; path = ../../experimental/Sandbox/SandboxSimulation.cpp; sourceTree = "<group>"; };
+		4616090758D04F5A24461DF4 /* SandboxSimulation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SandboxSimulation.h; path = ../../experimental/Sandbox/SandboxSimulation.h; sourceTree = "<group>"; };
+		46F702561D9827A901963105 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objc; name = AppDelegate.mm; path = ../../experimental/Sandbox/Mac/AppDelegate.mm; sourceTree = "<group>"; };
+		4BA555CC48462B8469B664C3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = ../../experimental/Sandbox/Mac/en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		4F1C76B522511A080C5675D8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../experimental/Sandbox/Mac/AppDelegate.h; sourceTree = "<group>"; };
+		5A63524F7E537C7514AE6524 /* TalonSandbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalonSandbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		61FD520C1AA22CB81D8B2ABE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../../experimental/Sandbox/Mac/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C9DF56B31596E2B40033F40D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
+		C9DF56B51596E2BD0033F40D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../../../../System/Library/Frameworks/Cocoa.framework; sourceTree = "<group>"; };
+		C9DF56B71596E2C30033F40D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		536A0C0536AA5BF5734151BD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9DF56B81596E2C30033F40D /* OpenGL.framework in Frameworks */,
+				C9DF56B61596E2BD0033F40D /* Cocoa.framework in Frameworks */,
+				C9DF56B41596E2B40033F40D /* CoreVideo.framework in Frameworks */,
+				5E974BE3246D088D07921D54 /* libTalon.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		17FE5B9E1F5D3A7E51F615B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43354F6F25BD47D51554725F /* libTalon.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2DEA64A068BB0C040FEC5021 /* Sandbox */ = {
+			isa = PBXGroup;
+			children = (
+				4F6266D563B516B62B590167 /* Mac */,
+				3FA720E268946A0E63C95351 /* SandboxSimulation.cpp */,
+				4616090758D04F5A24461DF4 /* SandboxSimulation.h */,
+			);
+			name = Sandbox;
+			sourceTree = "<group>";
+		};
+		34E6258D689D1F2607F16807 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A63524F7E537C7514AE6524 /* TalonSandbox.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		376A15AF3746783D239854BA /* Projects */ = {
+			isa = PBXGroup;
+			children = (
+				32EF120A65B558B30CC63B08 /* Talon.xcodeproj */,
+			);
+			name = Projects;
+			sourceTree = "<group>";
+		};
+		4F6266D563B516B62B590167 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				4F1C76B522511A080C5675D8 /* AppDelegate.h */,
+				46F702561D9827A901963105 /* AppDelegate.mm */,
+				22C8286516CE4B8C036F0750 /* Sandbox-Info.plist */,
+				3CE0251341825CFF009634E8 /* main.m */,
+				3D843BA562D60FD4496B4AAB /* InfoPlist.strings */,
+				311252B92ED87EC53DCB1B9C /* MainMenu.xib */,
+			);
+			name = Mac;
+			sourceTree = "<group>";
+		};
+		6F242DAB3ECB0AA557F057C8 /* experimental */ = {
+			isa = PBXGroup;
+			children = (
+				2DEA64A068BB0C040FEC5021 /* Sandbox */,
+			);
+			name = experimental;
+			sourceTree = "<group>";
+		};
+		74B74150707527806CD40FBF /* Sandbox */ = {
+			isa = PBXGroup;
+			children = (
+				C9DF56B71596E2C30033F40D /* OpenGL.framework */,
+				C9DF56B51596E2BD0033F40D /* Cocoa.framework */,
+				C9DF56B31596E2B40033F40D /* CoreVideo.framework */,
+				6F242DAB3ECB0AA557F057C8 /* experimental */,
+				34E6258D689D1F2607F16807 /* Products */,
+				376A15AF3746783D239854BA /* Projects */,
+			);
+			name = Sandbox;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		376C3D3F1DA202756CEF40DA /* Sandbox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1982512B0C913D8313BD6A9B /* Build configuration list for PBXNativeTarget "Sandbox" */;
+			buildPhases = (
+				6A3F64BA2244244D41CD14E9 /* Resources */,
+				7F60009F076F25C127197F2A /* Sources */,
+				536A0C0536AA5BF5734151BD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FCC36E938B30B8902404E6F /* PBXTargetDependency */,
+			);
+			name = Sandbox;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Sandbox;
+			productReference = 5A63524F7E537C7514AE6524 /* TalonSandbox.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sandbox" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 74B74150707527806CD40FBF /* Sandbox */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 17FE5B9E1F5D3A7E51F615B6 /* Products */;
+					ProjectRef = 32EF120A65B558B30CC63B08 /* Talon.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				376C3D3F1DA202756CEF40DA /* Sandbox */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		43354F6F25BD47D51554725F /* libTalon.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libTalon.dylib;
+			remoteRef = 1BC151CE32063514719C6B75 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A3F64BA2244244D41CD14E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EF14AAD3589392E372D1F98 /* InfoPlist.strings in Resources */,
+				258950D57CD52BA0505F4CDF /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F60009F076F25C127197F2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5421564D10216F561B2B2A68 /* AppDelegate.mm in Sources */,
+				73FC37EB4DA04EC725394FCD /* main.m in Sources */,
+				02BB7B9C43423F5566895627 /* SandboxSimulation.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1FCC36E938B30B8902404E6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libTalon.dylib;
+			targetProxy = 539624583B9538C879A2298F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		311252B92ED87EC53DCB1B9C /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BA555CC48462B8469B664C3 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		3D843BA562D60FD4496B4AAB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61FD520C1AA22CB81D8B2ABE /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		05782A43478A6DEB0F4F4018 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = NO;
+				CONFIGURATION_BUILD_DIR = ../../bin/x86/Release;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INFOPLIST_FILE = "../../experimental/Sandbox/Mac/Sandbox-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = TalonSandbox;
+			};
+			name = Release;
+		};
+		103F244367AA703407A4507A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HOST_MATT_LAPTOP,
+					_DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../experimental/Sandbox,
+				);
+				INFOPLIST_FILE = "";
+				OBJROOT = obj/Debug/Sandbox;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-ffast-math";
+				SDKROOT = "";
+				SYMROOT = ../../bin/x86/Debug;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Debug;
+		};
+		148A2656783C64E46BF26880 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HOST_MATT_LAPTOP,
+					NDEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../experimental/Sandbox,
+				);
+				INFOPLIST_FILE = "";
+				OBJROOT = obj/Release/Sandbox;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-ffast-math";
+				SDKROOT = "";
+				SYMROOT = ../../bin/x86/Release;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Release;
+		};
+		580A368620D44FE97FAC056A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = NO;
+				CONFIGURATION_BUILD_DIR = ../../bin/x86/Debug;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INFOPLIST_FILE = "../../experimental/Sandbox/Mac/Sandbox-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = TalonSandbox;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1982512B0C913D8313BD6A9B /* Build configuration list for PBXNativeTarget "Sandbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05782A43478A6DEB0F4F4018 /* Release */,
+				580A368620D44FE97FAC056A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sandbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				148A2656783C64E46BF26880 /* Release */,
+				103F244367AA703407A4507A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

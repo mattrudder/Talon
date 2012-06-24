@@ -16,7 +16,7 @@ namespace Talon
 	// TODO: Support passing by value for systems that support it (e.g, Xbox 360)
 	typedef const Matrix& MatrixArgL1;
 
-	TALON_ALIGN(16, struct Matrix
+	TALON_ALIGN(16, struct TalonApi Matrix
 	{
 		Vector r[4];
 
@@ -52,6 +52,7 @@ namespace Talon
 	Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs);
 }
 
+#if BUILDING_TALON
 #include "Matrix.inl"
 
 #if TALON_MATH == TALON_MATH_FPU
@@ -60,4 +61,5 @@ namespace Talon
 #include <Talon/Math/SSE/Matrix.inl>
 #else
 #error "Matrix not defined for this platform!"
+#endif
 #endif

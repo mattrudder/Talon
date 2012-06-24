@@ -9,9 +9,9 @@ local codeGenPath = path.getabsolute("bin/Debug/Talon.CodeGenerator.exe")
 
 if not _OPTIONS["to"] then
     if _ACTION then
-		_OPTIONS["to"] = "build/" .. _ACTION
+		_OPTIONS["to"] = "build/generated/" .. _ACTION
     else
-		_OPTIONS["to"] = "build"
+		_OPTIONS["to"] = "build/generated/"
     end
 end
 

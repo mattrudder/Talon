@@ -40,9 +40,6 @@ project "Talon"
 	}
 
 	apply_external("freeimage-3.15.3", "FreeImage")
-	apply_external("cairo-1.8.8", "cairo", true)
-	apply_external("libpng-1.5.10", "libpng15", true)
-	apply_external("zlib-1.2.6", "zlibwapi", true)
 
 	-- Configuration
 	configuration "Release"
@@ -78,7 +75,9 @@ project "Talon"
             "Platform/Mac/**.m",
             "Platform/Mac/**.mm"
         }
-        buildoptions { "-x objective-c++", "-fobjc-arc", "-std=c++11", "-stdlib=libc++"}
+        links { "Cocoa.framework", "OpenGL.framework" }
+        buildoptions { "-x objective-c++", "-fobjc-arc", "-std=c++11", "-stdlib=libc++" }
+        linkoptions { "-stdlib=libc++" }
 
     configuration "OpenGL"
         defines { "GLEW_STATIC", "TALON_OPENGL" }

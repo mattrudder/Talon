@@ -5,7 +5,6 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 {
 @public
-	std::shared_ptr<Talon::Engine> m_engine;
 	CVDisplayLinkRef m_displayLink;
 }
 

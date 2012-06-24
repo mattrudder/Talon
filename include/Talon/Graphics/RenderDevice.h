@@ -34,16 +34,14 @@ namespace Talon
 		D3D_FEATURE_LEVEL GetFeatureLevel() const;
 		ID3D11Device* GetDevice() const;
 		ID3D11DeviceContext* GetDeviceContext() const;
+#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
+		friend class GLContext;
+		void WithContext(std::function<void()> fn);
 #endif
 
 	protected:
 		void SetWindow(Window* value);
 		void SetInitialized(bool value);
-
-#if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-		friend class GLContext;
-		void WithContext(std::function<void()> fn);
-#endif
 
 	private:
 		Window* m_window;

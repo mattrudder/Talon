@@ -1,8 +1,10 @@
-﻿
+
 #include "TalonPrefix.h"
 #include <GL/glew.h>
 
 #include <Talon/Graphics/RenderDevice.h>
+#include <Talon/Graphics/IndexBuffer.h>
+#include <Talon/Graphics/VertexBuffer.h>
 
 #if TALON_WINDOWS
 #include <GL/wglew.h>
@@ -74,7 +76,7 @@ namespace Talon
 	private:
 		RenderDevice::Impl* m_pImpl;
 	};
-
+    
 	RenderDevice::RenderDevice(Window* window)
 		: m_window(window)
 		, m_pImpl(std::make_unique<Impl>())
@@ -152,6 +154,18 @@ namespace Talon
 		
 		NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
 		m_pImpl->context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+        
+        [m_pImpl->context makeCurrentContext];
+        
+        char line[255];
+        glewExperimental = GL_TRUE;
+        if (glewInit() == GLEW_OK)
+        {
+            sprintf(line, "GLEW version %s\n", glewGetString(GLEW_VERSION));
+//            OutputDebugStringA(line);
+        }
+        
+        [NSOpenGLContext clearCurrentContext];
 #endif
 
 		SetInitialized(true);
@@ -192,6 +206,12 @@ namespace Talon
 		[NSOpenGLContext clearCurrentContext];
 #endif
 	}
+
+    void RenderDevice::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
+    {
+        GLenum indexType = m_activeIndexBuffer->GetFormat() == BufferFormat::I16 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+        glDrawElements(GL_TRIANGLES, indexCount, indexType, 0);
+    }
 
 	void RenderDevice::BeginFrame()
 	{
