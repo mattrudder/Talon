@@ -12,6 +12,7 @@ project "MathTests"
 
     includedirs {
         "./",
+        "../../externals/UnitTest++-1.4/src"
     }
 
 	files {
