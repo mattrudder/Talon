@@ -71,3 +71,13 @@ TEST(VectorScale)
 	CHECK(r.x == 40);
 	CHECK(r.y == 80);
 }
+
+TEST(VectorDot)
+{
+	Vector a = Vector4Load(1, 2, 3, 0);
+	Vector b = Vector4Load(3, 4, 5, 0);
+
+	float r = Vector3Dot(a, b);
+
+	CHECK(r == 26);
+}

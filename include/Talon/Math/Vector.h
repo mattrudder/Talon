@@ -36,6 +36,12 @@ namespace Talon
 	Vector VectorDivide(VectorArgL1 v1, VectorArgL1 v2);
 	Vector VectorScale(VectorArgL1 v, float scale);
 
+	float Vector2Dot(VectorArgL1 v1, VectorArgL1 v2);
+
+	float Vector3Dot(VectorArgL1 v1, VectorArgL1 v2);
+
+	float Vector4Dot(VectorArgL1 v1, VectorArgL1 v2);
+
     // GCC/Clang already implement these.
 #if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 	Vector operator+ (VectorArgL1 V);
