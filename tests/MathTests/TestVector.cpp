@@ -2,22 +2,32 @@
 #include <Talon/Talon.h>
 using namespace Talon;
 
-TEST(Vector2Load)
+TEST(Vector2LoadStore)
 {
 	float2 f(1, 2);
 	Vector a = Vector2Load(f.x, f.y);
 	Vector b = Vector2Load(&f);
 
 	CHECK(memcmp(&a, &b, sizeof(Vector)) == 0);
+
+	float2 v;
+	StoreFloat2(&v, a);
+
+	CHECK(f.x == v.x && f.y == v.y);
 }
 
-TEST(Vector4Load)
+TEST(Vector4LoadStore)
 {
 	float4 f(1, 2, 3, 4);
 	Vector a = Vector4Load(f.x, f.y, f.z, f.w);
 	Vector b = Vector4Load(&f);
 
 	CHECK(memcmp(&a, &b, sizeof(Vector)) == 0);
+
+	float4 v;
+	StoreFloat4(&v, a);
+
+	CHECK(f.x == v.x && f.y == v.y && f.y == v.y && f.z == v.z);
 }
 
 TEST(VectorAdd)
