@@ -4,7 +4,7 @@ using namespace Talon;
 
 TEST(Vector2LoadStore)
 {
-	float2 f(1, 2);
+	float2a f(1, 2);
 	Vector a = Vector2Load(f.x, f.y);
 	Vector b = Vector2Load(&f);
 
@@ -16,9 +16,23 @@ TEST(Vector2LoadStore)
 	CHECK(f.x == v.x && f.y == v.y);
 }
 
+TEST(Vector3LoadStore)
+{
+	float3a f(1, 2, 3);
+	Vector a = Vector3Load(f.x, f.y, f.z);
+	Vector b = Vector3Load(&f);
+
+	CHECK(memcmp(&a, &b, sizeof(Vector)) == 0);
+
+	float3 v;
+	StoreFloat3(&v, a);
+
+	CHECK(f.x == v.x && f.y == v.y && f.y == v.y && f.z == v.z);
+}
+
 TEST(Vector4LoadStore)
 {
-	float4 f(1, 2, 3, 4);
+	float4a f(1, 2, 3, 4);
 	Vector a = Vector4Load(f.x, f.y, f.z, f.w);
 	Vector b = Vector4Load(&f);
 
@@ -27,7 +41,7 @@ TEST(Vector4LoadStore)
 	float4 v;
 	StoreFloat4(&v, a);
 
-	CHECK(f.x == v.x && f.y == v.y && f.y == v.y && f.z == v.z);
+	CHECK(f.x == v.x && f.y == v.y && f.y == v.y && f.z == v.z && f.w == v.w);
 }
 
 TEST(VectorAdd)
@@ -102,10 +116,19 @@ TEST(VectorScale)
 
 TEST(VectorDot)
 {
-	Vector a = Vector4Load(1, 2, 3, 0);
-	Vector b = Vector4Load(3, 4, 5, 0);
+	Vector a = Vector4Load(1, 2, 3, 4);
+	Vector b = Vector4Load(5, 6, 7, 8);
 
-	float r = Vector3Dot(a, b);
+	float r = Vector4Dot(a, b);
+	CHECK(r == 70);
 
+	a = Vector3Load(1, 2, 3);
+	b = Vector3Load(3, 4, 5);
+	r = Vector3Dot(a, b);
 	CHECK(r == 26);
+
+	a = Vector2Load(1, 2);
+	b = Vector2Load(3, 4);
+	r = Vector2Dot(a, b);
+	CHECK(r == 11);
 }

@@ -75,6 +75,7 @@ namespace Talon
 		vTemp2 = _mm_add_ps(vTemp2, vTemp);          // Add Z = X+Z; W = Y+W;
 		vTemp = _mm_shuffle_ps(vTemp, vTemp2, _MM_SHUFFLE(0,3,0,0));  // Copy W to the Z position
 		vTemp = _mm_add_ps(vTemp, vTemp2);           // Add Z and W together
+		vTemp = _mm_shuffle_ps(vTemp, vTemp, _MM_SHUFFLE(2,2,2,2));
 
 		float r;
 		_mm_store_ss(&r, vTemp);

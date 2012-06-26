@@ -138,8 +138,12 @@
 
 #if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS
 #	define TALON_ALIGN(size, decl) _declspec(align(size)) decl 
+#	define TALON_ALIGN_START(size, type) _declspec(align(size)) type 
+#	define TALON_ALIGN_END(size)
 #elif TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_GCC
 #	define TALON_ALIGN(size, decl) decl __attribute__((aligned(size)))
+#	define TALON_ALIGN_START(size, type) type
+#	define TALON_ALIGN_END(size) __attribute__((aligned(size)))
 #endif // TALON_COMPILER_VENDOR
 
 #if TALON_WINDOWS
