@@ -10,7 +10,7 @@ namespace Talon
 	
 	inline Vector Vector4Load(float x, float y, float z, float w)
 	{
-		return _mm_set_ps(x, y, z, w);
+		return _mm_set_ps(w, z, y, x);
 	}
 
 	inline Vector Vector2Load(const float2* v)
