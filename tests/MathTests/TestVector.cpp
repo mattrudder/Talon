@@ -2,7 +2,16 @@
 #include <Talon/Talon.h>
 using namespace Talon;
 
-TEST(VectorLoad)
+TEST(Vector2Load)
+{
+	float2 f(1, 2);
+	Vector a = Vector2Load(f.x, f.y);
+	Vector b = Vector2Load(&f);
+
+	CHECK(memcmp(&a, &b, sizeof(Vector)) == 0);
+}
+
+TEST(Vector4Load)
 {
 	float4 f(1, 2, 3, 4);
 	Vector a = Vector4Load(f.x, f.y, f.z, f.w);
