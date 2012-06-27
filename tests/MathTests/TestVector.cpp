@@ -132,3 +132,15 @@ TEST(VectorDot)
 	r = Vector2Dot(a, b);
 	CHECK(r == 11);
 }
+
+TEST(VectorCross)
+{
+	Vector a = Vector3Load(1, 0, 0);
+	Vector b = Vector3Load(0, 1, 0);
+	Vector x = Vector3Cross(a, b);
+
+	float3 r;
+	StoreFloat3(&r, x);
+
+	CHECK(r.x == 0 && r.y == 0 && r.z == 1);
+}

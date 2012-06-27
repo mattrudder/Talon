@@ -48,6 +48,32 @@ namespace Talon
 		return r;
 	}
 
+	inline Vector Vector3Cross(VectorArgL1 v1, VectorArgL1 v2)
+	{
+		// v1 -> yzxw
+		Vector vTemp1 = _mm_shuffle_ps(v1, v1, _MM_SHUFFLE(3, 0, 2, 1));
+
+		// v2 -> zxyw
+		Vector vTemp2 = _mm_shuffle_ps(v2, v2, _MM_SHUFFLE(3, 1, 0, 2));
+
+		// vTemp1 * vTemp2
+		Vector vResult = _mm_mul_ps(vTemp1, vTemp2);
+
+		// v1 -> zxyw
+		vTemp1 = _mm_shuffle_ps(v1, v1, _MM_SHUFFLE(3, 1, 0, 2));
+
+		// v2 -> yzxw
+		vTemp2 = _mm_shuffle_ps(v2, v2, _MM_SHUFFLE(3, 0, 2, 1));
+
+		// vTemp1 * vTemp2
+		vTemp1 = _mm_mul_ps(vTemp1, vTemp2);
+
+		// vResult - vTemp1
+		vResult = _mm_sub_ps(vResult, vTemp1);
+
+		return _mm_and_ps(vResult, VectorMask3);
+	}
+
 	inline float Vector3Dot(VectorArgL1 v1, VectorArgL1 v2)
 	{
 		// Perform the dot product

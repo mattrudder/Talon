@@ -15,11 +15,13 @@ namespace Talon
 		union
 		{
 			i32 i[4];
-			Vector v;
+#if TALON_MATH == TALON_MATH_SSE2
+			__m128 v;
+#endif
 		};
 
-		inline operator Vector() const { return v; }
 #if TALON_MATH == TALON_MATH_SSE2
+		inline operator __m128() const { return v; }
 		inline operator __m128i() const { return _mm_castps_si128(v); }
 		inline operator __m128d() const { return _mm_castps_pd(v); }
 #endif

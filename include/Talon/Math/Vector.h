@@ -1,6 +1,7 @@
 
 #pragma once
 #include <Talon/TalonPublic.h>
+#include "Constants.h"
 
 #if TALON_MATH == TALON_MATH_FPU
 namespace Talon
@@ -38,6 +39,7 @@ namespace Talon
 
 	float Vector2Dot(VectorArgL1 v1, VectorArgL1 v2);
 
+	Vector Vector3Cross(VectorArgL1 v1, VectorArgL1 v2);
 	float Vector3Dot(VectorArgL1 v1, VectorArgL1 v2);
 
 	float Vector4Dot(VectorArgL1 v1, VectorArgL1 v2);
