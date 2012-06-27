@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	Matrix::Matrix(float m00, float m01, float m02, float m03,
+	inline Matrix::Matrix(float m00, float m01, float m02, float m03,
 		float m10, float m11, float m12, float m13,
 		float m20, float m21, float m22, float m23,
 		float m30, float m31, float m32, float m33)
@@ -14,7 +14,7 @@ namespace Talon
 		r[3] = Vector4Load(m30, m31, m32, m33);
 	}
 
-	Matrix::Matrix(const float *pArray)
+	inline Matrix::Matrix(const float *pArray)
 	{
 		r[0] = Vector4Load((const float4 *)pArray);
 		r[0] = Vector4Load((const float4 *)pArray + 4);
@@ -22,7 +22,7 @@ namespace Talon
 		r[0] = Vector4Load((const float4 *)pArray + 12);
 	}
 
-	Matrix Matrix::operator- () const
+	inline Matrix Matrix::operator- () const
 	{
 		Matrix result;
 		result.r[0] = VectorNegate(r[0]);
@@ -33,7 +33,7 @@ namespace Talon
 		return result;
 	}
 
-	Matrix& Matrix::operator+= (MatrixArgL1 m)
+	inline Matrix& Matrix::operator+= (MatrixArgL1 m)
 	{
 		r[0] = VectorAdd(r[0], m.r[0]);
 		r[1] = VectorAdd(r[1], m.r[1]);
@@ -43,7 +43,7 @@ namespace Talon
 		return *this;
 	}
 
-	Matrix& Matrix::operator-= (MatrixArgL1 m)
+	inline Matrix& Matrix::operator-= (MatrixArgL1 m)
 	{
 		r[0] = VectorSubtract(r[0], m.r[0]);
 		r[1] = VectorSubtract(r[1], m.r[1]);
@@ -53,13 +53,13 @@ namespace Talon
 		return *this;
 	}
 
-	Matrix& Matrix::operator*= (MatrixArgL1 m)
+	inline Matrix& Matrix::operator*= (MatrixArgL1 m)
 	{
 		*this = MatrixMultiply(*this, m);
 		return *this;
 	}
 
-	Matrix& Matrix::operator*= (float s)
+	inline Matrix& Matrix::operator*= (float s)
 	{
 		r[0] = VectorScale(r[0], s);
 		r[1] = VectorScale(r[1], s);
@@ -69,7 +69,7 @@ namespace Talon
 		return *this;
 	}
 
-	Matrix& Matrix::operator/= (float s)
+	inline Matrix& Matrix::operator/= (float s)
 	{
 		TALON_ASSERT(s != 0);
 		float t = 1.0f / s;
@@ -81,7 +81,7 @@ namespace Talon
 		return *this;
 	}
 
-	Matrix Matrix::operator+ (MatrixArgL1 m) const
+	inline Matrix Matrix::operator+ (MatrixArgL1 m) const
 	{
 		Matrix result;
 		result.r[0] = VectorAdd(r[0], m.r[0]);
@@ -92,7 +92,7 @@ namespace Talon
 		return result;
 	}
 
-	Matrix Matrix::operator- (MatrixArgL1 m) const
+	inline Matrix Matrix::operator- (MatrixArgL1 m) const
 	{
 		Matrix result;
 		result.r[0] = VectorSubtract(r[0], m.r[0]);
@@ -103,12 +103,12 @@ namespace Talon
 		return result;
 	}
 
-	Matrix Matrix::operator* (MatrixArgL1 m) const
+	inline Matrix Matrix::operator* (MatrixArgL1 m) const
 	{
 		return MatrixMultiply(*this, m);
 	}
 
-	Matrix Matrix::operator* (float s) const
+	inline Matrix Matrix::operator* (float s) const
 	{
 		Matrix result;
 		result.r[0] = VectorScale(r[0], s);
@@ -119,7 +119,7 @@ namespace Talon
 		return result;
 	}
 
-	Matrix Matrix::operator/ (float s) const
+	inline Matrix Matrix::operator/ (float s) const
 	{
 		TALON_ASSERT(s != 0.0f);
 		float t = 1.0f / s;
@@ -132,7 +132,7 @@ namespace Talon
 		return result;
 	}
 
-	Matrix operator* (float s, MatrixArgL1 m)
+	inline Matrix operator* (float s, MatrixArgL1 m)
 	{
 		Matrix result;
 		result.r[0] = VectorScale(m.r[0], s);
@@ -141,5 +141,29 @@ namespace Talon
 		result.r[3] = VectorScale(m.r[3], s);
 
 		return result;
+	}
+
+	inline bool MatrixIsIdentity(MatrixArgL1 m)
+	{
+		__m128 vTemp1 = _mm_cmpeq_ps(m.r[0], MatrixIdentityRow0);
+		__m128 vTemp2 = _mm_cmpeq_ps(m.r[1], MatrixIdentityRow1);
+		__m128 vTemp3 = _mm_cmpeq_ps(m.r[2], MatrixIdentityRow2);
+		__m128 vTemp4 = _mm_cmpeq_ps(m.r[3], MatrixIdentityRow3);
+		vTemp1 = _mm_and_ps(vTemp1, vTemp2);
+		vTemp3 = _mm_and_ps(vTemp3, vTemp4);
+		vTemp1 = _mm_and_ps(vTemp1, vTemp3);
+
+		return _mm_movemask_ps(vTemp1) == 0x0F;
+	}
+
+	inline Matrix MatrixIdentity()
+	{
+		Matrix m;
+		m.r[0] = MatrixIdentityRow0.v;
+		m.r[1] = MatrixIdentityRow1.v;
+		m.r[2] = MatrixIdentityRow2.v;
+		m.r[3] = MatrixIdentityRow3.v;
+
+		return m;
 	}
 }

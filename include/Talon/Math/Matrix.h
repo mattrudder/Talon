@@ -4,6 +4,7 @@
 #include <Talon/TalonPublic.h>
 #include <Talon/Math/Vector.h>
 #include <Talon/Math/Conversions.h>
+#include <Talon/Math/Constants.h>
 
 #if TALON_MATH==TALON_MATH_SSE2
 #	include <xmmintrin.h>
@@ -16,7 +17,7 @@ namespace Talon
 	// TODO: Support passing by value for systems that support it (e.g, Xbox 360)
 	typedef const Matrix& MatrixArgL1;
 
-	TALON_ALIGN(16, struct TalonApi Matrix
+	TALON_ALIGN(16, struct Matrix
 	{
 		Vector r[4];
 
@@ -49,10 +50,13 @@ namespace Talon
 	});
 
 	// TODO: Matrix free functions
+	bool MatrixIsIdentity(MatrixArgL1 m);
+
+	Matrix MatrixIdentity();
+
 	Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs);
 }
 
-#if BUILDING_TALON
 #include "Matrix.inl"
 
 #if TALON_MATH == TALON_MATH_FPU
@@ -61,5 +65,4 @@ namespace Talon
 #include <Talon/Math/SSE/Matrix.inl>
 #else
 #error "Matrix not defined for this platform!"
-#endif
 #endif

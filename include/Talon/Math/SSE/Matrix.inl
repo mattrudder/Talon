@@ -3,7 +3,7 @@
 
 namespace Talon
 {
-	Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs)
+	inline Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs)
     {
         Matrix result;
         Vector vW = lhs.r[0];
