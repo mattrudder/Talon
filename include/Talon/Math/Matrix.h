@@ -53,6 +53,13 @@ namespace Talon
 	bool MatrixIsIdentity(MatrixArgL1 m);
 
 	Matrix MatrixIdentity();
+	Matrix MatrixTranslation(float x, float y, float z);
+	Matrix MatrixRotationX(float radians);
+	Matrix MatrixRotationY(float radians);
+	Matrix MatrixRotationZ(float radians);
+	Matrix MatrixScale(float s);
+	Matrix MatrixScale(float x, float y, float z);
+
 
 	Matrix MatrixMultiply(MatrixArgL1 lhs, MatrixArgL1 rhs);
 }

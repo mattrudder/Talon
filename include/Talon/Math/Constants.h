@@ -61,6 +61,11 @@ namespace Talon
 	TALON_GLOBALCONST VectorInt32 VectorMaskY = {0x00000000, 0xFFFFFFFF, 0x00000000, 0x00000000};
 	TALON_GLOBALCONST VectorInt32 VectorMaskZ = {0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000000};
 	TALON_GLOBALCONST VectorInt32 VectorMaskW = {0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF};
+
+	TALON_GLOBALCONST VectorFloat32 VectorNegateX = { -1.0f, 1.0f, 1.0f, 1.0f };
+	TALON_GLOBALCONST VectorFloat32 VectorNegateY = { 1.0f, -1.0f, 1.0f, 1.0f };
+	TALON_GLOBALCONST VectorFloat32 VectorNegateZ = { 1.0f, 1.0f, -1.0f, 1.0f };
+	TALON_GLOBALCONST VectorFloat32 VectorNegateW = { 1.0f, 1.0f, 1.0f, -1.0f };
 				
 	TALON_GLOBALCONST VectorFloat32 MatrixIdentityRow0 = { 1.0f, 0.0f, 0.0f, 0.0f };
 	TALON_GLOBALCONST VectorFloat32 MatrixIdentityRow1 = { 0.0f, 1.0f, 0.0f, 0.0f };
