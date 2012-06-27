@@ -8,29 +8,29 @@ local localHostName = trim(os.getenv("COMPUTERNAME") or os.outputof("hostname -s
 local codeGenPath = path.getabsolute("bin/Debug/Talon.CodeGenerator.exe")
 
 if not _OPTIONS["to"] then
-    if _ACTION then
+	if _ACTION then
 		_OPTIONS["to"] = "build/generated/" .. _ACTION
-    else
+	else
 		_OPTIONS["to"] = "build/generated/"
-    end
+	end
 end
 
 if not _OPTIONS["gfx"] then
-    if os.is("windows") then
+	if os.is("windows") then
 		_OPTIONS["gfx"] = "Direct3D11"
-    else
+	else
 		_OPTIONS["gfx"] = "OpenGL"
-    end
+	end
 end
 
 if isgeneratoraction(_ACTION) then
-    print("Talon Engine projects at " .. _OPTIONS["to"] .. " using:")
-    print(" - Host System: " .. localHostName .. " (" .. string.format("HOST_%s", string.upper(string.gsub(localHostName, "[^%a%d]", "_"))) .. ")")
-    print(" - Graphics: " .. _OPTIONS["gfx"])
+	print("Talon Engine projects at " .. _OPTIONS["to"] .. " using:")
+	print(" - Host System: " .. localHostName .. " (" .. string.format("HOST_%s", string.upper(string.gsub(localHostName, "[^%a%d]", "_"))) .. ")")
+	print(" - Graphics: " .. _OPTIONS["gfx"])
 
-    for k,v in pairs(_OPTIONS) do
-        print(" - " .. k .. ": " .. v)
-    end
+	for k,v in pairs(_OPTIONS) do
+		print(" - " .. k .. ": " .. v)
+	end
 end
 
 --if not _OPTIONS["scripts"] then
@@ -61,15 +61,19 @@ solution "Talon"
 	flags       	{ "EnableSSE2", "ExtraWarnings", "FloatFast", "Unicode" }
 	includedirs		{ "include" }
 
-    configuration "Debug"
-        defines "_DEBUG"
-        flags { "Symbols" }
-        targetdir "bin/x86/Debug"
-        
-    configuration "Release"
-        defines "NDEBUG"
-        flags { "OptimizeSpeed" }
-        targetdir "bin/x86/Release"
+	configuration "Debug"
+		defines "_DEBUG"
+		flags { "Symbols" }
+		targetdir "bin/x86/Debug"
+		
+	configuration "Release"
+		defines "NDEBUG"
+		flags { "OptimizeSpeed" }
+		targetdir "bin/x86/Release"
+
+	configuration "MacOSX"
+		buildoptions { "-x objective-c++", "-fobjc-arc", "-std=c++11", "-stdlib=libc++" }
+
 
 include "src"
 include "experimental"
@@ -88,12 +92,12 @@ newoption {
 }
 
 newoption {
-    trigger = "gfx",
-    value   = "api",
-    description = "Sets the graphics API to use",
-    allowed = {
-        { "OpenGL",    "OpenGL" },
-        { "Direct3D11",  "Direct3D 11 (Windows only)" },
-    },
-    optional = true 
+	trigger = "gfx",
+	value   = "api",
+	description = "Sets the graphics API to use",
+	allowed = {
+		{ "OpenGL",    "OpenGL" },
+		{ "Direct3D11",  "Direct3D 11 (Windows only)" },
+	},
+	optional = true 
 }

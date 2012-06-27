@@ -22,6 +22,7 @@ project "Sandbox"
         files {
             "Mac/**"
         }
+        linkoptions { "-stdlib=libc++" }
 
     configuration "Windows"
         postbuildcommands {

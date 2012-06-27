@@ -7,6 +7,7 @@
 
 #include "Exception.h"
 
+#include <math.h>
 #include <string>
 #include <vector>
 #include <memory>

@@ -108,7 +108,7 @@ TEST(VectorScale)
 	Vector a = Vector2Load(4, 8);
 
 	float2 r;
-	StoreFloat2(&r, a * 10);
+	StoreFloat2(&r, VectorScale(a, 10.0f));
 
 	CHECK(r.x == 40);
 	CHECK(r.y == 80);

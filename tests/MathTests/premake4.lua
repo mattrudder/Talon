@@ -20,3 +20,5 @@ project "MathTests"
         "./*.h"
 	}
 
+	configuration "MacOSX"
+		linkoptions { "-stdlib=libc++" }
