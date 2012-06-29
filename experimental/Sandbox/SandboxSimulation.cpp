@@ -127,7 +127,7 @@ void SandboxSimulation::OnEndFrame()
 {
 	m_spriteBatch->Begin();
 
-	static const int count = 1000;
+	static const int count = 10;
 	static Card cards[count];
 	static bool first = true;
 

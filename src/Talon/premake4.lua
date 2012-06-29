@@ -39,7 +39,20 @@ project "Talon"
 		"../../externals/glew-1.7.0/include",
 	}
 
+	local winCopyCommands = copy_cmd("../../externals/freeimage-3.15.3/lib/vc/$(PlatformShortName)/FreeImage.dll") ..
+		copy_cmd("../../externals/cairo-1.8.8/lib/vc/$(PlatformToolset)/$(PlatformShortName)/cairo.dll") ..
+		copy_cmd("../../externals/libpng-1.5.10/lib/vc/$(PlatformToolset)/$(PlatformShortName)/libpng15.dll") ..
+		copy_cmd("../../externals/zlib-1.2.6/lib/vc/$(PlatformToolset)/$(PlatformShortName)/zlibwapi.dll")
+
 	apply_external("freeimage-3.15.3", "FreeImage")
+
+	if not _OPTIONS["with-awesomium"] then
+		apply_external("awesomium-1.7", "awesomium")
+
+		if os.is("Windows") then
+			winCopyCommands = winCopyCommands .. copy_cmd("../../externals/awesomium-1.7/bin/$(PlatformShortName)/*")
+		end
+	end
 
 	-- Configuration
 	configuration "Release"
@@ -60,13 +73,7 @@ project "Talon"
 			"Platform/Win32/**.cpp"
 		}
 		links { "xinput" }
-		postbuildcommands
-		{
-			copy_cmd("../../externals/freeimage-3.15.3/lib/vc/$(PlatformShortName)/FreeImage.dll") ..
-			copy_cmd("../../externals/cairo-1.8.8/lib/vc/$(PlatformToolset)/$(PlatformShortName)/cairo.dll") ..
-			copy_cmd("../../externals/libpng-1.5.10/lib/vc/$(PlatformToolset)/$(PlatformShortName)/libpng15.dll") ..
-			copy_cmd("../../externals/zlib-1.2.6/lib/vc/$(PlatformToolset)/$(PlatformShortName)/zlibwapi.dll")
-		}
+		postbuildcommands {	winCopyCommands	}
 
 	configuration "MacOSX"
 		files {

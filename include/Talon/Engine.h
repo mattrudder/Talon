@@ -1,6 +1,8 @@
 
 #include <Talon/TalonPublic.h>
 
+namespace Awesomium { class WebCore; }
+
 namespace Talon
 {
 	class ComponentService;
@@ -56,5 +58,7 @@ namespace Talon
 		};
 
 		std::vector<TimedUpdate> m_serviceUpdates;
+
+		Awesomium::WebCore* m_webCore;
 	};
 }

@@ -26,10 +26,19 @@ namespace Talon
 		FreeImage_FlipVertical(bmp); 
 
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(device);
-		if (!texture->Load(FreeImage_GetWidth(bmp), FreeImage_GetHeight(bmp), BufferFormat::R8G8B8A8U, FreeImage_GetBits(bmp), fileName))
+		if (!texture->Load(FreeImage_GetWidth(bmp), FreeImage_GetHeight(bmp), BufferFormat::R8G8B8A8U, BufferUsage::Default, FreeImage_GetBits(bmp), fileName))
 			texture = nullptr;
 
 		FreeImage_Unload(bmp);
+		return texture;
+	}
+
+	std::shared_ptr<Texture> Texture::FromMemory(const RenderDevice* device, u32 width, u32 height, BufferFormat format, BufferUsage usage, const void* data, const std::string debugName)
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>(device);
+		if (!texture->Load(width, height, format, usage, data, debugName))
+			texture = nullptr;
+
 		return texture;
 	}
 }

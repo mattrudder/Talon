@@ -14,6 +14,20 @@
 //#include <cairo.h>
 #include <FreeImage.h>
 
+// HACKS: Remove at once!
+#include <Talon/Graphics/Texture.h>
+#include <Talon/Graphics/SpriteBatch.h>
+#include <Awesomium/WebConfig.h>
+#include <Awesomium/WebCore.h>
+#include <Awesomium/WebView.h>
+#include <Awesomium/STLHelpers.h>
+#include <Awesomium/BitmapSurface.h>
+using namespace Awesomium;
+
+Awesomium::WebView* g_myWebView = nullptr;
+std::shared_ptr<Talon::Texture> g_myWebViewTexture;
+std::shared_ptr<Talon::SpriteBatch> g_mySpriteBatch;
+
 namespace Talon
 {
 	Engine* Engine::Instance()
@@ -54,6 +68,12 @@ namespace Talon
 			return false;
 		}
 
+		// HACKS: Remove at once!
+		Awesomium::WebConfig cfg;
+		m_webCore = WebCore::Initialize(cfg);
+		g_myWebView = m_webCore->CreateWebView(1280, 720);
+		g_myWebView->LoadURL(WebURL(WSLit("http://vyrso.com/")));
+
 		CreateServices();
 
 		sim->Device = m_window->GetRenderDevice().get();
@@ -74,6 +94,13 @@ namespace Talon
 		m_window = nullptr;
 		m_simulation = nullptr;
 
+		g_mySpriteBatch = nullptr;
+		g_myWebView->Destroy();
+		g_myWebViewTexture = nullptr;
+
+		m_webCore = nullptr;
+		Awesomium::WebCore::Shutdown();
+
 		DestroyServices();
 
 		FreeImage_DeInitialise();
@@ -91,9 +118,39 @@ namespace Talon
 		if (device)
 		{
 			device->BeginFrame();
+
+			// HACKS: Remove at once!
+			m_webCore->Update();
+			if (!g_myWebView->IsLoading())
+			{
+
+				if (!g_mySpriteBatch)
+				{
+					BitmapSurface* surface = (BitmapSurface*)g_myWebView->surface();
+					if (surface)
+					{
+						g_mySpriteBatch = std::make_shared<SpriteBatch>(m_window->GetRenderDevice().get());
+						g_myWebViewTexture = Texture::FromMemory(m_window->GetRenderDevice().get(), 1280, 720, BufferFormat::B8G8R8A8U, BufferUsage::Dynamic, surface->buffer(), "Awesomium Surface");
+					}
+				}
+				else
+				{
+					BitmapSurface* surface = (BitmapSurface*)g_myWebView->surface();
+					g_myWebViewTexture->Update(surface->buffer());
+				}
+
+				if (g_myWebViewTexture)
+				{
+					g_mySpriteBatch->Begin();
+					g_mySpriteBatch->Draw(g_myWebViewTexture, 0, 0);
+					g_mySpriteBatch->End();
+				}
+			}
+
 			m_simulation->BeginFrame();
 
 			m_simulation->EndFrame();
+
 			device->EndFrame();
 		}
 	}
@@ -126,6 +183,7 @@ namespace Talon
 	}
 
 	Engine::Engine()
+		: m_webCore(nullptr)
 	{
 	}
 

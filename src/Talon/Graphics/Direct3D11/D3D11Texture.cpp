@@ -10,10 +10,14 @@ namespace Talon
 	class Texture::Impl
 	{
 	public:
-		bool Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName);
+		bool Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, BufferUsage usage, const void* data, const std::string debugName);
+		void Update(ID3D11DeviceContext* ctx, const void* data);
 
 		u32 width;
 		u32 height;
+
+		BufferFormat format;
+		BufferUsage usage;
 
 		CComPtr<ID3D11Texture2D> texture;
 		CComPtr<ID3D11ShaderResourceView> shaderResourceView;
@@ -34,12 +38,17 @@ namespace Talon
 		return m_pImpl->shaderResourceView;
 	}
 
-	bool Texture::Load(u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName)
+	bool Texture::Load(u32 width, u32 height, BufferFormat format, BufferUsage usage, const void* data, const std::string debugName)
 	{
-		return m_pImpl->Load(GetParent()->GetDevice(), width, height, format, data, debugName);
+		bool success = m_pImpl->Load(GetParent()->GetDevice(), width, height, format, usage, data, debugName);
+		
+		if (usage == BufferUsage::Dynamic)
+			Update(data);
+
+		return success;
 	}
 
-	bool Texture::Impl::Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, const void* data, const std::string debugName)
+	bool Texture::Impl::Load(ID3D11Device* device, u32 width, u32 height, BufferFormat format, BufferUsage usage, const void* data, const std::string debugName)
 	{
 		D3D11_TEXTURE2D_DESC desc = { 0 };
 		 
@@ -49,15 +58,18 @@ namespace Talon
 		desc.ArraySize = 1;
 		desc.Format = D3D11::ToDxgiFormat(format);
 		desc.SampleDesc.Count = 1;
-		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.Usage = D3D11::ToUsage(usage);
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = 0;
+		desc.CPUAccessFlags = usage == BufferUsage::Dynamic ? D3D11_CPU_ACCESS_WRITE : 0;
 
 		D3D11_SUBRESOURCE_DATA initialData = { 0 };
-		initialData.pSysMem = data;
-		initialData.SysMemPitch = width * Graphics::ToBytesPerPixel(format);
+		if (usage == BufferUsage::Default)
+		{
+			initialData.pSysMem = data;
+			initialData.SysMemPitch = width * Graphics::ToBytesPerPixel(format);
+		}
 
-		if (FAILED(device->CreateTexture2D(&desc, &initialData, &texture)))
+		if (FAILED(device->CreateTexture2D(&desc, usage == BufferUsage::Default ? &initialData : nullptr, &texture)))
 			return false;
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -72,13 +84,45 @@ namespace Talon
 			return false;
 		}
 		
-#if defined(DEBUG)
 		D3D11::SetDebugName(texture, debugName);
-#endif
 
 		this->width = width;
 		this->height = height;
+		this->format = format;
+		this->usage = usage;
+
 		return true;
+	}
+
+	void Texture::Impl::Update(ID3D11DeviceContext* ctx, const void* data)
+	{
+		if (usage == BufferUsage::Dynamic)
+		{
+			D3D11_MAPPED_SUBRESOURCE subresource;
+			ThrowIfFailed(ctx->Map(texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource));
+
+			u32 bufferSize = subresource.RowPitch * height;
+			for(u32 bufferOffset = 0; bufferOffset < bufferSize; bufferOffset += subresource.RowPitch)
+				memcpy(((u8*) subresource.pData) + bufferOffset, ((u8*) data) + bufferOffset, subresource.RowPitch);
+
+			ctx->Unmap(texture, 0);
+		}
+		else
+		{
+			auto debugName = D3D11::GetDebugName(texture);
+
+			shaderResourceView.Release();
+			texture.Release();
+
+			ID3D11Device* device;
+			ctx->GetDevice(&device);
+			Load(device, width, height, format, usage, data, debugName);
+		}
+	}
+
+	void Texture::Update(const void* data)
+	{
+		m_pImpl->Update(GetParent()->GetDeviceContext(), data);
 	}
 
 	u32 Texture::GetWidth() const

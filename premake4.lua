@@ -101,3 +101,8 @@ newoption {
 	},
 	optional = true 
 }
+
+newoption {
+	trigger = "with-awesomium",
+	description = "Enables the use of Awesomium for rendering HTML-based UI."
+}
