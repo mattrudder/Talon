@@ -2,17 +2,17 @@
 #include "TalonPrefix.h"
 
 #include <Talon/Graphics/SpriteBatch.h>
+
+#include <Talon/TalonMath.h>
 #include <Talon/Graphics/BufferFormat.h>
 #include <Talon/Graphics/BufferUsage.h>
 #include <Talon/Graphics/IndexBuffer.h>
-#include <Talon/Graphics/VertexBuffer.h>
-#include <Talon/Graphics/Texture.h>
-
 #include <Talon/Graphics/RenderDevice.h>
+#include <Talon/Graphics/Texture.h>
+#include <Talon/Graphics/VertexBuffer.h>
+#include <Talon/Graphics/VertexFormats.h>
 
 #include <algorithm>
-
-#include <Talon/TalonMath.h>
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 #include "Direct3D11/D3D11Utility.h"
@@ -250,38 +250,6 @@ namespace Talon
 		116, 105, 111, 110,   0, 171
 	};
 
-	// Vertex struct holding position, color, and texture mapping information.
-	struct VertexPositionColorTexture
-	{
-		VertexPositionColorTexture()
-		{ }
-
-		VertexPositionColorTexture(float3 const& position, float4 const& color, float2 const& textureCoordinate)
-			: position(position),
-			color(color),
-			textureCoordinate(textureCoordinate)
-		{ }
-
-		float3 position;
-		float4 color;
-		float2 textureCoordinate;
-
-		static const int InputElementCount = 3;
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
-#endif
-	};
-
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-	// Vertex struct holding position, color, and texture mapping information.
-	const D3D11_INPUT_ELEMENT_DESC VertexPositionColorTexture::InputElements[] =
-	{
-		{ "SV_Position", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",       0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-#endif
-
 	class SpriteBatch::Impl
 	{
 	public:
@@ -375,18 +343,28 @@ namespace Talon
         , device(renderDevice)
 		, m_vertexBufferOffset(0)
 	{
-        // TODO: Make Talon compliant
+		// TODO: Support shader abstraction (https://app.asana.com/0/1144010891804/1171962804787)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto device = renderDevice->GetDevice();
 		ThrowIfFailed(device->CreateVertexShader(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader), nullptr, &vertexShader));
 		ThrowIfFailed(device->CreatePixelShader(SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader), nullptr, &pixelShader));
+#endif
+		
+		// TODO: Support vertex layout class (https://app.asana.com/0/1144010891804/1155421552097)
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		ThrowIfFailed(device->CreateInputLayout(VertexPositionColorTexture::InputElements, VertexPositionColorTexture::InputElementCount, SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader), &inputLayout));
+#endif
 
+		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
 		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
 		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
 		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
+#endif
 
+		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		D3D11_BUFFER_DESC desc = {0};
 		desc.ByteWidth = sizeof(XMMATRIX);
 		desc.Usage = D3D11_USAGE_DYNAMIC;
@@ -419,6 +397,7 @@ namespace Talon
 		m_insideBeginEnd = false;
 	}
 
+	// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 	XMMATRIX GetViewportTransform(ID3D11DeviceContext* deviceContext)
 	{
@@ -503,7 +482,7 @@ namespace Talon
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto deviceContext = device->GetDeviceContext();
 
-		// TODO: Setup state
+		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
 		ID3D11SamplerState* pSamplerState = samplerState;
 		deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
 		deviceContext->OMSetDepthStencilState(depthStencilState, 0);
@@ -523,7 +502,7 @@ namespace Talon
 		deviceContext->IASetVertexBuffers(0, 1, &vb, &vertexStride, &vertexOffset);
 		deviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R16_UINT, 0);
 
-		// TODO: Setup constant buffers with transform matrix.
+		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
 		XMMATRIX transformMatrix = GetViewportTransform(deviceContext);
 
 		ID3D11Buffer* pConstBuffer = constantBuffer;
