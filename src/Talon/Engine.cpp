@@ -17,6 +17,7 @@
 // HACKS: Remove at once!
 #include <Talon/Graphics/Texture.h>
 #include <Talon/Graphics/SpriteBatch.h>
+#if TALON_WINDOWS
 #include <Awesomium/WebConfig.h>
 #include <Awesomium/WebCore.h>
 #include <Awesomium/WebView.h>
@@ -27,6 +28,7 @@ using namespace Awesomium;
 Awesomium::WebView* g_myWebView = nullptr;
 std::shared_ptr<Talon::Texture> g_myWebViewTexture;
 std::shared_ptr<Talon::SpriteBatch> g_mySpriteBatch;
+#endif
 
 namespace Talon
 {
@@ -68,12 +70,13 @@ namespace Talon
 			return false;
 		}
 
+#if TALON_WINDOWS
 		// HACKS: Remove at once!
 		Awesomium::WebConfig cfg;
 		m_webCore = WebCore::Initialize(cfg);
 		g_myWebView = m_webCore->CreateWebView(1280, 720);
 		g_myWebView->LoadURL(WebURL(WSLit("http://vyrso.com/")));
-
+#endif
 		CreateServices();
 
 		sim->Device = m_window->GetRenderDevice().get();
@@ -93,14 +96,14 @@ namespace Talon
 	{
 		m_window = nullptr;
 		m_simulation = nullptr;
-
+#if TALON_WINDOWS
 		g_mySpriteBatch = nullptr;
 		g_myWebView->Destroy();
 		g_myWebViewTexture = nullptr;
 
 		m_webCore = nullptr;
 		Awesomium::WebCore::Shutdown();
-
+#endif
 		DestroyServices();
 
 		FreeImage_DeInitialise();
@@ -119,6 +122,7 @@ namespace Talon
 		{
 			device->BeginFrame();
 
+#if TALON_WINDOWS
 			// HACKS: Remove at once!
 			m_webCore->Update();
 			if (!g_myWebView->IsLoading())
@@ -146,6 +150,7 @@ namespace Talon
 					g_mySpriteBatch->End();
 				}
 			}
+#endif
 
 			m_simulation->BeginFrame();
 

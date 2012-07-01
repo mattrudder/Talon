@@ -46,7 +46,7 @@ project "Talon"
 
 	apply_external("freeimage-3.15.3", "FreeImage")
 
-	if not _OPTIONS["with-awesomium"] then
+	if _OPTIONS["with-awesomium"] then
 		apply_external("awesomium-1.7", "awesomium")
 
 		if os.is("Windows") then

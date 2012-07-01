@@ -125,6 +125,10 @@ float randRange(int min, int max)
 
 void SandboxSimulation::OnEndFrame()
 {
+#if TALON_MAC
+	return;
+#endif
+	
 	m_spriteBatch->Begin();
 
 	static const int count = 10;
