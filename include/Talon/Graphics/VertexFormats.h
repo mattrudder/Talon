@@ -9,13 +9,15 @@ namespace Talon
 	struct VertexPositionColorTexture
 	{
 		VertexPositionColorTexture()
-		{ }
+		{
+		}
 		
 		VertexPositionColorTexture(float3 const& position, float4 const& color, float2 const& textureCoordinate)
-		: position(position),
-		color(color),
-		textureCoordinate(textureCoordinate)
-		{ }
+			: position(position)
+			, color(color)
+			, textureCoordinate(textureCoordinate)
+		{
+		}
 		
 		float3 position;
 		float4 color;
