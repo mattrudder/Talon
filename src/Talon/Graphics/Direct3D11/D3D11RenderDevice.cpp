@@ -42,6 +42,8 @@ namespace Talon
 		ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter1), (void **)&dxgiAdapter));
 		ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&dxgiFactory));
 
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 		// #if TALON_WINRT
 		// TODO: Handle creation from Metro (Win 8).
 		// #else

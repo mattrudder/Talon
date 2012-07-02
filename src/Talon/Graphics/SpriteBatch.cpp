@@ -39,7 +39,6 @@ namespace Talon
 	{
 	public:
 		Impl(RenderDevice* renderDevice);
-		~Impl();
 
 		void Begin();
 		void End();
@@ -110,10 +109,10 @@ namespace Talon
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		//CComPtr<ID3D11Buffer> constantBuffer;
 
-		//CComPtr<ID3D11BlendState> blendState;
-		//CComPtr<ID3D11DepthStencilState> depthStencilState;
-		//CComPtr<ID3D11RasterizerState> rasterizerState;
-		//CComPtr<ID3D11SamplerState> samplerState;
+		CComPtr<ID3D11BlendState> blendState;
+		CComPtr<ID3D11DepthStencilState> depthStencilState;
+		CComPtr<ID3D11RasterizerState> rasterizerState;
+		CComPtr<ID3D11SamplerState> samplerState;
 #else
 //#warning "SpriteBatch contains platform-specific code and needs to be ported!"
 #endif
@@ -141,10 +140,10 @@ namespace Talon
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		//ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
-		//ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
-		//ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
-		//ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
+		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
+		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
+		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
+		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
 #endif
 
 		constantBuffer = ConstantBuffer<Matrix>::Create(renderDevice, BufferUsage::Dynamic);
@@ -273,11 +272,11 @@ namespace Talon
 		auto deviceContext = device->GetDeviceContext();
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
-		//ID3D11SamplerState* pSamplerState = samplerState;
-		//deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
-		//deviceContext->OMSetDepthStencilState(depthStencilState, 0);
-		//deviceContext->RSSetState(rasterizerState);
-		//deviceContext->PSSetSamplers(0, 1, &pSamplerState);
+		ID3D11SamplerState* pSamplerState = samplerState;
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
+		deviceContext->OMSetDepthStencilState(depthStencilState, 0);
+		deviceContext->RSSetState(rasterizerState);
+		deviceContext->PSSetSamplers(0, 1, &pSamplerState);
 #endif
 
 		device->SetActiveInputLayout(spriteVertexLayout);
