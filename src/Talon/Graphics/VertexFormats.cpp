@@ -1,4 +1,6 @@
 
+#include "TalonPrefix.h"
+
 #include <Talon/Graphics/VertexFormats.h>
 
 namespace Talon

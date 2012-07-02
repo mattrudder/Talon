@@ -26,9 +26,13 @@ project "Talon"
 		"../../include/Talon/Platform/*.h",
 
 		"TalonPrefix.h",
+		"*.h",
 		"*.cpp",
+		"Graphics/*.h",
 		"Graphics/*.cpp",
+		"Input/*.h",
 		"Input/*.cpp",
+		"Platform/*.h",
 		"Platform/*.cpp",
 	}
 
