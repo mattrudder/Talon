@@ -11,6 +11,7 @@
 namespace Talon
 {
 	class IndexBuffer;
+	class InputLayout;
 	class Shader;
 	class VertexBuffer;
 	class Window;
@@ -26,6 +27,9 @@ namespace Talon
 
 		std::shared_ptr<IndexBuffer> GetActiveIndexBuffer() const;
 		void SetActiveIndexBuffer(std::shared_ptr<IndexBuffer> value);
+
+		std::shared_ptr<InputLayout> GetActiveInputLayout() const;
+		void SetActiveInputLayout(std::shared_ptr<InputLayout> value);
 
 		std::shared_ptr<VertexBuffer> GetActiveVertexBuffer() const;
 		void SetActiveVertexBuffer(std::shared_ptr<VertexBuffer> value);
@@ -52,12 +56,14 @@ namespace Talon
 		void SetInitialized(bool value);
 
 		void SetActiveIndexBufferCore(std::shared_ptr<IndexBuffer> value);
+		void SetActiveInputLayoutCore(std::shared_ptr<InputLayout> value);
 		void SetActiveVertexBufferCore(std::shared_ptr<VertexBuffer> value);
 		void SetActiveShaderCore(ShaderType type, std::shared_ptr<Shader> value);
 
 	private:
 		Window* m_window;
 		std::shared_ptr<IndexBuffer> m_activeIndexBuffer;
+		std::shared_ptr<InputLayout> m_activeInputLayout;
 		std::shared_ptr<VertexBuffer> m_activeVertexBuffer;
 		std::unordered_map<ShaderType, std::shared_ptr<Shader>> m_activeShaders;
 

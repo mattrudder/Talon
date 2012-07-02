@@ -13,9 +13,15 @@ namespace Talon
 	class TalonApi InputLayout : public RenderDeviceChild
 	{
 	public:
-		InputLayout(RenderDevice* device, const InputElement* inputElements, u32 elementCount, Shader* vertexShader);
+		static std::shared_ptr<InputLayout> Create(RenderDevice* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader);
 		~InputLayout();
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+		ID3D11InputLayout* GetInputLayout() const;
+#endif
+
+	private:
+		InputLayout(RenderDevice* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader);
 
 	private:
 		class Impl;

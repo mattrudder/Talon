@@ -33,6 +33,11 @@ namespace Talon
 		return m_activeIndexBuffer;
 	}
 
+	std::shared_ptr<InputLayout> RenderDevice::GetActiveInputLayout() const
+	{
+		return m_activeInputLayout;
+	}
+
 	std::shared_ptr<VertexBuffer> RenderDevice::GetActiveVertexBuffer() const
 	{
 		return m_activeVertexBuffer;
@@ -46,6 +51,11 @@ namespace Talon
 	void RenderDevice::SetActiveIndexBufferCore(std::shared_ptr<IndexBuffer> value)
 	{
 		m_activeIndexBuffer = value;
+	}
+
+	void RenderDevice::SetActiveInputLayoutCore(std::shared_ptr<InputLayout> value)
+	{
+		m_activeInputLayout = value;
 	}
 
 	void RenderDevice::SetActiveVertexBufferCore(std::shared_ptr<VertexBuffer> value)

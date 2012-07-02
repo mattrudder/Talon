@@ -14,7 +14,6 @@ namespace Talon
 		u32 SemanticIndex;
 		BufferFormat Format;
 		u32 InputSlot;
-		u32 AlignedByteOffset;
 		InputClassification InputSlotClass;
 		u32 InstanceDataStepRate;
 	};

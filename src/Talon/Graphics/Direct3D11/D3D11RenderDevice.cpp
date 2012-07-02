@@ -3,6 +3,7 @@
 
 #include "D3D11Utility.h"
 #include <Talon/Graphics/IndexBuffer.h>
+#include <Talon/Graphics/InputLayout.h>
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Graphics/Shader.h>
 #include <Talon/Graphics/VertexBuffer.h>
@@ -145,6 +146,24 @@ namespace Talon
 		}
 
 		SetActiveIndexBufferCore(value);
+	}
+
+	void RenderDevice::SetActiveInputLayout(std::shared_ptr<InputLayout> value)
+	{
+		auto context = m_pImpl->context;
+		ID3D11InputLayout* inputLayout = nullptr;
+
+		if (value)
+		{
+			inputLayout = value->GetInputLayout();
+			context->IASetInputLayout(inputLayout);
+		}
+		else if(!GetActiveInputLayout())
+		{
+			context->IASetInputLayout(inputLayout);
+		}
+
+		SetActiveInputLayoutCore(value);
 	}
 
 	void RenderDevice::SetActiveVertexBuffer(std::shared_ptr<VertexBuffer> value)

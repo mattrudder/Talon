@@ -14,12 +14,12 @@ namespace Talon
 	class InputLayout::Impl
 	{
 	public:
-		Impl(ID3D11Device* device, const InputElement* inputElements, u32 elementCount, Shader* vertexShader);
+		Impl(ID3D11Device* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader);
 
 		CComPtr<ID3D11InputLayout> inputLayout;
 	};
 	
-	InputLayout::Impl::Impl(ID3D11Device* device, const InputElement* inputElements, u32 elementCount, Shader* vertexShader)
+	InputLayout::Impl::Impl(ID3D11Device* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader)
 	{
 		TALON_ASSERT(inputElements != nullptr);
  		TALON_ASSERT(elementCount > 0);
@@ -35,7 +35,7 @@ namespace Talon
 			desc.SemanticIndex = el.SemanticIndex;
 			desc.Format = D3D11::ToDxgiFormat(el.Format);
 			desc.InputSlot = el.InputSlot;
-			desc.AlignedByteOffset = el.AlignedByteOffset;
+			desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 			desc.InputSlotClass = (D3D11_INPUT_CLASSIFICATION)el.InputSlotClass;
 			desc.InstanceDataStepRate = el.InstanceDataStepRate;
 		}
@@ -51,7 +51,12 @@ namespace Talon
 		ThrowIfFailed(hr);
 	}
 
-	InputLayout::InputLayout(RenderDevice* device, const InputElement* inputElements, u32 elementCount, Shader* vertexShader)
+	std::shared_ptr<InputLayout> InputLayout::Create(RenderDevice* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader)
+	{
+		return std::shared_ptr<InputLayout>(new InputLayout(device, inputElements, elementCount, vertexShader));
+	}
+
+	InputLayout::InputLayout(RenderDevice* device, const InputElement* inputElements, u32 elementCount, std::shared_ptr<Shader> vertexShader)
 		: RenderDeviceChild(device)
 		, m_pImpl(std::make_unique<Impl>(device->GetDevice(), inputElements, elementCount, vertexShader))
  	{
@@ -59,5 +64,10 @@ namespace Talon
 
 	InputLayout::~InputLayout()
 	{
+	}
+
+	ID3D11InputLayout* InputLayout::GetInputLayout() const
+	{
+		return m_pImpl->inputLayout;
 	}
 }
