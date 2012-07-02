@@ -50,14 +50,6 @@ project "Talon"
 
 	apply_external("freeimage-3.15.3", "FreeImage")
 
-	if _OPTIONS["with-awesomium"] then
-		apply_external("awesomium-1.7", "awesomium")
-
-		if os.is("Windows") then
-			winCopyCommands = winCopyCommands .. copy_cmd("../../externals/awesomium-1.7/bin/$(PlatformShortName)/*")
-		end
-	end
-
 	-- Configuration
 	configuration "Release"
 		flags { "OptimizeSpeed" }
@@ -65,7 +57,7 @@ project "Talon"
 	-- Generic platform includes
 	configuration "Windows"
 		links { "nowide" }
-		defines { "_CRT_SECURE_NO_WARNINGS" }
+		defines { "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0600" }
 		files {
 			"../../include/Talon/Platform/Win32/**.h",
 			"../../include/Talon/Math/SSE/*.h",
@@ -76,7 +68,7 @@ project "Talon"
 			"Input/XInput/**.cpp",
 			"Platform/Win32/**.cpp"
 		}
-		links { "xinput" }
+		links { "xinput9_1_0" }
 		postbuildcommands {	winCopyCommands	}
 
 	configuration "MacOSX"
@@ -96,5 +88,17 @@ project "Talon"
 	configuration "Direct3D11"
 		defines 	{ "TALON_D3D11" }
 		--includedirs { path.translate(path.join(dxPath, "Include")) }
-		libdirs 	{ path.translate(path.join(dxPath, "Lib/$(PlatformShortName)")) }
+		--libdirs 	{ path.translate(path.join(dxPath, "Lib/$(PlatformShortName)")) }
 		links		{ "dxguid", "dxgi", "d3d11", "d3dcompiler" }
+
+
+	configuration { "Windows", "with-awesomium" }
+		defines		{ "TALON_USING_AWESOMIUM" }
+
+	if _OPTIONS["with-awesomium"] then
+		apply_external("awesomium-1.7", "awesomium")
+
+		if os.is("Windows") then
+			winCopyCommands = winCopyCommands .. copy_cmd("../../externals/awesomium-1.7/bin/$(PlatformShortName)/*")
+		end
+	end

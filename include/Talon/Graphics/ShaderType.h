@@ -7,7 +7,11 @@ namespace Talon
 {
 	enum class ShaderType
 	{
+		Compute,
+		Domain,
+		Geometry,
+		Hull,
+		Pixel,
 		Vertex,
-		Pixel
 	};
 }

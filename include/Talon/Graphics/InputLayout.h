@@ -14,9 +14,11 @@ namespace Talon
 	{
 	public:
 		InputLayout(RenderDevice* device, const InputElement* inputElements, u32 elementCount, Shader* vertexShader);
+		~InputLayout();
+
 
 	private:
-		struct Impl;
+		class Impl;
 		std::unique_ptr<Impl> m_pImpl;
 	};
 }

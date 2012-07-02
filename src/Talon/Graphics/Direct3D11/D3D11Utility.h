@@ -3,6 +3,7 @@
 #include <Talon/Graphics/BufferFormat.h>
 #include <Talon/Graphics/BufferMapType.h>
 #include <Talon/Graphics/BufferUsage.h>
+#include <Talon/Graphics/ShaderType.h>
 
 namespace Talon { namespace D3D11
 {
@@ -93,10 +94,42 @@ namespace Talon { namespace D3D11
 		return device->CreateSamplerState(&desc, pResult);
 	}
 
+	inline const char* ToShaderLevel(ShaderType type)
+	{
+		switch(type)
+		{
+		case ShaderType::Compute:	return "cs_4_0_level_9_1";
+		case ShaderType::Domain:	return "ds_4_0_level_9_1";
+		case ShaderType::Geometry:	return "gs_4_0_level_9_1";
+		case ShaderType::Hull:		return "hs_4_0_level_9_1";
+		case ShaderType::Pixel:		return "ps_4_0_level_9_1";
+		case ShaderType::Vertex:	return "vs_4_0_level_9_1";
+		}
+
+		return nullptr;
+	}
+
+	inline const char* ToShaderEntryPoint(ShaderType type)
+	{
+		switch(type)
+		{
+		case ShaderType::Compute:	return "CSMain";
+		case ShaderType::Domain:	return "DSMain";
+		case ShaderType::Geometry:	return "GSMain";
+		case ShaderType::Hull:		return "HSMain";
+		case ShaderType::Pixel:		return "PSMain";
+		case ShaderType::Vertex:	return "VSMain";
+		}
+
+		return nullptr;
+	}
+
 	inline DXGI_FORMAT ToDxgiFormat(BufferFormat format)
 	{
 		switch (format)
 		{
+		case BufferFormat::I16:				return DXGI_FORMAT_R16_UINT;
+		case BufferFormat::I32:				return DXGI_FORMAT_R32_UINT;
 		case BufferFormat::B8G8R8A8U:		return DXGI_FORMAT_B8G8R8A8_UNORM;
 		case BufferFormat::B8G8R8U:			return DXGI_FORMAT_B8G8R8X8_UNORM;
 		case BufferFormat::R32G32B32A32F:	return DXGI_FORMAT_R32G32B32A32_FLOAT;

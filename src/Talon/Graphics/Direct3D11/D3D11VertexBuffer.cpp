@@ -56,8 +56,13 @@ namespace Talon
 		CComPtr<ID3D11Buffer> vertexBuffer;
     };
 
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
+	{
+		return std::shared_ptr<VertexBuffer>(new VertexBuffer(renderDevice, vertexSize, vertexCount, bufferUsage, initialData));
+	}
+
     VertexBuffer::VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
-        : m_renderDevice(renderDevice)
+        : RenderDeviceChild(renderDevice)
         , m_vertexSize(vertexSize)
         , m_vertexCount(vertexCount)
         , m_bufferUsage(bufferUsage)
@@ -97,17 +102,17 @@ namespace Talon
 	{
 		u32 bufferSize = vertexCount * m_vertexSize;
 		TALON_ASSERT(bufferSize <= m_vertexCount * m_vertexSize && "Data supplied is larger than the buffer!");
-		m_pImpl->Update(m_renderDevice->GetDeviceContext(), m_bufferUsage, bufferSize, vertexData);
+		m_pImpl->Update(GetParent()->GetDeviceContext(), m_bufferUsage, bufferSize, vertexData);
 	}
 
 	void VertexBuffer::Map(BufferMapType mapType, void** ppData)
 	{
-		m_pImpl->Map(m_renderDevice->GetDeviceContext(), mapType, ppData);
+		m_pImpl->Map(GetParent()->GetDeviceContext(), mapType, ppData);
 	}
 
 	void VertexBuffer::Unmap()
 	{
-		m_pImpl->Unmap(m_renderDevice->GetDeviceContext());
+		m_pImpl->Unmap(GetParent()->GetDeviceContext());
 	}
 
 	ID3D11Buffer* VertexBuffer::GetBuffer() const

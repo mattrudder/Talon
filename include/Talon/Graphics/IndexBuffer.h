@@ -6,15 +6,15 @@
 #include <Talon/Graphics/BufferFormat.h>
 #include <Talon/Graphics/BufferUsage.h>
 #include <Talon/Graphics/BufferMapType.h>
+#include <Talon/Graphics/RenderDeviceChild.h>
 
 namespace Talon
 {
-	class RenderDevice;
-
-	class TalonApi IndexBuffer
+	class TalonApi IndexBuffer : public RenderDeviceChild
 	{
 	public:
-		IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData = nullptr);
+		static std::shared_ptr<IndexBuffer> Create(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData = nullptr);
+		
 		virtual ~IndexBuffer();
 
 		BufferFormat GetFormat() const;
@@ -28,9 +28,10 @@ namespace Talon
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		ID3D11Buffer* GetBuffer() const;
 #endif
+	private:
+		IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData = nullptr);
 
 	private:
-		RenderDevice* m_renderDevice;
 		BufferFormat m_format;
 		u32 m_indexCount;
 		BufferUsage m_bufferUsage;

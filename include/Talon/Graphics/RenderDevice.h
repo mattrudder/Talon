@@ -2,11 +2,16 @@
 #pragma once
 
 #include <Talon/TalonPublic.h>
+
+#include <Talon/Graphics/ShaderType.h>
+
 #include <functional>
+#include <unordered_map>
 
 namespace Talon
 {
 	class IndexBuffer;
+	class Shader;
 	class VertexBuffer;
 	class Window;
 
@@ -19,11 +24,14 @@ namespace Talon
 		Window* GetWindow() const;
 		bool IsInitialized() const;
 
-		IndexBuffer* GetActiveIndexBuffer() const;
-		void SetActiveIndexBuffer(IndexBuffer* value);
+		std::shared_ptr<IndexBuffer> GetActiveIndexBuffer() const;
+		void SetActiveIndexBuffer(std::shared_ptr<IndexBuffer> value);
 
-		VertexBuffer* GetActiveVertexBuffer() const;
-		void SetActiveVertexBuffer(VertexBuffer* value);
+		std::shared_ptr<VertexBuffer> GetActiveVertexBuffer() const;
+		void SetActiveVertexBuffer(std::shared_ptr<VertexBuffer> value);
+
+		std::shared_ptr<Shader> GetActiveShader(ShaderType type);
+		void SetActiveShader(ShaderType type, std::shared_ptr<Shader> value);
 
 		void DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation);
 
@@ -43,10 +51,16 @@ namespace Talon
 		void SetWindow(Window* value);
 		void SetInitialized(bool value);
 
+		void SetActiveIndexBufferCore(std::shared_ptr<IndexBuffer> value);
+		void SetActiveVertexBufferCore(std::shared_ptr<VertexBuffer> value);
+		void SetActiveShaderCore(ShaderType type, std::shared_ptr<Shader> value);
+
 	private:
 		Window* m_window;
-		IndexBuffer* m_activeIndexBuffer;
-		VertexBuffer* m_activeVertexBuffer;
+		std::shared_ptr<IndexBuffer> m_activeIndexBuffer;
+		std::shared_ptr<VertexBuffer> m_activeVertexBuffer;
+		std::unordered_map<ShaderType, std::shared_ptr<Shader>> m_activeShaders;
+
 		bool m_initialized;
 
 		class Impl;

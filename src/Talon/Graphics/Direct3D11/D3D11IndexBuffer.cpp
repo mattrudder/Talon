@@ -56,8 +56,13 @@ namespace Talon
 		CComPtr<ID3D11Buffer> indexBuffer;
     };
 
+	std::shared_ptr<IndexBuffer> IndexBuffer::Create(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
+	{
+		return std::shared_ptr<IndexBuffer>(new IndexBuffer(renderDevice, indexCount, format, bufferUsage, initialData));
+	}
+
     IndexBuffer::IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
-        : m_renderDevice(renderDevice)
+        : RenderDeviceChild(renderDevice)
         , m_format(format)
         , m_indexCount(indexCount)
         , m_bufferUsage(bufferUsage)
@@ -104,7 +109,7 @@ namespace Talon
 		u32 indexSize = m_format == BufferFormat::I16 ? sizeof(i16) : sizeof(i32);
 		u32 bufferSize = indexCount * indexSize;
 		TALON_ASSERT(indexCount <= m_indexCount && "Data supplied is larger than the buffer!");
-		m_pImpl->Update(m_renderDevice->GetDeviceContext(), m_bufferUsage, bufferSize, indexData);
+		m_pImpl->Update(GetParent()->GetDeviceContext(), m_bufferUsage, bufferSize, indexData);
 	}
 
 	ID3D11Buffer* IndexBuffer::GetBuffer() const

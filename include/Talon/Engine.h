@@ -1,7 +1,9 @@
 
 #include <Talon/TalonPublic.h>
 
+#ifdef TALON_USING_AWESOMIUM
 namespace Awesomium { class WebCore; }
+#endif
 
 namespace Talon
 {
@@ -59,6 +61,8 @@ namespace Talon
 
 		std::vector<TimedUpdate> m_serviceUpdates;
 
+#ifdef TALON_USING_AWESOMIUM
 		Awesomium::WebCore* m_webCore;
+#endif
 	};
 }

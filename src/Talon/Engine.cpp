@@ -17,12 +17,12 @@
 // HACKS: Remove at once!
 #include <Talon/Graphics/Texture.h>
 #include <Talon/Graphics/SpriteBatch.h>
-#if TALON_WINDOWS
-#include <Awesomium/WebConfig.h>
-#include <Awesomium/WebCore.h>
-#include <Awesomium/WebView.h>
-#include <Awesomium/STLHelpers.h>
-#include <Awesomium/BitmapSurface.h>
+#ifdef TALON_USING_AWESOMIUM
+#	include <Awesomium/WebConfig.h>
+#	include <Awesomium/WebCore.h>
+#	include <Awesomium/WebView.h>
+#	include <Awesomium/STLHelpers.h>
+#	include <Awesomium/BitmapSurface.h>
 using namespace Awesomium;
 
 Awesomium::WebView* g_myWebView = nullptr;
@@ -70,7 +70,7 @@ namespace Talon
 			return false;
 		}
 
-#if TALON_WINDOWS
+#ifdef TALON_USING_AWESOMIUM
 		// HACKS: Remove at once!
 		Awesomium::WebConfig cfg;
 		m_webCore = WebCore::Initialize(cfg);
@@ -96,7 +96,7 @@ namespace Talon
 	{
 		m_window = nullptr;
 		m_simulation = nullptr;
-#if TALON_WINDOWS
+#ifdef TALON_USING_AWESOMIUM
 		g_mySpriteBatch = nullptr;
 		g_myWebView->Destroy();
 		g_myWebViewTexture = nullptr;
@@ -122,7 +122,7 @@ namespace Talon
 		{
 			device->BeginFrame();
 
-#if TALON_WINDOWS
+#ifdef TALON_USING_AWESOMIUM
 			// HACKS: Remove at once!
 			m_webCore->Update();
 			if (!g_myWebView->IsLoading())
@@ -188,7 +188,9 @@ namespace Talon
 	}
 
 	Engine::Engine()
+#ifdef TALON_USING_AWESOMIUM
 		: m_webCore(nullptr)
+#endif
 	{
 	}
 

@@ -1,8 +1,12 @@
 ﻿
 #include "TalonPrefix.h"
-#include <Talon/Graphics/RenderDevice.h>
-#include <Talon/Platform/Window.h>
 
+#include "D3D11Utility.h"
+#include <Talon/Graphics/IndexBuffer.h>
+#include <Talon/Graphics/RenderDevice.h>
+#include <Talon/Graphics/Shader.h>
+#include <Talon/Graphics/VertexBuffer.h>
+#include <Talon/Platform/Window.h>
 
 using namespace std;
 
@@ -121,5 +125,102 @@ namespace Talon
 	ID3D11DeviceContext* RenderDevice::GetDeviceContext() const
 	{
 		return m_pImpl->context;
+	}
+
+	void RenderDevice::SetActiveIndexBuffer(std::shared_ptr<IndexBuffer> value)
+	{
+		auto context = m_pImpl->context;
+		DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
+		ID3D11Buffer* ib = nullptr;
+
+		if (value)
+		{
+			ib = value->GetBuffer();
+			format = D3D11::ToDxgiFormat(value->GetFormat());
+			context->IASetIndexBuffer(ib, format, 0);
+		}
+		else if(!GetActiveVertexBuffer())
+		{
+			context->IASetIndexBuffer(ib, format, 0);
+		}
+
+		SetActiveIndexBufferCore(value);
+	}
+
+	void RenderDevice::SetActiveVertexBuffer(std::shared_ptr<VertexBuffer> value)
+	{
+		auto context = m_pImpl->context;
+		u32 vertexStride = 0;
+		u32 vertexOffset = 0;
+		ID3D11Buffer* vb = nullptr;
+		
+		if (value)
+		{
+			vb = value->GetBuffer();
+			vertexStride = value->GetVertexSize();
+
+			context->IASetVertexBuffers(0, 1, &vb, &vertexStride, &vertexOffset);
+		}
+		else if(!GetActiveVertexBuffer())
+		{
+			context->IASetVertexBuffers(0, 0, &vb, &vertexStride, &vertexOffset);
+		}
+
+		SetActiveVertexBufferCore(value);
+	}
+
+	void RenderDevice::SetActiveShader(ShaderType type, std::shared_ptr<Shader> value)
+	{
+		auto context = m_pImpl->context;
+		if (value)
+		{
+			switch(type)
+			{
+			case ShaderType::Compute:
+				context->CSSetShader(value->GetComputeShader(), nullptr, 0);
+				break;
+			case ShaderType::Domain:
+				context->DSSetShader(value->GetDomainShader(), nullptr, 0);
+				break;
+			case ShaderType::Geometry:
+				context->GSSetShader(value->GetGeometryShader(), nullptr, 0);
+				break;
+			case ShaderType::Hull:
+				context->HSSetShader(value->GetHullShader(), nullptr, 0);
+				break;
+			case ShaderType::Pixel:
+				context->PSSetShader(value->GetPixelShader(), nullptr, 0);
+				break;
+			case ShaderType::Vertex:
+				context->VSSetShader(value->GetVertexShader(), nullptr, 0);
+				break;
+			}
+		}
+		else if(!GetActiveShader(type))
+		{
+			switch(type)
+			{
+			case ShaderType::Compute:
+				context->CSSetShader(nullptr, nullptr, 0);
+				break;
+			case ShaderType::Domain:
+				context->DSSetShader(nullptr, nullptr, 0);
+				break;
+			case ShaderType::Geometry:
+				context->GSSetShader(nullptr, nullptr, 0);
+				break;
+			case ShaderType::Hull:
+				context->HSSetShader(nullptr, nullptr, 0);
+				break;
+			case ShaderType::Pixel:
+				context->PSSetShader(nullptr, nullptr, 0);
+				break;
+			case ShaderType::Vertex:
+				context->VSSetShader(nullptr, nullptr, 0);
+				break;
+			}
+		}
+
+		SetActiveShaderCore(type, value);
 	}
 }

@@ -9,7 +9,7 @@ namespace Talon
 {
 	class RenderDevice;
 
-	class TalonApi Texture : RenderDeviceChild
+	class TalonApi Texture : public RenderDeviceChild
 	{
 	public:
 		static std::shared_ptr<Texture> FromFile(const RenderDevice* device, const std::string fileName);

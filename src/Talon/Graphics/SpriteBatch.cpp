@@ -8,6 +8,7 @@
 #include <Talon/Graphics/BufferUsage.h>
 #include <Talon/Graphics/IndexBuffer.h>
 #include <Talon/Graphics/RenderDevice.h>
+#include <Talon/Graphics/Shader.h>
 #include <Talon/Graphics/Texture.h>
 #include <Talon/Graphics/VertexBuffer.h>
 #include <Talon/Graphics/VertexFormats.h>
@@ -250,6 +251,35 @@ namespace Talon
 		116, 105, 111, 110,   0, 171
 	};
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+	const char* c_vsSpriteEffect = "\
+		cbuffer Parameters : register(b0) \
+		{\
+			row_major float4x4 MatrixTransform;\
+		};\
+	\
+	\
+		void VSMain(inout float4 color    : COLOR0,\
+			inout float2 texCoord : TEXCOORD0,\
+			inout float4 position : SV_Position)\
+		{\
+			position = mul(position, MatrixTransform);\
+		}";
+
+	const char* c_psSpriteEffect = "\
+		Texture2D<float4> Texture : register(t0);\
+		sampler TextureSampler : register(s0);\
+	\
+	\
+		float4 PSMain(float4 color    : COLOR0,\
+			float2 texCoord : TEXCOORD0) : SV_Target0\
+		{\
+			return Texture.Sample(TextureSampler, texCoord) * color;\
+		}";
+#else
+#	warning "SpriteBatch needs shader definitions for this platform!"
+#endif
+
 	class SpriteBatch::Impl
 	{
 	public:
@@ -309,15 +339,19 @@ namespace Talon
 		std::vector<SpriteInfo const*> m_sortedSprites;
 
 		RenderDevice* device;
-		std::unique_ptr<IndexBuffer> indexBuffer;
-		std::unique_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		std::shared_ptr<VertexBuffer> vertexBuffer;
 
 		size_t m_vertexBufferOffset;
 
-                // TODO: Make Talon compliant
+		std::shared_ptr<Shader> vertexShader;
+		std::shared_ptr<Shader> pixelShader;
+
+
+		// TODO: Make Talon compliant
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		CComPtr<ID3D11PixelShader> pixelShader;
-		CComPtr<ID3D11VertexShader> vertexShader;
+		//CComPtr<ID3D11PixelShader> pixelShader;
+		//CComPtr<ID3D11VertexShader> vertexShader;
 		CComPtr<ID3D11InputLayout> inputLayout;
 		CComPtr<ID3D11Buffer> constantBuffer;
 
@@ -342,13 +376,12 @@ namespace Talon
         , m_queueSize(0)
         , device(renderDevice)
 		, m_vertexBufferOffset(0)
-	{
-		// TODO: Support shader abstraction (https://app.asana.com/0/1144010891804/1171962804787)
+
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto device = renderDevice->GetDevice();
-		ThrowIfFailed(device->CreateVertexShader(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader), nullptr, &vertexShader));
-		ThrowIfFailed(device->CreatePixelShader(SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader), nullptr, &pixelShader));
 #endif
+		vertexShader = Shader::CreateFromMemory(renderDevice, ShaderType::Vertex, c_vsSpriteEffect, "SpriteBatch.cpp+c_vsSpriteEffect");
+		pixelShader = Shader::CreateFromMemory(renderDevice, ShaderType::Pixel, c_psSpriteEffect, "SpriteBatch.cpp+c_psSpriteEffect");
 		
 		// TODO: Support vertex layout class (https://app.asana.com/0/1144010891804/1155421552097)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
@@ -357,10 +390,10 @@ namespace Talon
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
-		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
-		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
-		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
+		//ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
+		//ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
+		//ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
+		//ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
 #endif
 
 		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
@@ -374,8 +407,8 @@ namespace Talon
 #endif
 
 		auto indexValues = CreateIndexValues();
-		indexBuffer = std::make_unique<IndexBuffer>(renderDevice, MaxBatchSize * IndicesPerSprite, BufferFormat::I16, BufferUsage::Default, &indexValues.front());
-		vertexBuffer = std::make_unique<VertexBuffer>(renderDevice, sizeof(VertexPositionColorTexture), MaxBatchSize * VerticesPerSprite, BufferUsage::Dynamic);
+		indexBuffer = IndexBuffer::Create(renderDevice, MaxBatchSize * IndicesPerSprite, BufferFormat::I16, BufferUsage::Default, &indexValues.front());
+		vertexBuffer = VertexBuffer::Create(renderDevice, sizeof(VertexPositionColorTexture), MaxBatchSize * VerticesPerSprite, BufferUsage::Dynamic);
 	}
 
 	void SpriteBatch::Impl::Begin()
@@ -483,25 +516,23 @@ namespace Talon
 		auto deviceContext = device->GetDeviceContext();
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
-		ID3D11SamplerState* pSamplerState = samplerState;
-		deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
-		deviceContext->OMSetDepthStencilState(depthStencilState, 0);
-		deviceContext->RSSetState(rasterizerState);
-		deviceContext->PSSetSamplers(0, 1, &pSamplerState);
+		//ID3D11SamplerState* pSamplerState = samplerState;
+		//deviceContext->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
+		//deviceContext->OMSetDepthStencilState(depthStencilState, 0);
+		//deviceContext->RSSetState(rasterizerState);
+		//deviceContext->PSSetSamplers(0, 1, &pSamplerState);
 
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		deviceContext->IASetInputLayout(inputLayout);
-		deviceContext->VSSetShader(vertexShader, nullptr, 0);
-		deviceContext->PSSetShader(pixelShader, nullptr, 0);
+#endif
 
-		// TODO: Setup vertex/index buffers
-		auto vb = vertexBuffer->GetBuffer();
-		auto ib = indexBuffer->GetBuffer();
-		u32 vertexStride = sizeof(VertexPositionColorTexture);
-		u32 vertexOffset = 0;
-		deviceContext->IASetVertexBuffers(0, 1, &vb, &vertexStride, &vertexOffset);
-		deviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R16_UINT, 0);
+		device->SetActiveShader(ShaderType::Vertex, vertexShader);
+		device->SetActiveShader(ShaderType::Pixel, pixelShader);
 
+		device->SetActiveVertexBuffer(vertexBuffer);
+		device->SetActiveIndexBuffer(indexBuffer);
+
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
 		XMMATRIX transformMatrix = GetViewportTransform(deviceContext);
 
@@ -588,12 +619,8 @@ namespace Talon
 
 	void SpriteBatch::Impl::RenderBatch(std::shared_ptr<Texture> texture, SpriteInfo const* const* sprites, size_t count)
 	{
-		// TODO: Activate texture;
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		auto d3dTexture = texture->GetShaderResourceView();
-		auto ctx = device->GetDeviceContext();
-		ctx->PSSetShaderResources(0, 1, &d3dTexture);
-#endif
+		// Activate batch texture
+		pixelShader->SetTexture(0, texture);
 
 		while (count > 0)
 		{
@@ -628,7 +655,7 @@ namespace Talon
 			
 			vertexBuffer->Unmap();
 
-			// TODO: Draw indexed sprites!
+			// Draw indexed sprites!
 			u32 startIndex = m_vertexBufferOffset * IndicesPerSprite;
 			u32 indexCount = batchSize * IndicesPerSprite;
 
