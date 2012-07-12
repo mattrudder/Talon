@@ -28,7 +28,7 @@ namespace Talon
 		static const int InputElementCount = 3;
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		//static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
-		static const InputElement InputElements[InputElementCount];
 #endif
+		static const InputElement InputElements[InputElementCount];
 	};
 }

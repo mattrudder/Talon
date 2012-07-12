@@ -8,7 +8,7 @@
 
 namespace Talon
 {
-	class ConstantBuffer;
+	class ConstantBufferBase;
 	class Texture;
 
 	class TalonApi Shader : RenderDeviceChild
@@ -37,7 +37,7 @@ namespace Talon
 		void SetTexture(u32 index, std::shared_ptr<Texture> texture);
 
 		/** Sets a buffer of values on the current shader instance. */
-		void SetConstantBuffer(u32 index, std::shared_ptr<ConstantBuffer> buffer);
+		void SetConstantBuffer(u32 index, std::shared_ptr<ConstantBufferBase> buffer);
 
 		~Shader();
 

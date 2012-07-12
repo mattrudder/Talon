@@ -27,6 +27,8 @@ namespace Talon
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		ID3D11Buffer* GetBuffer() const;
+#else
+		u32 GetBuffer() const;
 #endif
 	private:
 		IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData = nullptr);

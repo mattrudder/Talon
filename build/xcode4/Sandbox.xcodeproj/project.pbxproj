@@ -250,6 +250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = NO;
@@ -260,6 +261,7 @@
 				INFOPLIST_FILE = "../../experimental/Sandbox/Mac/Sandbox-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = TalonSandbox;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -328,6 +330,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = NO;
@@ -337,6 +340,7 @@
 				INFOPLIST_FILE = "../../experimental/Sandbox/Mac/Sandbox-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = TalonSandbox;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};

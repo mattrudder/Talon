@@ -6,6 +6,7 @@
 #include <Talon/TalonMath.h>
 #include <Talon/Graphics/BufferFormat.h>
 #include <Talon/Graphics/BufferUsage.h>
+#include <Talon/Graphics/ConstantBuffer.h>
 #include <Talon/Graphics/IndexBuffer.h>
 #include <Talon/Graphics/InputLayout.h>
 #include <Talon/Graphics/RenderDevice.h>
@@ -25,32 +26,13 @@ using namespace DirectX;
 namespace Talon
 {
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-	const char* c_vsSpriteEffect = "\
-		cbuffer Parameters : register(b0) \
-		{\
-			row_major float4x4 MatrixTransform;\
-		};\
-	\
-	\
-		void VSMain(inout float4 color    : COLOR0,\
-			inout float2 texCoord : TEXCOORD0,\
-			inout float4 position : SV_Position)\
-		{\
-			position = mul(position, MatrixTransform);\
-		}";
+	const char* c_vsSpriteEffect = "Resources/SpriteBatch.VS.hlsl";
 
-	const char* c_psSpriteEffect = "\
-		Texture2D<float4> Texture : register(t0);\
-		sampler TextureSampler : register(s0);\
-	\
-	\
-		float4 PSMain(float4 color    : COLOR0,\
-			float2 texCoord : TEXCOORD0) : SV_Target0\
-		{\
-			return Texture.Sample(TextureSampler, texCoord) * color;\
-		}";
-#else
-#	warning "SpriteBatch needs shader definitions for this platform!"
+	const char* c_psSpriteEffect = "Resources/SpriteBatch.PS.hlsl";
+#elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
+	const char* c_vsSpriteEffect = "Resources/SpriteBatch.VS.glsl";
+	
+	const char* c_psSpriteEffect = "Resources/SpriteBatch.PS.glsl";
 #endif
 
 	class SpriteBatch::Impl
@@ -115,6 +97,7 @@ namespace Talon
 		std::vector<SpriteInfo const*> m_sortedSprites;
 
 		RenderDevice* device;
+		std::shared_ptr<ConstantBufferBase> constantBuffer;
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 
@@ -125,7 +108,7 @@ namespace Talon
 
 		// TODO: Make Talon compliant
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		CComPtr<ID3D11Buffer> constantBuffer;
+		//CComPtr<ID3D11Buffer> constantBuffer;
 
 		//CComPtr<ID3D11BlendState> blendState;
 		//CComPtr<ID3D11DepthStencilState> depthStencilState;
@@ -146,15 +129,14 @@ namespace Talon
 		: m_insideBeginEnd(false)
         , m_queueCount(0)
         , m_queueSize(0)
-        , device(renderDevice)
-		, m_vertexBufferOffset(0)
+        , m_vertexBufferOffset(0)
+		, device(renderDevice)
 	{
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 		auto device = renderDevice->GetDevice();
 #endif
-		vertexShader = Shader::CreateFromMemory(renderDevice, ShaderType::Vertex, c_vsSpriteEffect, "SpriteBatch.cpp+c_vsSpriteEffect");
-		pixelShader = Shader::CreateFromMemory(renderDevice, ShaderType::Pixel, c_psSpriteEffect, "SpriteBatch.cpp+c_psSpriteEffect");
-
+		vertexShader = Shader::CreateFromFile(renderDevice, ShaderType::Vertex, c_vsSpriteEffect);
+		pixelShader = Shader::CreateFromFile(renderDevice, ShaderType::Pixel, c_psSpriteEffect);
 		spriteVertexLayout = InputLayout::Create(renderDevice, VertexPositionColorTexture::InputElements, VertexPositionColorTexture::InputElementCount, vertexShader);
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
@@ -165,19 +147,24 @@ namespace Talon
 		//ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
 #endif
 
+		constantBuffer = ConstantBuffer<Matrix>::Create(renderDevice, BufferUsage::Dynamic);
 		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		D3D11_BUFFER_DESC desc = {0};
-		desc.ByteWidth = sizeof(XMMATRIX);
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		ThrowIfFailed(device->CreateBuffer(&desc, nullptr, &constantBuffer));
+//		D3D11_BUFFER_DESC desc = {0};
+//		desc.ByteWidth = sizeof(XMMATRIX);
+//		desc.Usage = D3D11_USAGE_DYNAMIC;
+//		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+//		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+//		ThrowIfFailed(device->CreateBuffer(&desc, nullptr, &constantBuffer));
 #endif
 
 		auto indexValues = CreateIndexValues();
 		indexBuffer = IndexBuffer::Create(renderDevice, MaxBatchSize * IndicesPerSprite, BufferFormat::I16, BufferUsage::Default, &indexValues.front());
 		vertexBuffer = VertexBuffer::Create(renderDevice, sizeof(VertexPositionColorTexture), MaxBatchSize * VerticesPerSprite, BufferUsage::Dynamic);
+	}
+	
+	SpriteBatch::Impl::~Impl()
+	{
 	}
 
 	void SpriteBatch::Impl::Begin()

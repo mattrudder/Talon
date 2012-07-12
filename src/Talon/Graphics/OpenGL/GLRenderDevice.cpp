@@ -1,16 +1,12 @@
 
 #include "TalonPrefix.h"
-#include <GL/glew.h>
 
 #include <Talon/Graphics/RenderDevice.h>
 #include <Talon/Graphics/IndexBuffer.h>
 #include <Talon/Graphics/VertexBuffer.h>
 
-#if TALON_WINDOWS
-#include <GL/wglew.h>
-#elif TALON_MAC
+#if TALON_MAC
 #import <Cocoa/Cocoa.h>
-#import <OpenGL/OpenGL.h>
 #endif
 
 #include <Talon/Platform/Window.h>
@@ -123,7 +119,7 @@ namespace Talon
 				else
 				{
 					// Only GL 2.1 is supported
-					OutputDebugString(L"OpenGL 3.2 not supported! Falling back to OpenGL 2.1.\n");
+					TalonLog("OpenGL 3.2 not supported! Falling back to OpenGL 2.1.\n");
 					hRC = tempContext;
 				}
 
@@ -132,7 +128,7 @@ namespace Talon
 			else
 			{
 				// Only GL 2.1 is supported
-				OutputDebugString(L"OpenGL 3.2 not supported! Falling back to OpenGL 2.1.\n");
+				TalonLog("OpenGL 3.2 not supported! Falling back to OpenGL 2.1.\n");
 				hRC = tempContext;
 			}
 
@@ -140,32 +136,42 @@ namespace Talon
 			m_pImpl->hRC = hRC;
 		}
 #elif TALON_MAC
-		GLuint attrs[] =
+		
+		
+		NSWindow* cocoaWindow = (NSWindow*)window->GetWindow();
+		NSOpenGLPixelFormatAttribute pixelFormatAttributes[] =
 		{
-			NSOpenGLPFANoRecovery,
-			NSOpenGLPFAColorSize, 24,
-			NSOpenGLPFADepthSize, 16,
-			NSOpenGLPFAStencilSize, 0,
-			NSOpenGLPFADoubleBuffer,
-			NSOpenGLPFAAccelerated,
-			NSOpenGLPFAAllowOfflineRenderers,
+			NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+			NSOpenGLPFAColorSize    , 24                           ,
+			NSOpenGLPFAAlphaSize    , 8                            ,
+			NSOpenGLPFADoubleBuffer ,
+			NSOpenGLPFAAccelerated  ,
+			NSOpenGLPFANoRecovery   ,
 			0
 		};
+		NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
+		NSOpenGLView* view = [[NSOpenGLView alloc] initWithFrame:[[cocoaWindow contentView] bounds] pixelFormat:pixelFormat];
+		[[cocoaWindow contentView] addSubview:view];
 		
-		NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-		m_pImpl->context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+		NSOpenGLContext* ctx = [view openGLContext];
+		m_pImpl->context = ctx;
+        [ctx makeCurrentContext];
+		[ctx setView:view];
         
-        [m_pImpl->context makeCurrentContext];
-        
-        char line[255];
-        glewExperimental = GL_TRUE;
-        if (glewInit() == GLEW_OK)
-        {
-            sprintf(line, "GLEW version %s\n", glewGetString(GLEW_VERSION));
-//            OutputDebugStringA(line);
-        }
-        
-        [NSOpenGLContext clearCurrentContext];
+			//		char line[255];
+		//glewExperimental = GL_TRUE;
+//        if (glewInit() == GLEW_OK)
+//        {
+//            sprintf(line, "GLEW version %s\n", glewGetString(GLEW_VERSION));
+//			TalonLog(line);
+//        }
+//		
+//		if (!GLEW_VERSION_3_2)
+//		{
+//			TalonLog("OpenGL 3.2 not supported!");
+//		}
+		
+			//[NSOpenGLContext clearCurrentContext];
 #endif
 
 		SetInitialized(true);
@@ -180,11 +186,11 @@ namespace Talon
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
 				
-#if TALON_MAC
-			NSWindow* cocoaWindow = (__bridge NSWindow*)window->GetWindow();
-			NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
-			[context setView:[cocoaWindow contentView]];
-#endif
+//#if TALON_MAC
+//			NSWindow* cocoaWindow = (__bridge NSWindow*)window->GetWindow();
+//			NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
+//			[context setView:[cocoaWindow contentView]];
+//#endif
 		});
 
 		window->Resized += [this](int width, int height)
@@ -203,7 +209,7 @@ namespace Talon
 		wglDeleteContext(m_pImpl->hRC);
 		::ReleaseDC(GetWindow()->GetHandle(), m_pImpl->hDC);
 #elif TALON_MAC
-		[NSOpenGLContext clearCurrentContext];
+			//[NSOpenGLContext clearCurrentContext];
 #endif
 	}
 
@@ -238,10 +244,39 @@ namespace Talon
 #endif
 	}
 
+	void* RenderDevice::GetContext()
+	{
+		return (void*)m_pImpl->context;
+	}
+	
 	void RenderDevice::WithContext(std::function<void()> fn)
 	{
 		GLContext context(m_pImpl.get());
 		
 		fn();
+	}
+	
+	void RenderDevice::SetActiveIndexBuffer(std::shared_ptr<IndexBuffer> value)
+	{
+		if (value)
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, value->GetBuffer());
+		else if (!GetActiveIndexBuffer())
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	
+	void RenderDevice::SetActiveInputLayout(std::shared_ptr<InputLayout> value)
+	{
+	}
+	
+	void RenderDevice::SetActiveShader(Talon::ShaderType type, std::shared_ptr<Shader> value)
+	{
+	}
+	
+	void RenderDevice::SetActiveVertexBuffer(std::shared_ptr<VertexBuffer> value)
+	{
+		if (value)
+			glBindBuffer(GL_ARRAY_BUFFER, value->GetBuffer());
+		else if (!GetActiveVertexBuffer())
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }

@@ -28,6 +28,10 @@ static CVReturn OnDisplayLink(CVDisplayLinkRef displayLink,
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+}
+
+- (void)awakeFromNib
+{
 	// Insert code here to initialize your application
     Engine::Instance()->Initialize(std::make_shared<SandboxSimulation>());
 	

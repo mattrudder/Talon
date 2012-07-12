@@ -86,6 +86,6 @@ namespace Talon
 	
 	void* Window::GetWindow() const
 	{
-		return (__bridge void*)m_pImpl->window;
+		return (void*)m_pImpl->window;
 	}
 }

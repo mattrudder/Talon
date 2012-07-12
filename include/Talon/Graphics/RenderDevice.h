@@ -48,6 +48,7 @@ namespace Talon
 		ID3D11DeviceContext* GetDeviceContext() const;
 #elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
 		friend class GLContext;
+		void* GetContext();
 		void WithContext(std::function<void()> fn);
 #endif
 
@@ -65,7 +66,7 @@ namespace Talon
 		std::shared_ptr<IndexBuffer> m_activeIndexBuffer;
 		std::shared_ptr<InputLayout> m_activeInputLayout;
 		std::shared_ptr<VertexBuffer> m_activeVertexBuffer;
-		std::unordered_map<ShaderType, std::shared_ptr<Shader>> m_activeShaders;
+		std::unordered_map<u32, std::shared_ptr<Shader>> m_activeShaders;
 
 		bool m_initialized;
 

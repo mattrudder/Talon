@@ -1,6 +1,5 @@
 
 #include "TalonPrefix.h"
-#include <GL/glew.h>
 #include <Talon/Graphics/IndexBuffer.h>
 
 namespace Talon
@@ -11,8 +10,14 @@ namespace Talon
 		GLuint elementArrayBuffer;
 	};
 
+	
+	std::shared_ptr<IndexBuffer> IndexBuffer::Create(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
+	{
+		return std::shared_ptr<IndexBuffer>(new IndexBuffer(renderDevice, indexCount, format, bufferUsage, initialData));
+	}
+	
 	IndexBuffer::IndexBuffer(RenderDevice* renderDevice, u32 indexCount, BufferFormat format, BufferUsage bufferUsage, void* initialData)
-		: m_renderDevice(renderDevice)
+		: RenderDeviceChild(renderDevice)
 		, m_format(format)
 		, m_indexCount(indexCount)
 		, m_bufferUsage(bufferUsage)
@@ -30,5 +35,10 @@ namespace Talon
 	IndexBuffer::~IndexBuffer()
 	{
 		glDeleteBuffers(1, &m_pImpl->elementArrayBuffer);
+	}
+	
+	u32 IndexBuffer::GetBuffer() const
+	{
+		return m_pImpl->elementArrayBuffer;
 	}
 }

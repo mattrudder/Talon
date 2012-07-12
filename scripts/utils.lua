@@ -11,7 +11,7 @@ function stringfromfile(file)
 end
 
 function trim(s)
-	return s:find'^%s*$' and '' or s:match'^%s*(.*%S)'
+	return s:find"^%s*$" and "" or s:match"^%s*(.*%S)"
 end
 
 function makedirs(t)
@@ -23,10 +23,22 @@ function makedirs(t)
 end
 
 function copy_cmd(src, dest)
-	dest = dest or get_absolute_from_solution("bin/$(PlatformShortName)/$(Configuration)/")
+	local destRoot = ''
+
+	if string.startswith(_ACTION, "vs") then
+		destRoot = get_absolute_from_solution("bin/$(PlatformShortName)/$(Configuration)/")
+	end
+
+	if string.startswith(_ACTION, "xcode") then
+		destRoot = get_absolute_from_solution("$TARGET_BUILD_DIR")
+	end
+
+	dest = path.join(destRoot, dest or "")
+	
 	local srcAbsolute = path.translate(path.getabsolute(src))
 	local destAbsolute = path.translate(path.getabsolute(dest))
 	local cmd = ""
+
 	if os.is("windows") then
 		cmd = "xcopy " .. srcAbsolute .. " " .. destAbsolute .. " /Y"
 
@@ -46,7 +58,7 @@ function get_absolute_from_solution(p)
 end
 
 function apply_external(api, lib, specifics)
-	specifics=specifics or false
+	specifics = specifics or false
 	local vs_specifics = ""
 
 	if specifics then

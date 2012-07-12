@@ -45,7 +45,7 @@ namespace Talon
 
 	std::shared_ptr<Shader> RenderDevice::GetActiveShader(ShaderType type)
 	{
-		return m_activeShaders[type];
+		return m_activeShaders[(u32)type];
 	}
 
 	void RenderDevice::SetActiveIndexBufferCore(std::shared_ptr<IndexBuffer> value)
@@ -65,6 +65,6 @@ namespace Talon
 	
 	void RenderDevice::SetActiveShaderCore(ShaderType type, std::shared_ptr<Shader> value)
 	{
-		m_activeShaders[type] = value;
+		m_activeShaders[(u32)type] = value;
 	}
 }

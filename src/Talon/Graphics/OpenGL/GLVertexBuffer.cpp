@@ -1,6 +1,5 @@
 
 #include "TalonPrefix.h"
-#include <GL/glew.h>
 #include <Talon/Graphics/VertexBuffer.h>
 
 namespace Talon
@@ -10,9 +9,14 @@ namespace Talon
 	public:
 		GLuint arrayBuffer;
 	};
+	
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
+	{
+		return std::shared_ptr<VertexBuffer>(new VertexBuffer(renderDevice, vertexSize, vertexCount, bufferUsage, initialData));
+	}
 
 	VertexBuffer::VertexBuffer(RenderDevice* renderDevice, u32 vertexSize, u32 vertexCount, BufferUsage bufferUsage, void* initialData)
-		: m_renderDevice(renderDevice)
+		: RenderDeviceChild(renderDevice)
 		, m_vertexSize(vertexSize)
 		, m_vertexCount(vertexCount)
 		, m_bufferUsage(bufferUsage)
@@ -41,13 +45,13 @@ namespace Talon
     
     void VertexBuffer::Map(BufferMapType mapType, void** ppData)
     {
-        GLenum access = GL_MAP_WRITE_BIT;
-        
-        if (mapType == BufferMapType::Discard)
-            access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
-        
-        glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
-        glMapBufferRange(GL_ARRAY_BUFFER, 0, m_vertexCount * m_vertexSize, access);
+			//        GLenum access = GL_MAP_WRITE_BIT;
+//        
+//        if (mapType == BufferMapType::Discard)
+//            access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+//        
+//        glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
+//        glMapBufferRange(GL_ARRAY_BUFFER, 0, m_vertexCount * m_vertexSize, access);
     }
     
     void VertexBuffer::Unmap()
@@ -55,4 +59,9 @@ namespace Talon
         glUnmapBuffer(GL_ARRAY_BUFFER);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+	
+	u32 VertexBuffer::GetBuffer() const
+	{
+		return m_pImpl->arrayBuffer;
+	}
 }

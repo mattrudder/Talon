@@ -72,7 +72,7 @@ solution "Talon"
 		targetdir "bin/x86/Release"
 
 	configuration "MacOSX"
-		buildoptions { "-x objective-c++", "-fobjc-arc", "-std=c++11", "-stdlib=libc++" }
+		buildoptions { "-x objective-c++", "-std=c++11", "-stdlib=libc++" }
 
 
 include "src"
