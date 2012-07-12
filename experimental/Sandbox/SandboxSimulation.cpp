@@ -65,7 +65,7 @@ void SandboxSimulation::OnInitialized()
 			m_mouse = nullptr;
 	};
 
-	m_texture = Texture::FromFile(Device, "test.png");
+	m_texture = Texture::FromFile(Device, "test_alpha.png");
 	m_spriteBatch = std::make_unique<SpriteBatch>(Device);
 }
 
@@ -165,7 +165,7 @@ void SandboxSimulation::OnEndFrame()
 	for (int i = 0; i < count; ++i)
 	{
 		cards[i].Update();
-		m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y);
+		m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y, 256, 256);
 	}
 
 	m_spriteBatch->End();

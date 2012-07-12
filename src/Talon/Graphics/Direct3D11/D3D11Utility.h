@@ -23,7 +23,7 @@ namespace Talon { namespace D3D11
 		return name;
 	}
 
-	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, ID3D11BlendState** pResult)
+	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, D3D11_BLEND srcBlendAlpha, D3D11_BLEND destBlendAlpha, D3D11_BLEND_OP op, D3D11_BLEND_OP opAlpha, ID3D11BlendState** pResult)
 	{
 		D3D11_BLEND_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
@@ -31,13 +31,31 @@ namespace Talon { namespace D3D11
 		desc.RenderTarget[0].BlendEnable = (srcBlend != D3D11_BLEND_ONE) ||
 			(destBlend != D3D11_BLEND_ZERO);
 
-		desc.RenderTarget[0].SrcBlend  = desc.RenderTarget[0].SrcBlendAlpha  = srcBlend;
-		desc.RenderTarget[0].DestBlend = desc.RenderTarget[0].DestBlendAlpha = destBlend;
-		desc.RenderTarget[0].BlendOp   = desc.RenderTarget[0].BlendOpAlpha   = D3D11_BLEND_OP_ADD;
+		desc.RenderTarget[0].SrcBlend  = srcBlend;
+		desc.RenderTarget[0].SrcBlendAlpha = srcBlendAlpha;
+		desc.RenderTarget[0].DestBlend = destBlend;
+		desc.RenderTarget[0].DestBlendAlpha = destBlendAlpha;
+		desc.RenderTarget[0].BlendOp = op;
+		desc.RenderTarget[0].BlendOpAlpha = opAlpha;
 
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		return device->CreateBlendState(&desc, pResult);
+	}
+
+	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, D3D11_BLEND srcBlendAlpha, D3D11_BLEND destBlendAlpha, ID3D11BlendState** pResult)
+	{
+		return CreateBlendState(device, srcBlend, destBlend, srcBlendAlpha, destBlendAlpha, D3D11_BLEND_OP_ADD, D3D11_BLEND_OP_ADD, pResult);
+	}
+
+	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, D3D11_BLEND_OP op, ID3D11BlendState** pResult)
+	{
+		return CreateBlendState(device, srcBlend, destBlend, srcBlend, destBlend, op, op, pResult);
+	}
+
+	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, ID3D11BlendState** pResult)
+	{
+		return CreateBlendState(device, srcBlend, destBlend, D3D11_BLEND_OP_ADD, pResult);
 	}
 
 	inline HRESULT CreateDepthStencilState(ID3D11Device* device, bool enable, bool writeEnable, ID3D11DepthStencilState** pResult)

@@ -26,5 +26,5 @@ project "Sandbox"
 
     configuration "Windows"
         postbuildcommands {
-            copy_cmd("test.png")
+            copy_cmd("*.png")
         }

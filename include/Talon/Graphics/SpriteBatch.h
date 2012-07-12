@@ -51,6 +51,8 @@ namespace Talon
 		void End();
 
 		void Draw(std::shared_ptr<Texture> texture, float x, float y);
+		void Draw(std::shared_ptr<Texture> texture, float x, float y, float w, float h);
+		void Draw(std::shared_ptr<Texture> texture, float x, float y, float w, float h, float4 color);
 
 	private:
 		class Impl;

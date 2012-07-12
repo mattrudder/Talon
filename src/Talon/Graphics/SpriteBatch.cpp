@@ -27,7 +27,7 @@ using namespace DirectX;
 
 namespace Talon
 {
-	// TODO: Replace with Material definition.
+	// TODO: Replace with Material definition (https://app.asana.com/0/1144010891804/1171962804809)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 	const char* c_vsSpriteEffect = "Resources/SpriteBatch.VS.hlsl";
 
@@ -116,22 +116,20 @@ namespace Talon
 		CComPtr<ID3D11DepthStencilState> depthStencilState;
 		CComPtr<ID3D11RasterizerState> rasterizerState;
 		CComPtr<ID3D11SamplerState> samplerState;
-#else
-//#warning "SpriteBatch contains platform-specific code and needs to be ported!"
 #endif
 	};
-    
-    const size_t SpriteBatch::Impl::MaxBatchSize = 2048;
-    const size_t SpriteBatch::Impl::MinBatchSize = 128;
-    const size_t SpriteBatch::Impl::InitialQueueSize = 64;
-    const size_t SpriteBatch::Impl::VerticesPerSprite = 4;
-    const size_t SpriteBatch::Impl::IndicesPerSprite = 6;
-    
+
+	const size_t SpriteBatch::Impl::MaxBatchSize = 2048;
+	const size_t SpriteBatch::Impl::MinBatchSize = 128;
+	const size_t SpriteBatch::Impl::InitialQueueSize = 64;
+	const size_t SpriteBatch::Impl::VerticesPerSprite = 4;
+	const size_t SpriteBatch::Impl::IndicesPerSprite = 6;
+
 	SpriteBatch::Impl::Impl(RenderDevice* renderDevice)
 		: m_insideBeginEnd(false)
-        , m_queueCount(0)
-        , m_queueSize(0)
-        , m_vertexBufferOffset(0)
+		, m_queueCount(0)
+		, m_queueSize(0)
+		, m_vertexBufferOffset(0)
 		, device(renderDevice)
 	{
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
@@ -143,10 +141,10 @@ namespace Talon
 
 		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_ZERO, &blendState));
+		ThrowIfFailed(D3D11::CreateBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA, D3D11_BLEND_ONE, D3D11_BLEND_ONE, &blendState));
 		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
 		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
-		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
+		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
 #endif
 
 		constantBuffer = ConstantBuffer<Matrix>::Create(renderDevice, BufferUsage::Dynamic);
@@ -477,8 +475,17 @@ namespace Talon
 
 	void SpriteBatch::Draw(std::shared_ptr<Texture> texture, float x, float y)
 	{
-		float4 dest(x, y, (float)texture->GetWidth(), (float)texture->GetHeight());
-		float4 color(1, 1, 1, 1);
+		Draw(texture, x, y, (float)texture->GetWidth(), (float)texture->GetHeight());
+	}
+
+	void SpriteBatch::Draw(std::shared_ptr<Texture> texture, float x, float y, float w, float h)
+	{
+		Draw(texture, x, y, w, h, float4(1, 1, 1, 1));
+	}
+
+	void SpriteBatch::Draw(std::shared_ptr<Texture> texture, float x, float y, float w, float h, float4 color)
+	{
+		float4 dest(x, y, w, h);
 		m_pImpl->Draw(texture, dest, nullptr, color, 0);
 	}
 }
