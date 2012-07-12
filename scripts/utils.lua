@@ -40,7 +40,7 @@ function copy_cmd(src, dest)
 	local cmd = ""
 
 	if os.is("windows") then
-		cmd = "xcopy " .. srcAbsolute .. " " .. destAbsolute .. " /Y"
+		cmd = "xcopy " .. srcAbsolute .. " " .. destAbsolute .. " /Y /I"
 
 		if os.isdir(src) then
 			cmd = cmd .. " /E" 
@@ -49,7 +49,13 @@ function copy_cmd(src, dest)
 		cmd = "cp -R " .. srcAbsolute .. " " .. destAbsolute
 	end
 
-	return cmd .. "\n"
+	if os.is("windows") then
+		cmd = cmd .. "\r\n"
+	else
+		cmd = cmd .. "\n"
+	end
+
+	return cmd
 end
 
 function get_absolute_from_solution(p)

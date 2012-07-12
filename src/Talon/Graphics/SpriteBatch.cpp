@@ -15,6 +15,8 @@
 #include <Talon/Graphics/VertexBuffer.h>
 #include <Talon/Graphics/VertexFormats.h>
 
+#include <Talon/Platform/Window.h>
+
 #include <algorithm>
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
@@ -25,6 +27,7 @@ using namespace DirectX;
 
 namespace Talon
 {
+	// TODO: Replace with Material definition.
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
 	const char* c_vsSpriteEffect = "Resources/SpriteBatch.VS.hlsl";
 
@@ -96,7 +99,9 @@ namespace Talon
 		std::vector<SpriteInfo const*> m_sortedSprites;
 
 		RenderDevice* device;
-		std::shared_ptr<ConstantBufferBase> constantBuffer;
+
+		std::shared_ptr<ConstantBuffer<Matrix>> constantBuffer;
+
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 
@@ -107,8 +112,6 @@ namespace Talon
 
 		// TODO: Make Talon compliant
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		//CComPtr<ID3D11Buffer> constantBuffer;
-
 		CComPtr<ID3D11BlendState> blendState;
 		CComPtr<ID3D11DepthStencilState> depthStencilState;
 		CComPtr<ID3D11RasterizerState> rasterizerState;
@@ -147,23 +150,10 @@ namespace Talon
 #endif
 
 		constantBuffer = ConstantBuffer<Matrix>::Create(renderDevice, BufferUsage::Dynamic);
-		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-//		D3D11_BUFFER_DESC desc = {0};
-//		desc.ByteWidth = sizeof(XMMATRIX);
-//		desc.Usage = D3D11_USAGE_DYNAMIC;
-//		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-//		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-//		ThrowIfFailed(device->CreateBuffer(&desc, nullptr, &constantBuffer));
-#endif
 
 		auto indexValues = CreateIndexValues();
 		indexBuffer = IndexBuffer::Create(renderDevice, MaxBatchSize * IndicesPerSprite, BufferFormat::I16, BufferUsage::Default, &indexValues.front());
 		vertexBuffer = VertexBuffer::Create(renderDevice, sizeof(VertexPositionColorTexture), MaxBatchSize * VerticesPerSprite, BufferUsage::Dynamic);
-	}
-	
-	SpriteBatch::Impl::~Impl()
-	{
 	}
 
 	void SpriteBatch::Impl::Begin()
@@ -186,32 +176,23 @@ namespace Talon
 		m_insideBeginEnd = false;
 	}
 
-	// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-	XMMATRIX GetViewportTransform(ID3D11DeviceContext* deviceContext)
+	Matrix GetViewportTransform(RenderDevice* device)
 	{
-		// Look up the current viewport.
-		D3D11_VIEWPORT viewport;
-		UINT viewportCount = 1;
-
-		deviceContext->RSGetViewports(&viewportCount, &viewport);
-
-		if (viewportCount != 1)
-			throw std::exception("No viewport is set");
+		int width = device->GetWindow()->GetWidth();
+		int height = device->GetWindow()->GetHeight();
 
 		// Compute the matrix.
-		float xScale = (viewport.Width  > 0) ? 2.0f / viewport.Width  : 0.0f;
-		float yScale = (viewport.Height > 0) ? 2.0f / viewport.Height : 0.0f;
+		float xScale = (width  > 0) ? 2.0f / width  : 0.0f;
+		float yScale = (height > 0) ? 2.0f / height : 0.0f;
 
-		return XMMATRIX
-			(
-			xScale,  0,       0,  0,
-			0,      -yScale,  0,  0,
-			0,       0,       1,  0,
-			-1,       1,       0,  1
-			);
+		return Matrix
+		(
+			xScale, 0,       0,  0,
+			0,      -yScale, 0,  0,
+			0,      0,       1,  0,
+			-1,     1,       0,  1
+		);
 	}
-#endif
 
 	void SpriteBatch::Impl::Draw(std::shared_ptr<Texture> texture, float4 destination, Rect const* sourceRect, float4 color, u32 flags)
 	{
@@ -287,17 +268,9 @@ namespace Talon
 		device->SetActiveVertexBuffer(vertexBuffer);
 		device->SetActiveIndexBuffer(indexBuffer);
 
-#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		// TODO: Support constant buffers (https://app.asana.com/0/1144010891804/1171962804793)
-		XMMATRIX transformMatrix = GetViewportTransform(deviceContext);
-
-		ID3D11Buffer* pConstBuffer = constantBuffer;
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		ThrowIfFailed(deviceContext->Map(pConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-		*(XMMATRIX*)mappedResource.pData = transformMatrix;
-		deviceContext->Unmap(pConstBuffer, 0);
-		deviceContext->VSSetConstantBuffers(0, 1, &pConstBuffer);
-#endif
+		Matrix transformMatrix = GetViewportTransform(device);
+		constantBuffer->Update(&transformMatrix);
+		vertexShader->SetConstantBuffer(0, constantBuffer);
 	}
 
 	void SpriteBatch::Impl::CleanupRendering()

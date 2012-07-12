@@ -39,9 +39,9 @@ namespace Talon
 	class ConstantBuffer : public ConstantBufferBase
 	{
 	public:
-		static std::shared_ptr<ConstantBufferBase> Create(RenderDevice* renderDevice, BufferUsage bufferUsage, BufferType* initialData = nullptr)
+		static std::shared_ptr<ConstantBuffer<BufferType>> Create(RenderDevice* renderDevice, BufferUsage bufferUsage, BufferType* initialData = nullptr)
 		{
-			return std::shared_ptr<ConstantBufferBase>(new ConstantBuffer(renderDevice, bufferUsage, initialData));
+			return std::shared_ptr<ConstantBuffer<BufferType>>(new ConstantBuffer<BufferType>(renderDevice, bufferUsage, initialData));
 		}
 		
 		void Update(BufferType* data) { ConstantBufferBase::Update(sizeof(BufferType), data); }

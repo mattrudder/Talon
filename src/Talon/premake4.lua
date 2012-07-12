@@ -63,7 +63,7 @@ project "Talon"
 
 	-- Copy graphics resources
 	copyCommands = copyCommands ..
-		copy_cmd("Graphics/" .. _OPTIONS["gfx"] .. "/Resources", "Resources")
+		copy_cmd("Graphics/" .. _OPTIONS["gfx"] .. "/Resources/", "Resources")
 
 	-- Configuration
 	configuration {}
