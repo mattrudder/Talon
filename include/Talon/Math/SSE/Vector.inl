@@ -3,6 +3,31 @@
 
 namespace Talon
 {
+	inline Vector VectorAnd(VectorArgL1 v1, VectorArgL1 v2)
+	{
+		return _mm_and_ps(v1, v2);
+	}
+
+	inline Vector VectorSplatX(VectorArgL1 v)
+	{
+		return _mm_shuffle_ps(v, v, _MM_SHUFFLE(0, 0, 0, 0));
+	}
+
+	inline Vector VectorSplatY(VectorArgL1 v)
+	{
+		return _mm_shuffle_ps(v, v, _MM_SHUFFLE(1, 1, 1, 1));
+	}
+
+	inline Vector VectorSplatZ(VectorArgL1 v)
+	{
+		return _mm_shuffle_ps(v, v, _MM_SHUFFLE(2, 2, 2, 2));
+	}
+
+	inline Vector VectorSplatW(VectorArgL1 v)
+	{
+		return _mm_shuffle_ps(v, v, _MM_SHUFFLE(3, 3, 3, 3));
+	}
+
 	inline Vector VectorNegate(VectorArgL1 v)
 	{
 		Vector zero = _mm_setzero_ps();

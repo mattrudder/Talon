@@ -8,7 +8,9 @@ namespace Talon
 	SpriteComponent::SpriteComponent()
 		: m_texture(nullptr)
 		, m_sourceBounds(0, 0, 0, 0)
+		, m_color(1, 1, 1, 1)
 		, m_origin(0, 0)
+		, m_position(0, 0)
 	{
 	}
 

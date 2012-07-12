@@ -29,6 +29,13 @@ namespace Talon
 	typedef const Vector VectorArgL1;
 	typedef const Vector& VectorArgL2;
 	typedef const Vector& VectorArgLX;
+	
+	Vector VectorAnd(VectorArgL1 v1, VectorArgL1 v2);
+
+	Vector VectorSplatX(VectorArgL1 v);
+	Vector VectorSplatY(VectorArgL1 v);
+	Vector VectorSplatZ(VectorArgL1 v);
+	Vector VectorSplatW(VectorArgL1 v);
 
 	Vector VectorNegate(VectorArgL1 v);
 	Vector VectorAdd(VectorArgL1 v1, VectorArgL1 v2);

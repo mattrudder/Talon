@@ -61,6 +61,7 @@ namespace Talon
 #   define TALON_GLOBALCONST extern const __attribute__((weak))
 #endif
 
+	TALON_GLOBALCONST VectorInt32 VectorMask2 = {{{ BitMaskI32, BitMaskI32, 0x00000000, 0x00000000 }}};
 	TALON_GLOBALCONST VectorInt32 VectorMask3 = {{{ BitMaskI32, BitMaskI32, BitMaskI32, 0x00000000 }}};
 	TALON_GLOBALCONST VectorInt32 VectorMaskX = {{{ BitMaskI32, 0x00000000, 0x00000000, 0x00000000 }}};
 	TALON_GLOBALCONST VectorInt32 VectorMaskY = {{{ 0x00000000, BitMaskI32, 0x00000000, 0x00000000 }}};

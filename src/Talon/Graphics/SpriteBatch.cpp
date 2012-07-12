@@ -219,6 +219,7 @@ namespace Talon
 			LoadVector(&sprite->source, &wholeTexture);
 		}
 
+		sprite->rotation = 0;
 		LoadVector(&sprite->destination, &dest);
 		LoadVector(&sprite->color, &color);
 
@@ -409,21 +410,37 @@ namespace Talon
 	void SpriteBatch::Impl::RenderSprite(SpriteInfo const* sprite, VertexPositionColorTexture* vertices, float2 /*textureSize*/, float2 inverseTextureSize)
 	{
 		// Load sprite parameters into SIMD registers.
-		//Vector source = Vector4Load(sprite->source);
-		//Vector destination = Vector4Load(sprite->destination);
+		//Vector source = Vector4Load(&sprite->source);
+		Vector destination = Vector4Load(&sprite->destination);
 		Vector origin = Vector2Load(&sprite->origin);
 		Vector invTexSize = Vector2Load(&inverseTextureSize);
-
-		//float4 color = sprite->color;
-		//f32 rotation = sprite->rotation;
-		//f32 depth = sprite->depth;
+		
+		float rotation = sprite->rotation;
+		//float depth = sprite->depth;
 		u32 flags = sprite->flags;
 
 		origin = origin * invTexSize;
 
-		Vector destinationOrigin = Vector2Load(sprite->destination.x, sprite->destination.y);
+		//Vector originRotationDepth = Vector4Load(sprite->origin.x, sprite->origin.y, rotation, depth);
 		Vector sourceSize = Vector2Load(sprite->source.z, sprite->source.w);
 		Vector destinationSize = Vector2Load(sprite->destination.z, sprite->destination.w);
+
+		Vector rotationMatrix1;
+		Vector rotationMatrix2;
+
+		if (rotation != 0)
+		{
+			float sin = sinf(rotation);
+			float cos = cosf(rotation);
+
+			rotationMatrix1 = Vector4Load(cos, sin, 0, 0);
+			rotationMatrix2 = Vector4Load(-sin, cos, 0, 0);
+		}
+		else
+		{
+			rotationMatrix1 = MatrixIdentityRow0;
+			rotationMatrix2 = MatrixIdentityRow1;
+		}
 
 		static Vector cornerOffsets[VerticesPerSprite] =
 		{
@@ -438,12 +455,20 @@ namespace Talon
 
 		int mirrorBits = flags & 3;
 
+		Matrix transformMatrix = MatrixRotationZ(rotation);
 		for (int i = 0; i < VerticesPerSprite; ++i)
 		{
 			// Calculate position.
 			Vector cornerOffset = (cornerOffsets[i] - origin) * destinationSize;
-			Vector position = cornerOffset + destinationOrigin;
 
+			Vector position1 = VectorAdd(VectorMultiply(VectorSplatX(cornerOffset), rotationMatrix1), destination);
+			Vector position2 = VectorAdd(VectorMultiply(VectorSplatY(cornerOffset), rotationMatrix2), position1);
+			Vector posX = VectorAdd(cornerOffset, destination);
+			posX = posX;
+
+			// TODO: Add real depth component, instead of just zeroing out the depth.
+			//Vector position = VectorPermute<0, 1, 7, 6>(position2, originRotationDepth); Modeled after XMVectorPermute
+			Vector position = VectorAnd(position2, VectorMask2);
 			StoreFloat3(&vertices[i].position, position);
 
 			vertices[i].color = sprite->color;

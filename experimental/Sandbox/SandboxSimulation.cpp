@@ -21,6 +21,16 @@
 using namespace std;
 using namespace Talon;
 
+//float randRange(int min, int max)
+//{
+//	return (float)(min + (int)(rand() % ((max - min) + 1)));
+//}
+
+float randRange(float min, int max)
+{
+	return min + (float)rand()/((float)RAND_MAX/(max-min));
+}
+
 SandboxSimulation::SandboxSimulation()
     : m_spriteBatch(nullptr)
     , m_texture(nullptr)
@@ -67,6 +77,16 @@ void SandboxSimulation::OnInitialized()
 
 	m_texture = Texture::FromFile(Device, "test_alpha.png");
 	m_spriteBatch = std::make_unique<SpriteBatch>(Device);
+
+	m_testGo = new GameObject();
+	m_testSprite = (SpriteComponent*) m_testGo->AddComponent(SpriteComponent::GetType());
+	if (m_testSprite)
+	{
+		m_testSprite->SetPosition(float2(randRange(128, 1280 - 128), randRange(128, 720 - 128)));
+		m_testSprite->SetSourceBounds(float4(randRange(4, 8), randRange(3, 7), 0, 0));
+		m_testSprite->SetTexture(m_texture);
+		m_testSprite->SetColor(float4(1, 1, 1, 0.5));
+	}
 }
 
 void SandboxSimulation::OnBeginFrame()
@@ -118,11 +138,6 @@ struct Card
 	}
 };
 
-float randRange(int min, int max)
-{
-	return (float)(min + (int)(rand() % ((max - min) + 1)));
-}
-
 void SandboxSimulation::OnEndFrame()
 {
 #if TALON_MAC
@@ -155,18 +170,26 @@ void SandboxSimulation::OnEndFrame()
 		}
 		first = false;
 	}
+	
+	float spriteAccel = 10 + max(m_gamepad->GetAxis(InputDeviceAxis::RightZ), m_gamepad->GetAxis(InputDeviceAxis::LeftZ)) * 10;
+	float2 spritePos = m_testSprite->GetPosition();
+	float2 spriteControl(m_gamepad->GetAxis(InputDeviceAxis::LeftX) - 0.5f, m_gamepad->GetAxis(InputDeviceAxis::LeftY) - 0.5f);
+	spritePos.x += spriteControl.x * spriteAccel;
+	spritePos.y -= spriteControl.y * spriteAccel;
+	m_testSprite->SetPosition(spritePos);
+
+	/*for (int i = 0; i < count; ++i)
+	{
+	cards[i].Update();
+	m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y, 64, 64);
+	}*/
 
 	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this](Component* component)
 	{
 		SpriteComponent* sprite = (SpriteComponent*) component;
-		m_spriteBatch->Draw(sprite->GetTexture(), sprite->GetOrigin().x, sprite->GetOrigin().y);
+		float2 spritePos = sprite->GetPosition();
+		m_spriteBatch->Draw(sprite->GetTexture(), spritePos.x, spritePos.y, (float)sprite->GetTexture()->GetWidth(), (float)sprite->GetTexture()->GetHeight(), float4(randRange(0, 1), randRange(0, 1), randRange(0, 1), 1));
 	});
-
-	for (int i = 0; i < count; ++i)
-	{
-		cards[i].Update();
-		m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y, 256, 256);
-	}
 
 	m_spriteBatch->End();
 }

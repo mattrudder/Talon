@@ -8,11 +8,14 @@ namespace Talon
 
 	class SpriteBatch;
 	class Texture;
-
+	
 	class InputDevice;
 	class GamepadInputDevice;
 	class KeyboardInputDevice;
 	class MouseInputDevice;
+
+	class GameObject;
+	class SpriteComponent;
 }
 
 class SandboxSimulation : public Talon::Simulation
@@ -38,5 +41,8 @@ private:
 	Talon::GamepadInputDevice* m_gamepad;
 	Talon::KeyboardInputDevice* m_keyboard;
 	Talon::MouseInputDevice* m_mouse;
+
+	Talon::GameObject* m_testGo;
+	Talon::SpriteComponent* m_testSprite;
 };
 
