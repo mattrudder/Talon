@@ -22,7 +22,12 @@ namespace Talon
 	private:
 		XInputDevice(u32 controllerId);
 
-		static u32 c_maxDevices;
+		static const u32 c_countDimensions = 3;
+		static const u32 c_maxDevices = 4;
+
+		float3 m_leftState;
+		float3 m_rightState;
+
 		u32 m_controllerId;
 		XINPUT_STATE m_state;
 		XINPUT_STATE m_lastState;
