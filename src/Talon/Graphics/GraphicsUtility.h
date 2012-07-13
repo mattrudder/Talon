@@ -5,5 +5,5 @@
 
 namespace Talon { namespace Graphics 
 {
-	u32 ToBytesPerPixel(BufferFormat format);
+	u32 ToByteSize(BufferFormat format);
 }}

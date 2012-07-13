@@ -48,8 +48,10 @@ namespace Talon
 		ID3D11DeviceContext* GetDeviceContext() const;
 #elif TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
 		friend class GLContext;
-		void* GetContext();
 		void WithContext(std::function<void()> fn);
+#	if TALON_MAC
+		void* GetContext();
+#	endif
 #endif
 
 	protected:

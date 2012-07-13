@@ -39,7 +39,7 @@ namespace Talon
         glDeleteTextures(1, &texture);
     }
     
-	bool Texture::Load(u32 width, u32 height, BufferFormat format, BufferUsage usage, const void* data, const std::string debugName)
+	bool Texture::Load(u32 width, u32 height, BufferFormat format, BufferUsage /*usage*/, const void* data, const std::string debugName)
 	{
 		glBindTexture(GL_TEXTURE_2D, m_pImpl->texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL::ToInternalFormat(format), width, height, 0, GL::ToFormat(format), GL::ToDataType(format), data);

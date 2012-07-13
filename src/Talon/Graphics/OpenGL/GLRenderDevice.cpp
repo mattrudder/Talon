@@ -185,12 +185,6 @@ namespace Talon
 			glDepthFunc(GL_LEQUAL);
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
-				
-//#if TALON_MAC
-//			NSWindow* cocoaWindow = (__bridge NSWindow*)window->GetWindow();
-//			NSOpenGLContext* context = (NSOpenGLContext*) m_pImpl->context;
-//			[context setView:[cocoaWindow contentView]];
-//#endif
 		});
 
 		window->Resized += [this](int width, int height)
@@ -209,15 +203,17 @@ namespace Talon
 		wglDeleteContext(m_pImpl->hRC);
 		::ReleaseDC(GetWindow()->GetHandle(), m_pImpl->hDC);
 #elif TALON_MAC
-			//[NSOpenGLContext clearCurrentContext];
+		[NSOpenGLContext clearCurrentContext];
 #endif
 	}
 
-    void RenderDevice::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
-    {
-        GLenum indexType = m_activeIndexBuffer->GetFormat() == BufferFormat::I16 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
-        glDrawElements(GL_TRIANGLES, indexCount, indexType, 0);
-    }
+	void RenderDevice::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
+	{
+		u32 indexSize = Graphics::ToByteSize(m_activeIndexBuffer->GetFormat());
+		GLenum indexType = m_activeIndexBuffer->GetFormat() == BufferFormat::I16 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+		
+		glDrawElementsBaseVertex(GL_TRIANGLES, indexCount, indexType, (GLvoid*)(indexSize * startIndex), baseVertexLocation);
+	}
 
 	void RenderDevice::BeginFrame()
 	{
@@ -244,10 +240,12 @@ namespace Talon
 #endif
 	}
 
+#if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL && TALON_MAC
 	void* RenderDevice::GetContext()
 	{
 		return (void*)m_pImpl->context;
 	}
+#endif
 	
 	void RenderDevice::WithContext(std::function<void()> fn)
 	{
@@ -264,11 +262,11 @@ namespace Talon
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
-	void RenderDevice::SetActiveInputLayout(std::shared_ptr<InputLayout> value)
+	void RenderDevice::SetActiveInputLayout(std::shared_ptr<InputLayout> /*value*/)
 	{
 	}
 	
-	void RenderDevice::SetActiveShader(Talon::ShaderType type, std::shared_ptr<Shader> value)
+	void RenderDevice::SetActiveShader(Talon::ShaderType /*type*/, std::shared_ptr<Shader> /*value*/)
 	{
 	}
 	

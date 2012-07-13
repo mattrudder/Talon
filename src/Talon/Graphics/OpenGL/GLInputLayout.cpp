@@ -20,7 +20,6 @@ namespace Talon
 		: RenderDeviceChild(device)
 		, m_pImpl(std::make_unique<Impl>())
  	{
-		return;
  		TALON_ASSERT(inputElements != nullptr);
  		TALON_ASSERT(elementCount > 0);
  		TALON_ASSERT(vertexShader != nullptr);

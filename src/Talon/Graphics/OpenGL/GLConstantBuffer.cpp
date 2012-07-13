@@ -40,13 +40,15 @@ namespace Talon
     
     void ConstantBufferBase::Map(BufferMapType mapType, void** ppData)
     {
-//        GLenum access = GL_MAP_WRITE_BIT;
-//        
-//        if (mapType == BufferMapType::Discard)
-//            access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
-        
-        glBindBuffer(GL_UNIFORM_BUFFER_EXT, m_pImpl->constantBuffer);
-			//        glMapBufferRange(GL_UNIFORM_BUFFER_EXT, 0, m_bufferSize, access);
+		TALON_ASSERT(ppData);
+
+		GLenum access = GL_MAP_WRITE_BIT;
+
+		if (mapType == BufferMapType::Discard)
+			access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+
+		glBindBuffer(GL_UNIFORM_BUFFER_EXT, m_pImpl->constantBuffer);
+		*ppData = glMapBufferRange(GL_UNIFORM_BUFFER_EXT, 0, m_bufferSize, access);
     }
     
     void ConstantBufferBase::Unmap()

@@ -14,14 +14,13 @@
 #include <functional>
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_OPENGL
-	//#	include <GL/glew.h>
-#	if TALON_WINDOWS
-#		include <GL/wglew.h>
-#	endif
+#	include <GL/glew.h>
 #	if TALON_COMPILER_VENDOR == TALON_COMPILER_VENDOR_VS && (defined(BUILDING_TALON) || !defined(TALON_DLL))
 #		pragma comment(lib, "OpenGL32.lib")
 #	endif
-#	if TALON_MAC
+#	if TALON_WINDOWS
+#		include <GL/wglew.h>
+#	elif TALON_MAC
 #		include <OpenGL/gl.h>
 #	endif
 #elif TALON_GRAPHICS == TALON_GRAPHICS_D3D11

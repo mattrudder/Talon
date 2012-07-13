@@ -6,7 +6,6 @@
 #include <Talon/Graphics/Shader.h>
 #include <Talon/Platform/Platform.h>
 
-#import <Cocoa/Cocoa.h>
 namespace Talon
 {
 	class Shader::Impl
@@ -35,18 +34,12 @@ namespace Talon
 		return std::shared_ptr<Shader>(shader);
 	}
 	
-	bool Shader::Impl::LoadFromMemory(RenderDevice* device, ShaderType type, const char* shaderText, const char* sourceFileName)
+	bool Shader::Impl::LoadFromMemory(RenderDevice* device, ShaderType type, const char* shaderText, const char* /*sourceFileName*/)
 	{
 		bool result = false;
 		
 		device->WithContext([this, type, &shaderText, &result]()
 		{
-			NSOpenGLContext* context = [NSOpenGLContext currentContext];
-			bool hasContext = context == nil;
-			
-			if (false && hasContext)
-				return;
-			
 			GLenum glType = GL::ToShaderType(type);
 			
 			shaderInstance = glCreateShader(glType);
@@ -78,17 +71,18 @@ namespace Talon
 	}
 	
 	/** Sets a texture on the current shader instance. */
-	void Shader::SetTexture(u32 index, std::shared_ptr<Texture> texture)
+	void Shader::SetTexture(u32 /*index*/, std::shared_ptr<Texture> /*texture*/)
 	{
 	}
 	
 	/** Sets a buffer of values on the current shader instance. */
-	void Shader::SetConstantBuffer(u32 index, std::shared_ptr<ConstantBufferBase> buffer)
+	void Shader::SetConstantBuffer(u32 /*index*/, std::shared_ptr<ConstantBufferBase> /*buffer*/)
 	{
 	}
 	
 	Shader::Shader(RenderDevice* device, ShaderType type)
 		: RenderDeviceChild(device)
+		, m_pImpl(std::make_unique<Impl>())
 		, m_type(type)
 	{
 	}

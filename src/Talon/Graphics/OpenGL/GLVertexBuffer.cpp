@@ -32,33 +32,35 @@ namespace Talon
 	{
 		glDeleteBuffers(1, &m_pImpl->arrayBuffer);
 	}
-    
-    void VertexBuffer::Update(int vertexCount, void* vertexData)
-    {
-        u32 bufferSize = vertexCount * m_vertexSize;
+
+	void VertexBuffer::Update(int vertexCount, void* vertexData)
+	{
+		u32 bufferSize = vertexCount * m_vertexSize;
 		TALON_ASSERT(bufferSize <= m_vertexCount * m_vertexSize && "Data supplied is larger than the buffer!");
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
-        glBufferData(GL_ARRAY_BUFFER, bufferSize, vertexData, m_bufferUsage == BufferUsage::Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-    
-    void VertexBuffer::Map(BufferMapType mapType, void** ppData)
-    {
-			//        GLenum access = GL_MAP_WRITE_BIT;
-//        
-//        if (mapType == BufferMapType::Discard)
-//            access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
-//        
-//        glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
-//        glMapBufferRange(GL_ARRAY_BUFFER, 0, m_vertexCount * m_vertexSize, access);
-    }
-    
-    void VertexBuffer::Unmap()
-    {
-        glUnmapBuffer(GL_ARRAY_BUFFER);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+		glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
+		glBufferData(GL_ARRAY_BUFFER, bufferSize, vertexData, m_bufferUsage == BufferUsage::Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void VertexBuffer::Map(BufferMapType mapType, void** ppData)
+	{
+		TALON_ASSERT(ppData);
+
+		GLenum access = GL_MAP_WRITE_BIT;
+
+		if (mapType == BufferMapType::Discard)
+			access |= GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_pImpl->arrayBuffer);
+		*ppData = glMapBufferRange(GL_ARRAY_BUFFER, 0, m_vertexCount * m_vertexSize, access);
+	}
+
+	void VertexBuffer::Unmap()
+	{
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 	
 	u32 VertexBuffer::GetBuffer() const
 	{
