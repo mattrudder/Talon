@@ -1,5 +1,6 @@
 #include "SandboxSimulation.h"
 
+#include <Talon/Talon.h>
 #include <Talon/Engine.h>
 #include <Talon/ComponentService.h>
 #include <Talon/Input/InputService.h>
@@ -20,11 +21,6 @@
 
 using namespace std;
 using namespace Talon;
-
-//float randRange(int min, int max)
-//{
-//	return (float)(min + (int)(rand() % ((max - min) + 1)));
-//}
 
 float randRange(float min, int max)
 {
@@ -47,7 +43,6 @@ SandboxSimulation::~SandboxSimulation(void)
 
 void SandboxSimulation::Foo()
 {
-//	OutputDebugStringA("Button pressed!");
 }
 
 void SandboxSimulation::OnInitialized()
@@ -75,7 +70,7 @@ void SandboxSimulation::OnInitialized()
 			m_mouse = nullptr;
 	};
 
-	m_texture = Texture::FromFile(Device, "test_alpha.png");
+	m_texture = Texture::FromFile(Device, "test.png");
 	m_spriteBatch = std::make_unique<SpriteBatch>(Device);
 
 	m_testGo = new GameObject();
@@ -173,10 +168,32 @@ void SandboxSimulation::OnEndFrame()
 	
 	float spriteAccel = 10 + max(m_gamepad->GetAxis(InputDeviceAxis::RightZ), m_gamepad->GetAxis(InputDeviceAxis::LeftZ)) * 10;
 	float2 spritePos = m_testSprite->GetPosition();
-	float2 spriteControl(m_gamepad->GetAxis(InputDeviceAxis::LeftX) - 0.5f, m_gamepad->GetAxis(InputDeviceAxis::LeftY) - 0.5f);
+	float2 spriteControl(m_gamepad->GetAxis(InputDeviceAxis::LeftX), m_gamepad->GetAxis(InputDeviceAxis::LeftY));
 	spritePos.x += spriteControl.x * spriteAccel;
 	spritePos.y -= spriteControl.y * spriteAccel;
 	m_testSprite->SetPosition(spritePos);
+
+	static float colorProgress = 0.0f;
+	static int colorIndex = 0;
+	static Vector colors[3] =
+	{
+		Vector4Load(1, 0, 0, 1),
+		Vector4Load(0, 1, 0, 1),
+		Vector4Load(0, 0, 1, 1)
+	};
+
+	colorProgress += 0.01f;
+	if (colorProgress > 1.0f)
+	{
+		colorProgress = 0.0f;
+		colorIndex++;
+		if (colorIndex > 2)
+			colorIndex = 0;
+	}
+
+	float4 spriteColor;
+	Vector finalColor = VectorLerp(colors[colorIndex], colors[(colorIndex + 1) % 3], colorProgress);
+	StoreFloat4(&spriteColor, finalColor);
 
 	/*for (int i = 0; i < count; ++i)
 	{
@@ -184,11 +201,12 @@ void SandboxSimulation::OnEndFrame()
 	m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y, 64, 64);
 	}*/
 
-	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this](Component* component)
+	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this, &spriteColor](Component* component)
 	{
 		SpriteComponent* sprite = (SpriteComponent*) component;
 		float2 spritePos = sprite->GetPosition();
-		m_spriteBatch->Draw(sprite->GetTexture(), spritePos.x, spritePos.y, (float)sprite->GetTexture()->GetWidth(), (float)sprite->GetTexture()->GetHeight(), float4(randRange(0, 1), randRange(0, 1), randRange(0, 1), 1));
+
+		m_spriteBatch->Draw(sprite->GetTexture(), spritePos.x, spritePos.y, (float)sprite->GetTexture()->GetWidth(), (float)sprite->GetTexture()->GetHeight(), spriteColor);
 	});
 
 	m_spriteBatch->End();
