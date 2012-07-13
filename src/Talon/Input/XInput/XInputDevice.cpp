@@ -158,10 +158,6 @@ namespace Talon
 					OnPressed(i.button);
 			}
 		}
-
-		char log[255];
-		sprintf(log, "Left Z: %g\n", m_leftState.z);
-		TalonLog(log);
 	}
 
 	XInputDevice::~XInputDevice()
