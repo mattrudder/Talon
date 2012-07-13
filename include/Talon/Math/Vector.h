@@ -44,6 +44,8 @@ namespace Talon
 	Vector VectorDivide(VectorArgL1 v1, VectorArgL1 v2);
 	Vector VectorScale(VectorArgL1 v, float scale);
 
+	Vector VectorLerp(VectorArgL1 v1, VectorArgL1 v2, float scale);
+
 	float Vector2Dot(VectorArgL1 v1, VectorArgL1 v2);
 
 	Vector Vector3Cross(VectorArgL1 v1, VectorArgL1 v2);

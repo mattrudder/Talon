@@ -60,6 +60,14 @@ namespace Talon
 		return _mm_mul_ps(s, v);
 	}
 
+	inline Vector VectorLerp(VectorArgL1 v1, VectorArgL1 v2, float scale)
+	{
+		scale = std::min(std::max(scale, 0.0f), 1.0f);
+		float inverseScale = 1.0f - scale;
+
+		return VectorAdd(VectorScale(v1, inverseScale), VectorScale(v2, scale));
+	}
+
 	inline float Vector2Dot(VectorArgL1 v1, VectorArgL1 v2)
 	{
 		Vector vLengthSq = _mm_mul_ps(v1, v2);
