@@ -23,7 +23,7 @@ namespace Talon
  		TALON_ASSERT(inputElements != nullptr);
  		TALON_ASSERT(elementCount > 0);
  		TALON_ASSERT(vertexShader != nullptr);
- 		TALON_ASSERT(vertexShader->GetType() != ShaderType::Vertex);
+ 		TALON_ASSERT(vertexShader->GetType() == ShaderType::Vertex);
 	}
 	
 	InputLayout::~InputLayout()
