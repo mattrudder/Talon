@@ -158,20 +158,23 @@ namespace Talon
         [ctx makeCurrentContext];
 		[ctx setView:view];
         
-			//		char line[255];
-		//glewExperimental = GL_TRUE;
-//        if (glewInit() == GLEW_OK)
-//        {
-//            sprintf(line, "GLEW version %s\n", glewGetString(GLEW_VERSION));
-//			TalonLog(line);
-//        }
-//		
-//		if (!GLEW_VERSION_3_2)
-//		{
-//			TalonLog("OpenGL 3.2 not supported!");
-//		}
+		char line[255];
+			//glewExperimental = GL_TRUE;
+        if (glewInit() == GLEW_OK)
+        {
+            sprintf(line, "GLEW version %s\n", glewGetString(GLEW_VERSION));
+			TalonLog(line);
+        }
 		
-			//[NSOpenGLContext clearCurrentContext];
+		sprintf(line, "GLSL version %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		TalonLog(line);
+		
+		if (!GLEW_VERSION_3_2)
+		{
+			TalonLog("OpenGL 3.2 not supported!");
+		}
+		
+		[NSOpenGLContext clearCurrentContext];
 #endif
 
 		SetInitialized(true);
