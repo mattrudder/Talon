@@ -455,7 +455,6 @@ namespace Talon
 
 		int mirrorBits = flags & 3;
 
-		Matrix transformMatrix = MatrixRotationZ(rotation);
 		for (int i = 0; i < VerticesPerSprite; ++i)
 		{
 			// Calculate position.
@@ -463,8 +462,6 @@ namespace Talon
 
 			Vector position1 = VectorAdd(VectorMultiply(VectorSplatX(cornerOffset), rotationMatrix1), destination);
 			Vector position2 = VectorAdd(VectorMultiply(VectorSplatY(cornerOffset), rotationMatrix2), position1);
-			Vector posX = VectorAdd(cornerOffset, destination);
-			posX = posX;
 
 			// TODO: Add real depth component, instead of just zeroing out the depth.
 			//Vector position = VectorPermute<0, 1, 7, 6>(position2, originRotationDepth); Modeled after XMVectorPermute
