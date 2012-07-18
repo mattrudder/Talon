@@ -14,10 +14,14 @@ namespace Talon
 		friend class Engine;
 
 		void Initialize();
+		
 		void BeginFrame();
 		void EndFrame();
 
+		void Quit();
+
 		delegate<Simulation, void()> Initialized;
+		delegate<Simulation, void()> Shutdown;
 		delegate<Simulation, void()> FrameStarted;
 		delegate<Simulation, void()> FrameEnded;
 
@@ -30,6 +34,7 @@ namespace Talon
 		virtual void OnInitialized();
 		virtual void OnBeginFrame();
 		virtual void OnEndFrame();
+		virtual void OnShutdown();
 
 	private:
 	};

@@ -28,6 +28,12 @@ namespace Talon
 		FrameEnded();
 	}
 
+	void Simulation::Quit()
+	{
+		OnShutdown();
+		Shutdown();
+	}
+
 	void Simulation::OnInitialized()
 	{
 	}
@@ -37,6 +43,10 @@ namespace Talon
 	}
 
 	void Simulation::OnEndFrame()
+	{
+	}
+
+	void Simulation::OnShutdown()
 	{
 	}
 }

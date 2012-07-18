@@ -29,7 +29,12 @@ if isgeneratoraction(_ACTION) then
 	print(" - Graphics: " .. _OPTIONS["gfx"])
 
 	for k,v in pairs(_OPTIONS) do
-		print(" - " .. k .. ": " .. v)
+		local val = v
+		if val == nil then
+			val = 'true'
+		end
+
+		print(" - " .. k .. ": " .. val)
 	end
 end
 

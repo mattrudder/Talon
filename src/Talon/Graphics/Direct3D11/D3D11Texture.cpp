@@ -66,7 +66,7 @@ namespace Talon
 		if (usage == BufferUsage::Default)
 		{
 			initialData.pSysMem = data;
-			initialData.SysMemPitch = width * Graphics::ToBytesPerPixel(format);
+			initialData.SysMemPitch = width * Graphics::ToByteSize(format);
 		}
 
 		if (FAILED(device->CreateTexture2D(&desc, usage == BufferUsage::Default ? &initialData : nullptr, &texture)))

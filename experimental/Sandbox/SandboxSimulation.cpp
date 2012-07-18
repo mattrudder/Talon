@@ -211,3 +211,9 @@ void SandboxSimulation::OnEndFrame()
 
 	m_spriteBatch->End();
 }
+
+void SandboxSimulation::OnShutdown()
+{
+	m_texture = nullptr;
+	m_spriteBatch = nullptr;
+}

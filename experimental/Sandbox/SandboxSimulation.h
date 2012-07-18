@@ -31,6 +31,7 @@ protected:
 	void OnInitialized();
 	void OnBeginFrame();
 	void OnEndFrame();
+	void OnShutdown();
 
 private:
 	std::unique_ptr<Talon::SpriteBatch> m_spriteBatch;

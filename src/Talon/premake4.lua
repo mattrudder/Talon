@@ -58,7 +58,7 @@ project "Talon"
 	if _OPTIONS["with-awesomium"] then
 		apply_external("awesomium-1.7", "awesomium")
 
-		copyCommands = copyCommands .. copy_cmd("../../externals/awesomium-1.7/bin/$(PlatformShortName)/*")
+		copyCommands = copyCommands .. copy_cmd("../../externals/awesomium-1.7/bin/vc/$(PlatformShortName)/*")
 	end
 
 	-- Copy graphics resources

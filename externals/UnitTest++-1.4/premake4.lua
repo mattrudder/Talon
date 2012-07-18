@@ -19,7 +19,7 @@ project "UnitTest++"
 			"src/Win32/*.cpp"
 		}
 
-	configuration "not windows"
+	configuration "macosx or linux"
 		files {
 			"src/Posix/*.h",
 			"src/Posix/*.cpp"
