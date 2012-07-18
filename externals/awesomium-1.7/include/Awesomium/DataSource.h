@@ -31,6 +31,7 @@ class WebSession;
 ///
 class OSM_EXPORT DataSource {
  public:
+  virtual ~DataSource();
   ///
   /// This event is called whenever a request is made for a certain path
   /// on the asset URL that this DataSource is bound to. It is your
@@ -74,7 +75,6 @@ class OSM_EXPORT DataSource {
 
  protected:
   DataSource();
-  virtual ~DataSource();
 
   void set_session(WebSession* session, int data_source_id);
 

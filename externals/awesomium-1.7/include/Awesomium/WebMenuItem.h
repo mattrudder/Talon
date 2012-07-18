@@ -34,8 +34,7 @@ enum WebMenuItemType {
 };
 
 ///
-/// @brief  Represents an item in a menu. This is used for both
-///         Popup (Dropdown) Menus and Context Menus.
+/// @brief  Represents an item in a menu. This is used for Popup Menus.
 ///
 class OSM_EXPORT WebMenuItem {
  public:

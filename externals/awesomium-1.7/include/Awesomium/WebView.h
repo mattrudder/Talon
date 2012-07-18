@@ -24,6 +24,7 @@
 #include <Awesomium/WebKeyboardEvent.h>
 #include <Awesomium/WebTouchEvent.h>
 #include <Awesomium/WebViewListener.h>
+#include <Awesomium/PrintConfig.h>
 #include <Awesomium/JSValue.h>
 
 namespace Awesomium {
@@ -94,6 +95,13 @@ class OSM_EXPORT WebView {
   ///
   virtual void set_dialog_listener(WebViewListener::Dialog* listener) = 0;
 
+  ///
+  /// Register a listener to handle printing-related events.
+  ///
+  /// @param  listener  The instance to register (you retain ownership).
+  ///
+  virtual void set_print_listener(WebViewListener::Print* listener) = 0;
+
   /// Get the current view-event listener (may be NULL).
   virtual WebViewListener::View* view_listener() = 0;
 
@@ -108,6 +116,9 @@ class OSM_EXPORT WebView {
 
   /// Get the current dialog-event listener (may be NULL).
   virtual WebViewListener::Dialog* dialog_listener() = 0;
+
+  /// Get the current print-event listener (may be NULL).
+  virtual WebViewListener::Print* print_listener() = 0;
 
   ///
   /// Begin loading a certain URL asynchronously.
@@ -355,6 +366,20 @@ class OSM_EXPORT WebView {
   virtual void SelectAll() = 0;
 
   ///
+  /// Prints this WebView to a PDF file asynchronously.
+  ///
+  /// @param  config  The configuration settings to use (you must specify
+  ///                 a writable output_path or this operation will fail).
+  ///
+  /// @see WebView::set_print_listener
+  ///
+  /// @return  Returns a unique request ID that you can use later to identify
+  ///          this specific request (see WebViewListener::Print). May return 0
+  ///          if this method fails prematurely (eg, if the view has crashed).
+  ///
+  virtual int PrintToFile(const PrintConfig& config) = 0;
+
+  ///
   /// Check if an error occurred during the last synchronous API call.
   ///
   /// @see WebView::CreateGlobalJavascriptObject
@@ -469,6 +494,35 @@ class OSM_EXPORT WebView {
   ///
   virtual void DidChooseFiles(const WebStringArray& files,
                               bool should_write_files) = 0;
+
+  ///
+  /// This method should be called as the result of a user supplying
+  /// their credentials in a login dialog.
+  ///
+  /// @param  request_id  The id of the request that was handled (see 
+  ///                     WebLoginDialogInfo::request_id).
+  ///
+  /// @param  username  The username supplied.
+  ///
+  /// @param  password  The password supplied.
+  ///
+  /// @see  WebViewListener::Dialog::OnShowLoginDialog
+  ///
+  virtual void DidLogin(int request_id,
+                        const WebString& username,
+                        const WebString& password) = 0;
+
+  ///
+  /// This method should be called as the result of a user cancelling
+  /// a login dialog.
+  ///
+  /// @param  request_id  The id of the request that was handled (see 
+  ///                     WebLoginDialogInfo::request_id).
+  ///
+  /// @see  WebViewListener::Dialog::OnShowLoginDialog
+  ///
+  virtual void DidCancelLogin(int request_id) = 0;
+
  protected:
     virtual ~WebView() {}
 };

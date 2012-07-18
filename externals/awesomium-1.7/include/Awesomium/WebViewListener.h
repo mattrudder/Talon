@@ -131,6 +131,70 @@ struct OSM_EXPORT WebPopupMenuInfo {
   bool right_aligned;      ///< Whether or not the menu is right-aligned
 };
 
+/// Used with WebContextMenuInfo
+enum MediaType
+{
+	kMediaType_None,
+	kMediaType_Image,
+	kMediaType_Video,
+	kMediaType_Audio,
+  kMediaType_File,
+  kMediaType_Plugin
+};
+
+/// Used with WebContextMenuInfo
+enum MediaState
+{
+  kMediaState_None = 0x0,
+  kMediaState_Error = 0x1,
+  kMediaState_Paused = 0x2,
+  kMediaState_Muted = 0x4,
+  kMediaState_Loop = 0x8,
+  kMediaState_CanSave = 0x10,
+  kMediaState_HasAudio = 0x20,
+  kMediaState_HasVideo = 0x40
+};
+
+/// Used with WebContextMenuInfo
+enum CanEditFlags
+{
+  kCan_EditNothing = 0x0,
+  kCan_Undo = 0x1,
+  kCan_Redo = 0x2,
+  kCan_Cut = 0x4,
+  kCan_Copy = 0x8,
+  kCan_Paste = 0x10,
+  kCan_Delete = 0x20,
+  kCan_SelectAll = 0x40,
+};
+
+/// Used with WebViewListener::Menu::OnShowContextMenu
+struct OSM_EXPORT WebContextMenuInfo {
+  int pos_x;                ///< The x-coordinate of the menu's position.
+  int pos_y;                ///< The y-coordinate of the menu's position.
+  MediaType media_type;     ///< The type of media (if any) that was clicked.
+  int media_state;          ///< The state of the media (if any).
+  WebURL link_url;          ///< The URL of the link (if any).
+  WebURL src_url;           ///< The URL of the media (if any).
+  WebURL page_url;          ///< The URL of the web-page.
+  WebURL frame_url;         ///< The URL of the frame.
+  int64 frame_id;           ///< The ID of the frame.
+  WebString selection_text; ///< The selected text (if any).
+  bool is_editable;         ///< Whether or not this node is editable.
+  int edit_flags;           ///< Which edit actions can be performed.
+};
+
+/// Used with WebViewListener::Dialog::OnShowLoginDialog
+struct OSM_EXPORT WebLoginDialogInfo {
+  int request_id;        ///< The unique ID of the request.
+  WebString request_url; ///< The URL of the web-page requesting login.
+  bool is_proxy;         ///< Whether or not this is a proxy auth.
+  WebString host;        ///< The hostname of the server.
+  unsigned short port;   ///< The port of the server.
+  WebString scheme;      ///< The scheme of the server.
+  WebString realm;       ///< The realm of the server.
+};
+
 /// Namespace containing all the WebView event-listener interfaces.
 namespace WebViewListener {
 
@@ -272,6 +336,15 @@ class OSM_EXPORT Menu {
   ///
   virtual void OnShowPopupMenu(Awesomium::WebView* caller,
                                const WebPopupMenuInfo& menu_info) = 0;
+
+  ///
+  /// This event occurs when the page requests to display a context menu.
+  /// This is usually the result of a user right-clicking somewhere on the
+  /// page. It is your responsibility to display this menu in your
+  /// application and perform the selected actions. This event is not modal.
+  ///
+  virtual void OnShowContextMenu(Awesomium::WebView* caller,
+                                 const WebContextMenuInfo& menu_info) = 0;
  protected:
   virtual ~Menu() {}
 };
@@ -294,8 +367,65 @@ class OSM_EXPORT Dialog {
   ///
   virtual void OnShowFileChooser(Awesomium::WebView* caller,
                                  const WebFileChooserInfo& chooser_info) = 0;
+
+  ///
+  /// This event occurs when the page needs authentication from the user (for
+  /// example, Basic HTTP Auth, NTLM Auth, etc). It is your responsibility to
+  /// display a dialog so that users can input their username and password.
+  /// This event is not modal.
+  ///
+  /// @see WebView::DidLogin
+  /// @see WebView::DidCancelLogin
+  ///
+  virtual void OnShowLoginDialog(Awesomium::WebView* caller,
+                                 const WebLoginDialogInfo& dialog_info) = 0;
  protected:
   virtual ~Dialog() {}
+};
+
+///
+/// @brief  An interface that you can use to handle all print-related events
+///         for a certain WebView.
+///
+/// @see  WebView::set_print_listener
+///
+class OSM_EXPORT Print {
+ public:
+  ///
+  /// This event occurs when the page requests to print itself. (Usually
+  /// the result of `window.print()` being called from JavaScript.) It is
+  /// your responsiblity to print the WebView to a file and handle the
+  /// actual device printing.
+  ///
+  /// @see  WebView::PrintToFile
+  ///
+  virtual void OnRequestPrint(Awesomium::WebView* caller) = 0;
+
+  ///
+  /// This event occurs when WebView::PrintToFile fails. Typically because of
+  /// bad printer configuration or invalid output path (it must be writable).
+  ///
+  /// @param  request_id  The unique request ID (returned from
+  ///                     WebView::PrintToFile earlier).
+  ///
+  virtual void OnFailPrint(Awesomium::WebView* caller,
+                           int request_id) = 0;
+
+  ///
+  /// This event occurs when WebView::PrintToFile succeeds.
+  ///
+  /// @param  request_id  The unique request ID (returned from
+  ///                     WebView::PrintToFile earlier).
+  ///
+  /// @param  file_list  The list of file-paths written. There may be multiple
+  ///                    files written if split_pages_into_multiple_files was
+  ///                    set to true in PrintConfig.
+  ///
+  virtual void OnFinishPrint(Awesomium::WebView* caller,
+                             int request_id,
+                             const WebStringArray& file_list) = 0;
+ protected:
+  virtual ~Print() {}
 };
 
 }  // namespace WebViewListener

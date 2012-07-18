@@ -17,6 +17,7 @@
 
 #include <Awesomium/Platform.h>
 #include <Awesomium/WebString.h>
+#include <Awesomium/WebStringArray.h>
 
 namespace Awesomium {
 
@@ -89,6 +90,19 @@ class OSM_EXPORT WebConfig {
   /// Specify 0 to disable the inspector (the default).
   ///
   int remote_debugging_port;
+
+  ///
+  /// Additional command-line options for Chromium (this is for advanced users
+  /// only, use these at your own risk).
+  ///
+  /// @see https://gist.github.com/2999122 for a list of compatible options.
+  ///
+  /// @note 
+  ///   Each option should be formatted as "--switch=value" or just "--switch"
+  ///
+  ///   For example: `"--use-gl=desktop"` to force native WebGL rendering.
+  ///
+  WebStringArray additional_options;
 };
 
 }  // namespace Awesomium
