@@ -75,7 +75,9 @@ namespace Talon
 		Awesomium::WebConfig cfg;
 		m_webCore = WebCore::Initialize(cfg);
 		g_myWebView = m_webCore->CreateWebView(1280, 720);
-		g_myWebView->LoadURL(WebURL(WSLit("http://vyrso.com/")));
+		
+		g_myWebView->LoadURL(WebURL(WSLit("file:///C:/Users/mrudder/GitHub/Talon/experimental/Sandbox/resources/index.html")));
+		g_myWebView->SetTransparent(true);
 #endif
 		CreateServices();
 

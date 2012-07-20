@@ -18,13 +18,15 @@ project "Sandbox"
         "./*.h"
 	}
 
+    local copyCommands = copy_cmd("Resources/*", "Resources")
+    copyCommands = copyCommands .. copy_cmd("*.png")
+
+    -- Configuration
+    configuration {}
+        postbuildcommands { copyCommands }
+
     configuration "MacOSX"
         files {
             "Mac/**"
         }
         linkoptions { "-stdlib=libc++" }
-
-    configuration "Windows"
-        postbuildcommands {
-            copy_cmd("*.png")
-        }

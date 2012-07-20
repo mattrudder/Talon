@@ -7,7 +7,7 @@ namespace Talon
 {
 	const std::string Simulation::GetTitle() const
 	{
-		return "๏̯͡๏ Talon Sandbox ᵔᴥᵔ";
+		return "Talon " TALON_VERSION_STRING;
 	}
 
 	void Simulation::Initialize()

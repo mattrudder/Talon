@@ -28,8 +28,7 @@ namespace Talon { namespace D3D11
 		D3D11_BLEND_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
 
-		desc.RenderTarget[0].BlendEnable = (srcBlend != D3D11_BLEND_ONE) ||
-			(destBlend != D3D11_BLEND_ZERO);
+		desc.RenderTarget[0].BlendEnable = srcBlend != D3D11_BLEND_ONE || destBlend != D3D11_BLEND_ZERO;
 
 		desc.RenderTarget[0].SrcBlend  = srcBlend;
 		desc.RenderTarget[0].SrcBlendAlpha = srcBlendAlpha;
