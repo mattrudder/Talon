@@ -145,6 +145,11 @@ namespace Talon
 		ThrowIfFailed(D3D11::CreateDepthStencilState(device, true, true, &depthStencilState));
 		ThrowIfFailed(D3D11::CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, &rasterizerState));
 		ThrowIfFailed(D3D11::CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_CLAMP, &samplerState));
+
+		D3D11::SetDebugName(blendState, "SpriteBatch");
+		D3D11::SetDebugName(depthStencilState, "SpriteBatch");
+		D3D11::SetDebugName(rasterizerState, "SpriteBatch");
+		D3D11::SetDebugName(samplerState, "SpriteBatch");
 #endif
 
 		constantBuffer = ConstantBuffer<Matrix>::Create(renderDevice, BufferUsage::Dynamic);
@@ -281,6 +286,17 @@ namespace Talon
 		device->SetActiveShader(ShaderType::Vertex, nullptr);
 
 		device->SetActiveInputLayout(nullptr);
+
+#if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
+		auto deviceContext = device->GetDeviceContext();
+
+		ID3D11SamplerState* pSamplerState = nullptr;
+		// TODO: Support render states (https://app.asana.com/0/1144010891804/1171962804804)
+		deviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+		deviceContext->OMSetDepthStencilState(nullptr, 0);
+		deviceContext->RSSetState(nullptr);
+		deviceContext->PSSetSamplers(0, 1, &pSamplerState);
+#endif
 	}
 
 	std::vector<u16> SpriteBatch::Impl::CreateIndexValues()

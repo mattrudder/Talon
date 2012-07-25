@@ -18,7 +18,7 @@ namespace Talon
 		static std::shared_ptr<Shader> CreateFromMemory(RenderDevice* device, ShaderType type, const char* shaderText, const char* sourceFileName);
 
 #if TALON_GRAPHICS == TALON_GRAPHICS_D3D11
-		static std::shared_ptr<Shader> CreateFromBlob(RenderDevice* device, ShaderType type, ID3DBlob* shaderBytecode);
+		static std::shared_ptr<Shader> CreateFromBlob(RenderDevice* device, ShaderType type, ID3DBlob* shaderBytecode, const std::string debugName);
 
 		ID3DBlob* GetShaderBytecode() const;
 #	define SHADER_ACCESSOR(type) ID3D11##type##Shader* Get##type##Shader() const;

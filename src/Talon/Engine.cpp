@@ -96,16 +96,20 @@ namespace Talon
 
 	void Engine::Shutdown()
 	{
-		m_window = nullptr;
+		m_simulation->Quit();
 		m_simulation = nullptr;
+		
 #ifdef TALON_USING_AWESOMIUM
 		g_mySpriteBatch = nullptr;
 		g_myWebView->Destroy();
+		g_myWebView = nullptr;
 		g_myWebViewTexture = nullptr;
 
 		m_webCore = nullptr;
 		Awesomium::WebCore::Shutdown();
 #endif
+
+		m_window = nullptr;
 		DestroyServices();
 
 		FreeImage_DeInitialise();

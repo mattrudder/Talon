@@ -23,6 +23,38 @@ namespace Talon { namespace D3D11
 		return name;
 	}
 
+	inline void SetDebugName(ID3D11Device* child, const std::string name)
+	{
+		child->SetPrivateData(WKPDID_D3DDebugObjectName, name.size() * sizeof(char), name.c_str());
+	}
+
+	inline std::string GetDebugName(ID3D11Device* child)
+	{
+		char name[1024];
+		u32 size = sizeof(name) - 1;
+
+		if (FAILED(child->GetPrivateData(WKPDID_D3DDebugObjectName, &size, name)))
+			return "";
+
+		return name;
+	}
+
+	inline void SetDebugName(IDXGIObject* child, const std::string name)
+	{
+		child->SetPrivateData(WKPDID_D3DDebugObjectName, name.size() * sizeof(char), name.c_str());
+	}
+
+	inline std::string GetDebugName(IDXGIObject* child)
+	{
+		char name[1024];
+		u32 size = sizeof(name) - 1;
+
+		if (FAILED(child->GetPrivateData(WKPDID_D3DDebugObjectName, &size, name)))
+			return "";
+
+		return name;
+	}
+
 	inline HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, D3D11_BLEND srcBlendAlpha, D3D11_BLEND destBlendAlpha, D3D11_BLEND_OP op, D3D11_BLEND_OP opAlpha, ID3D11BlendState** pResult)
 	{
 		D3D11_BLEND_DESC desc;

@@ -18,6 +18,7 @@ namespace Talon
     {
 	public:
 		void CreateDevice(Window* window);
+		void ReportLiveObjects();
 
 		void DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation);
     public:
@@ -28,6 +29,7 @@ namespace Talon
 		CComPtr<IDXGIDevice1> dxgiDevice;
 		CComPtr<IDXGIAdapter1> dxgiAdapter;
 		CComPtr<IDXGIFactory1> dxgiFactory;
+		CComPtr<ID3D11Debug> deviceDebug;
 
 		DXGI_ADAPTER_DESC1 adapterDesc;
 		D3D_FEATURE_LEVEL featureLevel;
@@ -66,6 +68,26 @@ namespace Talon
 		CComPtr<ID3D11Texture2D> backBuffer;
 		ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer));
 		ThrowIfFailed(device->CreateRenderTargetView(backBuffer, nullptr, &backBufferRTV));
+		ThrowIfFailed(device->QueryInterface(&deviceDebug));
+
+		D3D11::SetDebugName(device, "RenderDevice");
+		D3D11::SetDebugName(dxgiDevice, "RenderDevice");
+		D3D11::SetDebugName(dxgiAdapter, "RenderDevice");
+		D3D11::SetDebugName(dxgiFactory, "RenderDevice");
+
+		D3D11::SetDebugName(context, "RenderDevice Context");
+		D3D11::SetDebugName(swapChain, "RenderDevice SwapChain");
+		D3D11::SetDebugName(backBufferRTV, "RenderDevice BackBuffer");
+	}
+
+	void RenderDevice::Impl::ReportLiveObjects()
+	{
+#if 1
+		context->ClearState();
+		context->Flush();
+
+	//	deviceDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+#endif
 	}
 
 	void RenderDevice::Impl::DrawIndexed(u32 indexCount, u32 startIndex, i32 baseVertexLocation)
@@ -82,6 +104,7 @@ namespace Talon
 
 	RenderDevice::~RenderDevice()
 	{
+		m_pImpl->ReportLiveObjects();
 	}
 
     void RenderDevice::BeginFrame()

@@ -98,6 +98,7 @@ namespace Talon
 		bufferData.SysMemSlicePitch = 0;
 
 		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, initialData == nullptr ? nullptr : &bufferData, &m_pImpl->indexBuffer));
+		D3D11::SetDebugName(m_pImpl->indexBuffer, "IndexBuffer");
 	}
 
 	IndexBuffer::~IndexBuffer()

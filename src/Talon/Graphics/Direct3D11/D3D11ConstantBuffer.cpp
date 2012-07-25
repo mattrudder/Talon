@@ -37,6 +37,7 @@ namespace Talon
 		bufferData.SysMemPitch = 0;
 		bufferData.SysMemSlicePitch = 0;
 		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&desc, initialData == nullptr ? nullptr : &bufferData, &m_pImpl->constantBuffer));
+		D3D11::SetDebugName(m_pImpl->constantBuffer, "ConstantBuffer");
 	}
 
 	void ConstantBufferBase::Update(u32 bufferSize, void* bufferData)

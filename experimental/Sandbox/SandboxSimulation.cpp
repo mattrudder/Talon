@@ -195,12 +195,6 @@ void SandboxSimulation::OnEndFrame()
 	Vector finalColor = VectorLerp(colors[colorIndex], colors[(colorIndex + 1) % 3], colorProgress);
 	StoreFloat4(&spriteColor, finalColor);
 
-	/*for (int i = 0; i < count; ++i)
-	{
-	cards[i].Update();
-	m_spriteBatch->Draw(m_texture, cards[i].x, cards[i].y, 64, 64);
-	}*/
-
 	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this, &spriteColor](Component* component)
 	{
 		SpriteComponent* sprite = (SpriteComponent*) component;
@@ -214,6 +208,12 @@ void SandboxSimulation::OnEndFrame()
 
 void SandboxSimulation::OnShutdown()
 {
+	Engine::Instance()->GetComponentService()->ForEach(SpriteComponent::GetType(), nullptr, [this](Component* component)
+	{
+		SpriteComponent* sprite = (SpriteComponent*) component;
+		sprite->SetTexture(nullptr);
+	});
+
 	m_texture = nullptr;
 	m_spriteBatch = nullptr;
 }

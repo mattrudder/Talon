@@ -84,7 +84,8 @@ namespace Talon
 			return false;
 		}
 		
-		D3D11::SetDebugName(texture, debugName);
+		D3D11::SetDebugName(shaderResourceView, "Texture: " + debugName);
+		D3D11::SetDebugName(texture, "Texture: " + debugName);
 
 		this->width = width;
 		this->height = height;
@@ -114,7 +115,7 @@ namespace Talon
 			shaderResourceView.Release();
 			texture.Release();
 
-			ID3D11Device* device;
+			CComPtr<ID3D11Device> device;
 			ctx->GetDevice(&device);
 			Load(device, width, height, format, usage, data, debugName);
 		}

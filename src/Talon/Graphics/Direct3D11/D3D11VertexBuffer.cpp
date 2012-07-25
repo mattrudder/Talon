@@ -96,6 +96,7 @@ namespace Talon
 		bufferData.SysMemSlicePitch = 0;
 
 		ThrowIfFailed(renderDevice->GetDevice()->CreateBuffer(&bufferDesc, initialData == nullptr ? nullptr : &bufferData, &m_pImpl->vertexBuffer));
+		D3D11::SetDebugName(m_pImpl->vertexBuffer, "VertexBuffer");
     }
 
 	void VertexBuffer::Update(int vertexCount, void* vertexData)
