@@ -76,7 +76,11 @@ namespace Talon
 		m_webCore = WebCore::Initialize(cfg);
 		g_myWebView = m_webCore->CreateWebView(1280, 720);
 		
+#if defined(HOST_MATT_PC)
+		g_myWebView->LoadURL(WebURL(WSLit("file:///C:/Users/matt/Code/Talon/experimental/Sandbox/resources/index.html")));
+#elif defined(HOST_WS1470VM1)
 		g_myWebView->LoadURL(WebURL(WSLit("file:///C:/Users/mrudder/GitHub/Talon/experimental/Sandbox/resources/index.html")));
+#endif
 		g_myWebView->SetTransparent(true);
 #endif
 		CreateServices();
